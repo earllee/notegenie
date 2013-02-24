@@ -6,6 +6,7 @@
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
+		<script src="jquery.textarea_auto_expand.js"></script>
 		<link href='http://fonts.googleapis.com/css?family=Handlee|Indie+Flower' rel='stylesheet' type='text/css'>
 	</head>
 
@@ -21,7 +22,7 @@
 						<div id="intro" >
 							<p>Need to cram for a test? Simply type in terms you need to know in the text box below. Put only one term on each line, and we'll give you a brief overview of the topics.</p>
 							</div>
-					<textarea id="input" class="text-input" name="comments" rows="5">Cold War
+					<textarea id="input" class="js-auto-expand" name="comments" rows="5">Cold War
 John F Kennedy
 Iron Curtain
 NATO
@@ -52,7 +53,9 @@ Warsaw Pact</textarea>
 		</footer>
 
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+		<script> $('textarea.js-auto-expand').textareaAutoExpand(); </script>
 		<!-- script type="text/javascript">
+		
 			var parse = function() {
 				var inputText = $('textarea').val();
 				var inputArray = inputText.split('\n');

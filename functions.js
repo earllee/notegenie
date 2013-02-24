@@ -48,9 +48,10 @@ function updateBox(wikipediaPage, box, pos, curval)
 
 
 				box.val(curval + "\n" + text + "\n" + newval);
+				
 				//alert(wikipediaPage + text);
 
-
+				box.trigger({type: 'keypress', which: 35});
 
 
 			}
@@ -75,9 +76,14 @@ $('#input').on("keypress", function(e) {
 		var lastline = value.lastIndexOf("\n");
 		$(this).val(value + "\n");
 		updateBox(value.substring(lastline+1,pos), $(this), pos, value);
+		//$(this).scrollTop(1);
 		//  alert(value);
 		//alert (pos);
+		
+		//window.scrollTo(0, document.body.scrollHeight);
 		return false; // prevent the button click from happening
 	}
 });
+
+
 });
