@@ -1,9 +1,5 @@
 $(document).ready(function() {
 
-window.onload = function() {
-  alert("welcome");
-};
-
 function updateBox(wikipediaPage, box, pos, curval)
 {
 	var req1 = $.ajax(
