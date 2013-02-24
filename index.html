@@ -1,39 +1,67 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>CheatSheetNow</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Bootstrap -->
-	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<title>CheatSheetNow</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	</head>
 
 	<body>
 		<div class="container">
+			<div class="navbar-inverse navbar">
+					<div class="navbar-inner">
+						<a class="brand" href="#">CheatSheetNow</a>
+					</div>
+				</div>
 			<textarea name="comments" cols="25" rows="5">Enter your comments here...</textarea>
 			<input class="btn btn-primary" value="Parse" name="parse-btn" type="button">
+			<div id="myCheatsheet" class="container"></div>
 		</div>
-		<div id="myDiv"></div>
 
 
 		<footer>
-			&copy; CheatSheetNow.
+			&copy;2013 CheatSheetNow.
 		</footer>
 
-		 <script src="http://code.jquery.com/jquery.js"></script>
-		 <script src="js/bootstrap.js"></script>
-		 <script type="text/javascript">
+		<script type="text/javascript" src="bootstrap/js/csn.js"></script>
+		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="parsing.js"></script>
+		<script type="text/javascript">
+
 			var parse = function() {
 				var inputText = $('textarea').val();
 				var inputArray= inputText.split('\n');
+var query = function(topic) { 
+								$.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?', {page:topic, prop:'text|images', uselang:'en'}, function(json)
+								{
+								var text=json.parse.text["*"];
+								var n = text.indexOf("</table>");
+								if (n > -1)
+								{
+									text = text.substring(n+9);
+								}
+
+								text = text.substring(text.indexOf("<p>")+3);
+								text = text.substring(0, text.indexOf("</p>"));
+								var regex = /(<([^>]+)>)/ig;
+
+								text = text.replace(regex, "");
+
+								//text = $(text).text();
+
+								alert(text);								
+return text;
+
+};);};
 
 				for (var i = 0; i < inputArray.length; i++) {
-					$('#myDiv').append("<div>arr["+i+"] =>"+inputArray[i]+"</div>");
+				$('#myCheatsheet').append("<div>arr["+i+"] =>"+query(inputArray[i])+"</div>");
 				}
 			};
 
-				$('input[name="parse-btn"]').bind('click', parse);
+			$('input[name="parse-btn"]').bind('click', parse);
 		</script>
-	</body>
+		</body>
 
 </html>
