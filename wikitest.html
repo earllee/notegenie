@@ -9,8 +9,8 @@ function jsonworks()
 alert("worked")
 }
 
-
-wikipediaPage="Apple"
+function parseTerm(wikipediaPage)
+{
 $.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json)
 {
 var text=json.parse.text["*"];
@@ -29,9 +29,9 @@ text = text.replace(regex, "");
 
 //text = $(text).text();
 
-alert(text);
+return text;
 
-
+}
 
 
 }
