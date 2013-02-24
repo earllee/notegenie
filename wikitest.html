@@ -10,10 +10,10 @@ alert("worked")
 }
 
 allterms = new Array();
-allterms[0] = "Apple"
+allterms[0] = "asdff"
 allterms[1] = "cyan"
 allterms[2] = "usa"
-allterms[3] = "yale"
+allterms[3] = "yale university"
 allterms[4] = "blajds"
 
 text=""
@@ -21,6 +21,8 @@ for (i = 0; i < allterms.length; i++)
 {
 wikipediaPage=allterms[i];
 $.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json)
+{
+try
 {
 var text=json.parse.text["*"];
 var n = text.indexOf("</table>");
@@ -49,6 +51,11 @@ alert(text);
 
 
 
+}
+catch (err)
+{
+	alert("cannot load page")
+}
 }
 );
 }
