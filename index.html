@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>CheatSheetNow</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<textarea name="comments" cols="25" rows="5">Enter your comments here...</textarea>
+			<input class="btn btn-primary" value="Parse" name="parse-btn" type="button">
+		</div>
+		<div id="myDiv"></div>
+
+
+		<footer>
+			&copy; CheatSheetNow.
+		</footer>
+
+		 <script src="http://code.jquery.com/jquery.js"></script>
+		 <script src="js/bootstrap.js"></script>
+		 <script type="text/javascript">
+			var parse = function() {
+				var inputText = $('textarea').val();
+				var inputArray= inputText.split('\n');
+
+				for (var i = 0; i < inputArray.length; i++) {
+					$('#myDiv').append("<div>arr["+i+"] =>"+inputArray[i]+"</div>");
+				}
+			};
+
+				$('input[name="parse-btn"]').bind('click', parse);
+		</script>
+	</body>
+
+</html>
