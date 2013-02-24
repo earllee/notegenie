@@ -18,12 +18,35 @@ body {
 }
 
 #input {
+	padding-left: 8%;
+	left: -8%;
+	position: relative;
+	width: 101.8%;
+	height: auto;
+	background: none;
+	outline: none;
+	border: none;
+	:focus { outline: none; border: none; }
+}
+
+textarea {
+	background-color: transparent;
+	border: 1px solid transaparent;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-transition: none; 
+	-moz-transition: none;
+	-o-transition: none;
+	transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+#input2 {
 	height: 100%;
 	width: 100%;
 	background: #222;
 	max-width: 100%;
-	padding: 50px 50px 50px 100px;
-	font: 20px/29px "Courier New", monospace;
+	padding: 10px; 
 	border: 0;
 	outline: 0;
 	color: #ccc;
