@@ -4,7 +4,8 @@
 		<title>CheatSheetNow</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="functions.js"></script>
 		<link href='http://fonts.googleapis.com/css?family=Handlee|Indie+Flower' rel='stylesheet' type='text/css'>
 	</head>
 
@@ -20,7 +21,7 @@
 						<div id="intro" >
 							<p>Need to cram for a test? Simply type in terms you need to know in the text box below. Put only one term on each line, and we'll give you a brief overview of the topics.</p>
 							</div>
-					<textarea class="text-input" name="comments" rows="5">Cold War
+					<textarea id="input" class="text-input" name="comments" rows="5">Cold War
 John F Kennedy
 Iron Curtain
 NATO
@@ -36,7 +37,7 @@ Warsaw Pact</textarea>
 					<div class="red-line first"></div>
 					<div class="red-line"></div>
 					<div id="myCheatsheet">
-						This is where we spit out information about random things!	
+						This is where we tell you what you want to know!	
 					</div> 
 					<div id="filler"></div>
 					<div class="left-shadow"></div> 
@@ -47,13 +48,11 @@ Warsaw Pact</textarea>
 
 
 		<footer class="container">
-			<small>&copy;2013 CheatSheetNow. Made with love from TD.</small>
+			<small>&copy;2013 CheatSheetNow. By <a href="http://facebook.com/earlvlee">Earl</a> &amp; <a href="mailto:shenil.dodhia@yale.edu">Shenil</a>. Made with love from TD.</small>
 		</footer>
 
-		<script type="text/javascript" src="bootstrap/js/csn.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
-		<script type="text/javascript" src="parsing.js"></script>
-		<script type="text/javascript">
+		<!-- script type="text/javascript">
 			var parse = function() {
 				var inputText = $('textarea').val();
 				var inputArray = inputText.split('\n');
@@ -93,7 +92,7 @@ Warsaw Pact</textarea>
 
 			$('input[name="parse-btn"]').bind('click', parse);
 
-		</script>
+		</script-->
 		</body>
 
 </html>
