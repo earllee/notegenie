@@ -10,7 +10,7 @@ alert("worked")
 }
 
 allterms = new Array();
-allterms[0] = "asdff"
+allterms[0] = "ACZ"
 allterms[1] = "cyan"
 allterms[2] = "usa"
 allterms[3] = "yale university"
@@ -37,7 +37,8 @@ text = text.substring(0, text.indexOf("</p>"));
 var regex = /(<([^>]+)>)/ig;
 
 text = text.replace(regex, "");
-
+if (text.length > 3 && (text.substring(text.length-3) == "to:"))
+	{throw "disambiguation"}
 //text = $(text).text();
 
 
