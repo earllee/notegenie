@@ -14,14 +14,39 @@
 						<a class="brand" href="#">CheatSheetNow</a>
 					</div>
 				</div>
-			<textarea name="comments" cols="25" rows="5">Enter your comments here...</textarea>
-			<input class="btn btn-primary" value="Parse" name="parse-btn" type="button">
-			<div id="myCheatsheet" class="container"></div>
+			<div class="container">
+					<div class="main">
+						<div id="intro" >
+							<p>Need to cram for a test? Simply type in terms you need to know in the text box below. Put only one term on each line, and we'll give you a brief overview of the topics.</p>
+							</div>
+					<textarea class="text-input" name="comments" rows="5">Cold War
+John F Kennedy
+Iron Curtain
+NATO
+Warsaw Pact</textarea>
+					</br>
+					<input class="btn btn-primary" value="Show me the magic!" name="parse-btn" type="button">
+					</div>
+				</div>
+			</div>
+			<div id="output" class="container">
+				<div class="paper">
+					<div class="tape"></div>
+					<div class="red-line first"></div>
+					<div class="red-line"></div>
+					<div id="myCheatsheet">
+						This is where we spit out information about random things!	
+					</div> 
+					<div id="filler"></div>
+					<div class="left-shadow"></div> 
+					<div class="right-shadow"></div>
+				</div>
+			</div>
 		</div>
 
 
 		<footer class="container">
-			&copy;2013 CheatSheetNow.
+			<small>&copy;2013 CheatSheetNow. Made with love from TD.</small>
 		</footer>
 
 		<script type="text/javascript" src="bootstrap/js/csn.js"></script>
@@ -30,37 +55,36 @@
 		<script type="text/javascript">
 			var parse = function() {
 				var inputText = $('textarea').val();
-				var inputArray= inputText.split('\n');
+				var inputArray = inputText.split('\n');
+				var timer = 0;
 
-				text=""
-
+				$('#myCheatsheet').text("");
 				for (i = 0; i < inputArray.length; i++) {
 					wikipediaPage=inputArray[i];
-					$.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json)
-				{
-				try
-				{
-				var text=json.parse.text["*"];
-				var n = text.indexOf("</table>");
-				if (n > -1)
-				{
-				text = text.substring(n+9);
-				}
+					$.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json) {
+						try
+						{
+							var text = json.parse.text["*"];
+							var n = text.indexOf("</table>");
+						if (n > -1)
+						{
+							text = text.substring(n+9);
+						}
 
-				text = text.substring(text.indexOf("<p>")+3);
-				text = text.substring(0, text.indexOf("</p>"));
+						text = text.substring(text.indexOf("<p>")+3);
+						text = text.substring(0, text.indexOf("</p>"));
 
-				var regex = /(<([^>]+)>)/ig;
+						var regex = /(<([^>]+)>)/ig;
 
-				text = text.replace(regex, "");
-
-				$('#myCheatsheet').append("<p>"+text+"</p>\n\n");
-				}
-				catch (err)
-				{
-					alert("cannot load page")
-				}
-				}
+						text = "<p>" + text.replace(regex, "") + "</p>";
+						//text = "<strong>" + inputArray[i] + "</strong>" + text;
+							$('#myCheatsheet').append(text);
+						}
+						catch (err)
+						{
+							$('#myCheatsheet').append("<p>Sorry! Could not find anything on one of your terms!</p>");
+						}
+					}
 				);
 				}
 
