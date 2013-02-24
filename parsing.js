@@ -1,8 +1,21 @@
+function mytext()
+{
+	this.value = "oldtxt"
+}
+
+function textchanger(obj,val)
+{
+	obj.value = val;
+}
+
 function parseTerm(wikipediaPage)
 {
-$.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json)
+	thetext = new mytext();
+	sometext = "asdfd";
+	sometext = Object(sometext);
+$.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json, sometext)
 {
-var text=json.parse.text["*"];
+ text=json.parse.text["*"];
 var n = text.indexOf("</table>");
 if (n > -1)
 {
@@ -17,11 +30,10 @@ var regex = /(<([^>]+)>)/ig;
 text = text.replace(regex, "");
 
 //text = $(text).text();
+textchanger(sometext, text);
 
-return text;
+$("asdf").show();
 
+});
+return sometext.value;
 }
-
-
-}
-);
