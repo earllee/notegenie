@@ -10,6 +10,7 @@ function jsonworks()
 alert("worked")
 }
 
+
 function pausecomp(millis)
  {
   var date = new Date();
@@ -33,7 +34,7 @@ for (i = 0; i < allterms.length; i++)
 wikipediaPage=allterms[i];
 
 var req1 = $.ajax(
-{ dataType: "json", url:'http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', data:{page:wikipediaPage, prop:'text|images', uselang:'en'}, async: false, success:function(json)
+{ type: 'GET', dataType: "json", url:'http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', data:{page:'usa|cyan', uselang:'en'}, async: false, success:function(json,wikipediaPage)
 {
 try
 {
@@ -58,13 +59,15 @@ text = text.replace(regex, "");
 var regex2 = /(\[([^\]]+)\])/ig;
 
 if (text.length > 3 && (text.substring(text.length-3) == "to:"))
-	{throw "disambiguation"}
+{throw "disambiguation"}
 
 text = text.replace(regex2, "");
 text = text.replace(/&#160;/g, "");	
 if (text.indexOf("Cite error:") > -1)
-	text = text.substring(0, text.indexOf("Cite error:"));
-	
+text = text.substring(0, text.indexOf("Cite error:"));
+
+//console.log(wikipediaPage);
+
 //text = $(text).text();
 
 
@@ -73,7 +76,9 @@ if (text.indexOf("Cite error:") > -1)
 
 //pausecomp(5000);
 //console.log(wikipediaPage + text);
-alert(wikipediaPage + text);
+
+console.log(text);
+//alert(wikipediaPage + text);
 
 
 
@@ -81,7 +86,7 @@ alert(wikipediaPage + text);
 }
 catch (err)
 {
-	alert("cannot load page")
+alert("cannot load page")
 }
 }
 

@@ -6,6 +6,7 @@
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
+		<script src="jquery.textarea_auto_expand.js"></script>
 		<link href='http://fonts.googleapis.com/css?family=Handlee|Indie+Flower' rel='stylesheet' type='text/css'>
 	</head>
 
@@ -26,7 +27,7 @@
 					<div class="tape"></div>
 					<div class="red-line first"></div>
 					<div class="red-line"></div>
-					<textarea id="input" class="text-input" name="comments" >Cold War
+					<textarea id="input" class="js-auto-expand text-input" name="comments" >Cold War
 John F Kennedy
 Iron Curtain
 NATO
@@ -37,11 +38,10 @@ Warsaw Pact</textarea>
 				</div>
 			</div>
 					</br>
-					<input class="btn btn-primary" value="Show me the magic!" name="parse-btn" type="button">
+					<!-- input class="btn btn-primary" value="Show me the magic!" name="parse-btn" type="button"-->
 					</div>
 				</div>
 			</div>
-		</div>
 
 
 		<footer class="container">
@@ -49,7 +49,9 @@ Warsaw Pact</textarea>
 		</footer>
 
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+		<script> $('textarea.js-auto-expand').textareaAutoExpand(); </script>
 		<!-- script type="text/javascript">
+		
 			var parse = function() {
 				var inputText = $('textarea').val();
 				var inputArray = inputText.split('\n');
