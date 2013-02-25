@@ -6,7 +6,6 @@
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
-		<script src="jquery.textarea_auto_expand.js"></script>
 		<link href='http://fonts.googleapis.com/css?family=Handlee|Indie+Flower' rel='stylesheet' type='text/css'>
 	</head>
 
@@ -56,49 +55,19 @@ by Earl and Shenil</textarea>
 		</footer>
 
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
-		<script> //$('textarea.js-auto-expand').textareaAutoExpand(); </script>
-		<!-- script type="text/javascript">
-		
-			var parse = function() {
-				var inputText = $('textarea').val();
-				var inputArray = inputText.split('\n');
-				var timer = 0;
+		<script type="text/javascript">
 
-				$('#myCheatsheet').text("");
-				for (i = 0; i < inputArray.length; i++) {
-					wikipediaPage=inputArray[i];
-					$.getJSON('http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', {page:wikipediaPage, prop:'text|images', uselang:'en'}, function(json) {
-						try
-						{
-							var text = json.parse.text["*"];
-							var n = text.indexOf("</table>");
-						if (n > -1)
-						{
-							text = text.substring(n+9);
-						}
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10750769-4']);
+  _gaq.push(['_trackPageview']);
 
-						text = text.substring(text.indexOf("<p>")+3);
-						text = text.substring(0, text.indexOf("</p>"));
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 
-						var regex = /(<([^>]+)>)/ig;
-
-						text = "<p>" + text.replace(regex, "") + "</p>";
-						//text = "<strong>" + inputArray[i] + "</strong>" + text;
-							$('#myCheatsheet').append(text);
-						}
-						catch (err)
-						{
-							//$('#myCheatsheet').append("<p>Sorry! Could not find anything on one of your terms!</p>");
-						}
-					}
-				);
-				}
-
-			};
-
-			$('input[name="parse-btn"]').bind('click', parse);
-
-		</script-->
+		</script>
 		</body>
 
 </html>
