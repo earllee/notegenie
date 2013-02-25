@@ -9023,8 +9023,9 @@ body {
 #input {
   position: relative;
   left: -8%;
-  width: 101.8%;
+  width: 101.5%;
   height: 960px;
+  padding-top: 2%;
   padding-left: 8%;
   background: none;
   border: none;
@@ -9038,6 +9039,7 @@ body {
 
 textarea {
   height: 960px;
+  font-family: 'Handlee', cursive;
   background-color: transparent;
   border: 1px solid transaparent;
   -webkit-box-shadow: none;
@@ -9087,6 +9089,7 @@ textarea {
 
 footer {
   padding-top: 10px;
+  padding-bottom: 10px;
   text-align: center;
 }
 

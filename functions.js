@@ -43,7 +43,7 @@ function updateBox(wikipediaPage, box, pos, curval)
 				//actval = actval.subString(actval.indexOf(curval) + curval.length() + 1);    
 
 		
-				box.val(curval + "\n" + text + "\n" + newval);
+				box.val(curval + "\n" + text + newval);
 				box.scrollTop(9999).focus();
 
 				//alert(wikipediaPage + text);
@@ -66,7 +66,7 @@ function updateBox(wikipediaPage, box, pos, curval)
 
 
 $('#input').on("keypress", function(e) {
-		window.scrollTo(0, document.body.scrollHeight);
+		//window.scrollTo(0, document.body.scrollHeight);
 	if (e.keyCode == 13) {
 		var value   = $(this).val();
 		pos     = $(this).prop('selectionStart');        // cursor position
@@ -78,7 +78,7 @@ $('#input').on("keypress", function(e) {
 		//  alert(value);
 		//alert (pos);
 		
-		window.scrollTo(0, document.body.scrollHeight);
+		//window.scrollTo(0, document.body.scrollHeight);
 		return false; // prevent the button click from happening
 	}
 });
