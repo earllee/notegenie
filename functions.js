@@ -64,10 +64,13 @@ function updateBox(wikipediaPage, box, pos, curval)
 }
 
 
+// For slightly better responsiveness.
+var down = 0;
 
 $('#input').on("keypress", function(e) {
 		//window.scrollTo(0, document.body.scrollHeight);
-	if (e.keyCode == 13) {
+	if (e.keyCode == 13 && !down) {
+		down = 1;
 		var value   = $(this).val();
 		pos     = $(this).prop('selectionStart');        // cursor position
 		//$(this).val(value.substring(0,pos) + "HELLO" + value.substring(pos));
@@ -79,6 +82,7 @@ $('#input').on("keypress", function(e) {
 		//alert (pos);
 		
 		//window.scrollTo(0, document.body.scrollHeight);
+		down = 0;
 		return false; // prevent the button click from happening
 	}
 });
