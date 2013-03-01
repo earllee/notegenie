@@ -34,7 +34,21 @@ function updateBox(wikipediaPage, box, pos, curval)
 				text = text.replace(/&#160;/g, "");	
 				if (text.indexOf("Cite error:") > -1)
 				text = text.substring(0, text.indexOf("Cite error:"));
-				par1 = text.substring(0,10).indexOf("(");
+				par1 = text.substring(0,15).indexOf("(");
+				if (par1 > -1)
+				{
+					var parcount = 1;
+					var curpos = par1 + 1;
+					while (parcount > 0 && curpos < text.length)
+					{
+						if (text.charAt(curpos) == ')')
+							parcount -= 1;
+						if (text.charAt(curpos) == '(')
+							parcount += 1;
+						curpos += 1;
+					}
+					text = text.substring(0, par1) + text.substring(curpos+1);
+				}
 				//alert(text)
 				console.log(text);
 
