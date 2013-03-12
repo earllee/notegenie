@@ -136,4 +136,10 @@ $(document).ready(function() {
 					$('#input').css("font-family", $(this).data('font'));
 				});
 
+				//Change font size
+				$('#font-size').on("change", function(e) {
+					$('#input').css("font-size", $(this).val() + "px");
+					e.preventDefault();
+					return false;
+				});
 });
