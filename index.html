@@ -14,6 +14,8 @@
 
 		<textarea id="input" class="text-input" name="comments" placeholder="A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!"></textarea>
 
+		<div id="preview"></div>
+
 		<div id="footer" class="navbar navbar-inverse">
 			<div class="navbar-inner">
 
@@ -25,8 +27,6 @@
 
 				<a class="brand" href="#">NoteGenie</a>
 
-				<!-- Collapsible menu-->
-				<div class="nav-collapse collapse">
 					<ul class="nav dropup">
 
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -47,7 +47,8 @@
 						</form>
 						</li>
 					</ul>
-				</div>	
+				<!-- Collapsible menu-->
+				<div class="nav-collapse collapse"></div>	
 
 				<!-- 
 				<p class="navbar-text">
@@ -62,6 +63,7 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 		<script type="text/javascript" src="http://modernizr.com/downloads/modernizr-latest.js"></script> <!-- Checks for HTML5 features -->
+		<script type="text/javascript" src="marked.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
 
 		<!-- Analytics -->

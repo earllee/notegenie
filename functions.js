@@ -2,10 +2,12 @@ $(document).ready(function() {
 
 	var input = $('#input');
 
+	//Set firstTime to false on first keypress
 	input.one("keypress", function() {
 		localStorage["firstTime"] = false;
 	});
 
+	//Retrieve saved text
 	if (Modernizr.localstorage && localStorage["text"]) {
 		var savedText = "";
 		try {
@@ -19,6 +21,7 @@ $(document).ready(function() {
 		}
 	} 
 
+	//Save text on interval
 	try {
 		if(localStorage["firstTime"] == "false")
 			setInterval(function() {
@@ -81,7 +84,7 @@ $(document).ready(function() {
 					if (text.indexOf("Cite error:") > -1)
 					text = text.substring(0, text.indexOf("Cite error:"));
 
-					firstParen = text.substring(0,15).indexOf("(");
+					var firstParen = text.substring(0,15).indexOf("(");
 
 					if (firstParen > -1) {
 						var parenCount = 1;
@@ -135,9 +138,22 @@ $(document).ready(function() {
 		}
 	});
 	
-	// handle enters
+	//Markdown preview
+	$(document).on("keydown", function(e) {
+		if (e.keyCode == 77 && e.ctrlKey) {
+		console.log(e.keyCode);
+			//Handle Ctrl+m
+			var tokens = marked.lexer(input.val());
+			console.log(marked.parser(tokens));
+			return false;
+		}
+	});
+
+	//Core keypress parser
 	$('#input').on("keypress", function(e) {
+		console.log(e.keyCode);
 		if (e.keyCode == 13) {
+			//Handle 'Enter'
 			var value = $(this).val();
 			pos = $(this).prop('selectionStart');	//Cursor position
 			var endLine = value.substring(0, pos).lastIndexOf("\n");
@@ -148,7 +164,7 @@ $(document).ready(function() {
 		
 			updateBox(value.substring(endLine+1,pos), $(this), pos, value);
 			return false; // prevent the button click from happening
-		}
+		} 
 	});
 
 	//Change fonts
@@ -162,6 +178,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		return false;
 	});
+
 
 	//Not yet implemented
 	function goFullscren(e) {
