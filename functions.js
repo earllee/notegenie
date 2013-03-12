@@ -87,7 +87,6 @@ $(document).ready(function() {
 				//	box.trigger({type: 'keypress', which: 35});	//Why?
 					box.focus();
 					var offsetSelect = actval.length - curval.length;
-					console.log(offsetSelect);
 					var selectpos = pos + text.length + 1 + offsetSelect;
 					$(box).selectRange(selectpos, selectpos);	
 				}
@@ -115,7 +114,6 @@ $(document).ready(function() {
 			$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
 			$(this).selectRange(pos + 1, pos+1);
 			
-			console.log(value.substring(endLine+1, pos));
 			updateBox(value.substring(endLine+1,pos), $(this), pos, value);
 		//	var lastline = value.lastIndexOf("\n");
 		//	$(this).val(value + "\n");
