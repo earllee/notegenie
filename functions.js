@@ -131,4 +131,11 @@ $(document).ready(function() {
 					}
 				});
 
+				//Change fonts
+				$('.font-btn').on("click", function(e) {
+					$('#input').css("font-family", $(this).data('font'));
+					e.preventDefault();
+					return false;
+				});
+
 });

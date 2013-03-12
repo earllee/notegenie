@@ -7,7 +7,7 @@
 		<meta name="description" content="A better way to take notes and stay informed." />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-		<link href='http://fonts.googleapis.com/css?family=Handlee|Indie+Flower' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=EB+Garamond|Handlee|Open+Sans' rel='stylesheet' type='text/css'>
 	</head>
 
 	<body>
@@ -33,9 +33,11 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu bottom-up"> 
-							<li><a href="#">Handlee</a></li>
-							<li><a href="#">Open Sans</a></li>
-							<li><a href="#">Console</a></li>
+							<li><a class="font-btn" data-font="Arial" href="#">Arial</a></li>
+							<li><a class="font-btn" data-font="Consolas" href="#">Consolas</a></li>
+							<li><a class="font-btn" data-font="EB Garamond" href="#">EB Garamond</a></li>
+							<li><a class="font-btn" data-font="Handlee" href="#">Handlee</a></li>
+							<li><a class="font-btn" data-font="Open sans" href="#">Open Sans</a></li>
 						</ul>
 						</li>
 					</ul>
@@ -54,6 +56,16 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+$('.font-btn').on("click", function(e) {
+console.log($(this).data('font'));
+$('#input').css("font-family", $(this).data('font'));
+e.preventDefault();
+return false;
+});
+			});
+		</script>
 
 		<!-- Analytics -->
 		<script type="text/javascript">
