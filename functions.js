@@ -152,6 +152,7 @@ console.log(tokens);
 				preview.html(marked.parser(tokens));
 				preview.css("opacity", 1);
 				preview.css("visibility", "visible");
+				$('body').css("background","white");
 				isPreviewActive = true;
 				input.blur();
 			}
