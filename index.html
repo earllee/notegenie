@@ -11,12 +11,45 @@
 	</head>
 
 	<body>
-		<textarea id="input" class="js-auto-expand text-input" name="comments" placeholder="A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!"></textarea>
 
+		<textarea id="input" class="text-input" name="comments" placeholder="A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!"></textarea>
 
-		<footer class="container">
-			<small>&copy;2013 NoteGenie. By <a href="mailto:earl.lee@yale.edu">Earl</a> &amp; <a href="mailto:shenil.dodhia@yale.edu">Shenil</a>. Made with love from TD.</small>
-		</footer>
+		<div id="footer" class="navbar navbar-inverse">
+			<div class="navbar-inner">
+
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+
+				<a class="brand" href="#">NoteGenie</a>
+
+				<!-- Collapsible menu-->
+				<div class="nav-collapse collapse">
+					<ul class="nav dropup">
+						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							Fonts
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu bottom-up"> 
+							<li><a href="#">Handlee</a></li>
+							<li><a href="#">Open Sans</a></li>
+							<li><a href="#">Console</a></li>
+						</ul>
+						</li>
+					</ul>
+				</div>	
+
+				<!-- 
+				<p class="navbar-text">
+					<small>&copy;2013 NoteGenie. By <a href="mailto:earl.lee@yale.edu">Earl</a> &amp; <a href="mailto:shenil.dodhia@yale.edu">Shenil</a>. Made with love from TD.</small>
+				</p>
+				-->
+
+			</div>	<!-- End navbar-innner -->
+		</div>	<!-- End navbar -->
+
 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>

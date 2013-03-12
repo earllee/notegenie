@@ -46,14 +46,14 @@ $(document).ready(function() {
 					if (text.length > 3 && (text.substring(text.length-3) == "to:")) {
 						throw "disambiguation";
 					}
-					
+
 					var citations = /(\[([^\]]+)\])/ig;	//Finds bracketed citations
 					text = text.replace(citations, "");
 
 					text = text.replace(/&#160;/g, "");	//Remove symbol
 
 					if (text.indexOf("Cite error:") > -1)
-						text = text.substring(0, text.indexOf("Cite error:"));
+					text = text.substring(0, text.indexOf("Cite error:"));
 
 					firstParen = text.substring(0,15).indexOf("(");	//Why 15?
 					//text.strip;	//Why?
@@ -63,9 +63,9 @@ $(document).ready(function() {
 						var curPos = firstParen + 1;
 						while (parenCount > 0 && curPos < text.length) {
 							if (text.charAt(curPos) == ')')
-								parenCount -= 1;
+							parenCount -= 1;
 							if (text.charAt(curPos) == '(')
-								parenCount += 1;
+							parenCount += 1;
 							curPos += 1;
 						}
 						text = text.substring(0, firstParen) + text.substring(curPos+1);
@@ -73,53 +73,49 @@ $(document).ready(function() {
 
 					text = text.replace(/^\s+|\s+$/g,'');	//trim
 					if (text === "")
-						throw "blank page";
+					throw "blank page";
 
 					var actval = String(box.val());
 					var extratextlen = actval.indexOf("\n", pos) - pos;
 					var newval = actval.substring(pos, extratextlen);
-				//	var newval = actval.substring(actval.indexOf(curval) + curval.length);
+					//	var newval = actval.substring(actval.indexOf(curval) + curval.length);
 
 					box.val(curval.substring(0, pos) + "\n" + text + "\n" + actval.substring(pos + 1));
-				//	box.val(curval + "\n" + text + newval);
+					//	box.val(curval + "\n" + text + newval);
 					box.scrollTop(9999).focus();
 
-				//	box.trigger({type: 'keypress', which: 35});	//Why?
+					//	box.trigger({type: 'keypress', which: 35});	//Why?
 					box.focus();
 					var offsetSelect = actval.length - curval.length;
 					var selectpos = pos + text.length + 1 + offsetSelect;
 					$(box).selectRange(selectpos, selectpos);	
 				}
 				catch (err) {
-				//	box.val(curval + "\n");
+					//	box.val(curval + "\n");
 					var actval = String(box.val());
 					box.val(curval.substring(0,pos) + actval.substring(pos));
 					$(box).selectRange(pos+1 ,pos+1);
 				}
-			}	//End success function
+				}	//End success function
 
-		});	//End AJAX
-	}	//End updateBox
-	
-	var down = 0;	// For slightly better responsiveness.
+				});	//End AJAX
+				}	//End updateBox
 
-	$('#input').on("keypress", function(e) {
-		if (e.keyCode == 13 && !down) {
-			down = 1;
-			var value = $(this).val();
-			pos = $(this).prop('selectionStart');	//Cursor position
-			var endLine = value.substring(0, pos).lastIndexOf("\n");
-			if (endLine == -1)
+
+				$('#input').on("keypress", function(e) {
+					if (e.keyCode == 13) {
+						var value = $(this).val();
+						pos = $(this).prop('selectionStart');	//Cursor position
+						var endLine = value.substring(0, pos).lastIndexOf("\n");
+						if (endLine == -1)
 				endLine = value.lastIndexOf("\n");
 			$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
-			$(this).selectRange(pos + 1, pos+1);
+			$(this).selectRange(pos + 1, pos + 1);
 			
 			updateBox(value.substring(endLine+1,pos), $(this), pos, value);
 		//	var lastline = value.lastIndexOf("\n");
 		//	$(this).val(value + "\n");
 		//	updateBox(value.substring(lastline+1,pos), $(this), pos, value);
-
-			down = 0;
 			return false; // prevent the button click from happening
 		}
 	});

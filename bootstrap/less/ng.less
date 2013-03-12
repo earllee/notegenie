@@ -1,14 +1,17 @@
 @import "bootstrap";
 @import "responsive";
-@import "variables-readable";
-@import "bootswatch";
+//@import "variables-readable";
+//@import "bootswatch";
 
 html, body {
 	background: repeat url(../../img/bg.png) 0 0;
-	padding: 0;
+	padding: 0 0 45px 0;
 	margin: 0;
 	height: 100%;
 	width: 100%;
+	#footer {
+		font-color: @gray;
+	}
 }
 
 #input {
@@ -21,6 +24,7 @@ html, body {
 	padding: 20px;
 	box-sizing: border-box; //Causes width to include padding
 	resize: none; //Removes resize indicator
+	.box-shadow(none);
 	&:focus {
 		outline: 0px !important;
 		-webkit-appearance:none;
@@ -36,14 +40,26 @@ textarea {
 	transition: all .5s ease;
 }
 
-.navbar {
-	padding-top: 10px;
-}
 
 
-footer {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	text-align: center;
+#footer {
+	.navbar-inner {
+		.border-radius(0); 
+		padding-left: 10px;
+	}
+	color: #999;
+	#info {
+		line-height: 40px;
+	}
+	.dropdown-menu{
+		&:after {
+			border-right: 0; 
+			border-bottom: 0;
+		}
+		&:before {
+			border-right: 0; 
+			border-bottom: 0;
+		}
+	}
 }
 
