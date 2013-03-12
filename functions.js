@@ -55,8 +55,8 @@ $(document).ready(function() {
 					if (text.indexOf("Cite error:") > -1)
 					text = text.substring(0, text.indexOf("Cite error:"));
 
-					firstParen = text.substring(0,15).indexOf("(");	//Why 15?
-					//text.strip;	//Why?
+					firstParen = text.substring(0,15).indexOf("(");
+						//15 is an arbitrary choice, but it's to prevent all parenthetical content from being deleted
 
 					if (firstParen > -1) {
 						var parenCount = 1;
@@ -84,17 +84,16 @@ $(document).ready(function() {
 					//	box.val(curval + "\n" + text + newval);
 					box.scrollTop(9999).focus();
 
-					//	box.trigger({type: 'keypress', which: 35});	//Why?
 					box.focus();
 					var offsetSelect = actval.length - curval.length;
 					var selectpos = pos + text.length + 1 + offsetSelect;
 					$(box).selectRange(selectpos, selectpos);	
 				}
 				catch (err) {
-					//	box.val(curval + "\n");
 					var actval = String(box.val());
 					box.val(curval.substring(0,pos) + actval.substring(pos));
-					$(box).selectRange(pos+1 ,pos+1);
+					var offset = actval.length - curval.length;
+					$(box).selectRange(pos +offset,pos+offset);
 				}
 				}	//End success function
 
