@@ -1,5 +1,24 @@
 $(document).ready(function() {
 
+	$.fn.selectRange = function(start, end) {
+		return this.each(function() {
+			if (this.setSelectionRange) {
+				this.focus();
+				this.setSelectionRange(start, end);
+			} else if (this.createTextRange) {
+				var range = this.createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', end);
+				range.moveStart('character', start);
+				range.select();
+			}
+		});
+	};
+
+	function setCaretToPos (input, pos) {
+		setSelectionRange(input, pos, pos);
+	}
+
 	function updateBox(wikipediaPage, box, pos, curval) {
 		var req1 = $.ajax({ 
 			type: 'GET', 
@@ -9,9 +28,9 @@ $(document).ready(function() {
 			async: false, 
 			success: function(json,wikipediaPage) {
 				try {
-					var text=json.parse.text["*"];
+					var text = json.parse.text["*"];
 					var n = text.indexOf("/table>");
-					while (n != -1)	{
+					while (n != -1)	{	//Gets rid of pre-content tables	
 						if (n > -1) {
 							text = text.substring(n+8);
 						}
@@ -21,71 +40,87 @@ $(document).ready(function() {
 					text = text.substring(text.indexOf("<p>")+3);
 					text = text.substring(0, text.indexOf("</p>"));
 
-					var regex = /(<([^>]+)>)/ig;
-
-					text = text.replace(regex, "");
-
-					var regex2 = /(\[([^\]]+)\])/ig;
+					var tags = /(<([^>]+)>)/ig;	//Finds all tags
+					text = text.replace(tags, "");
 
 					if (text.length > 3 && (text.substring(text.length-3) == "to:")) {
 						throw "disambiguation";
 					}
+					
+					var citations = /(\[([^\]]+)\])/ig;	//Finds bracketed citations
+					text = text.replace(citations, "");
 
-					text = text.replace(regex2, "");
-					text = text.replace(/&#160;/g, "");	
+					text = text.replace(/&#160;/g, "");	//Remove symbol
+
 					if (text.indexOf("Cite error:") > -1)
-					text = text.substring(0, text.indexOf("Cite error:"));
-					par1 = text.substring(0,15).indexOf("(");
-					if (par1 > -1)
-					{
-						var parcount = 1;
-						var curpos = par1 + 1;
-						while (parcount > 0 && curpos < text.length)
-						{
-							if (text.charAt(curpos) == ')')
-								parcount -= 1;
-							if (text.charAt(curpos) == '(')
-								parcount += 1;
-							curpos += 1;
+						text = text.substring(0, text.indexOf("Cite error:"));
+
+					firstParen = text.substring(0,15).indexOf("(");	//Why 15?
+					//text.strip;	//Why?
+
+					if (firstParen > -1) {
+						var parenCount = 1;
+						var curPos = firstParen + 1;
+						while (parenCount > 0 && curPos < text.length) {
+							if (text.charAt(curPos) == ')')
+								parenCount -= 1;
+							if (text.charAt(curPos) == '(')
+								parenCount += 1;
+							curPos += 1;
 						}
-						text = text.substring(0, par1) + text.substring(curpos+1);
+						text = text.substring(0, firstParen) + text.substring(curPos+1);
 					}
 
-					var actval = String(box.val());
-					var newval = actval.substring(actval.indexOf(curval)+curval.length);
+					text = text.replace(/^\s+|\s+$/g,'');	//trim
+					if (text === "")
+						throw "blank page";
 
-					box.val(curval + "\n" + text + newval);
+					var actval = String(box.val());
+					var extratextlen = actval.indexOf("\n", pos) - pos;
+					var newval = actval.substring(pos, extratextlen);
+				//	var newval = actval.substring(actval.indexOf(curval) + curval.length);
+
+					box.val(curval.substring(0, pos) + "\n" + text + "\n" + actval.substring(pos + 1));
+				//	box.val(curval + "\n" + text + newval);
 					box.scrollTop(9999).focus();
 
-					box.trigger({type: 'keypress', which: 35});
+				//	box.trigger({type: 'keypress', which: 35});	//Why?
+					box.focus();
+					var offsetSelect = actval.length - curval.length;
+					console.log(offsetSelect);
+					var selectpos = pos + text.length + 1 + offsetSelect;
+					$(box).selectRange(selectpos, selectpos);	
 				}
 				catch (err) {
-					box.val(curval + "\n");
+				//	box.val(curval + "\n");
+					var actval = String(box.val());
+					box.val(curval.substring(0,pos) + actval.substring(pos));
+					$(box).selectRange(pos+1 ,pos+1);
 				}
 			}	//End success function
 
-		}
-
-	);	//End AJAX
+		});	//End AJAX
 	}	//End updateBox
 	
 	var down = 0;	// For slightly better responsiveness.
 
 	$('#input').on("keypress", function(e) {
-			//window.scrollTo(0, document.body.scrollHeight);
 		if (e.keyCode == 13 && !down) {
 			down = 1;
-			var value   = $(this).val();
-			pos     = $(this).prop('selectionStart');        // cursor position
-			//$(this).val(value.substring(0,pos) + "HELLO" + value.substring(pos));
-			var lastline = value.lastIndexOf("\n");
-			$(this).val(value + "\n");
-			updateBox(value.substring(lastline+1,pos), $(this), pos, value);
-			//$(this).scrollTop(1);
-			//  alert(value);
-			//alert (pos);
+			var value = $(this).val();
+			pos = $(this).prop('selectionStart');	//Cursor position
+			var endLine = value.substring(0, pos).lastIndexOf("\n");
+			if (endLine == -1)
+				endLine = value.lastIndexOf("\n");
+			$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
+			$(this).selectRange(pos + 1, pos+1);
+			
+			console.log(value.substring(endLine+1, pos));
+			updateBox(value.substring(endLine+1,pos), $(this), pos, value);
+		//	var lastline = value.lastIndexOf("\n");
+		//	$(this).val(value + "\n");
+		//	updateBox(value.substring(lastline+1,pos), $(this), pos, value);
 
-			//window.scrollTo(0, document.body.scrollHeight);
 			down = 0;
 			return false; // prevent the button click from happening
 		}
