@@ -100,23 +100,35 @@ $(document).ready(function() {
 				});	//End AJAX
 				}	//End updateBox
 
-
+				
+				// catch tabs
+				$('#input').on("keydown", function(e) {
+					if (e.keyCode == 9) {
+						e.preventDefault();
+						var value = $(this).val();
+						pos = $(this).prop('selectionStart');
+						$(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
+						$(this).selectRange(pos + 1, pos+1);
+					}
+				});
+				
+				// handle enters
 				$('#input').on("keypress", function(e) {
 					if (e.keyCode == 13) {
 						var value = $(this).val();
 						pos = $(this).prop('selectionStart');	//Cursor position
 						var endLine = value.substring(0, pos).lastIndexOf("\n");
 						if (endLine == -1)
-				endLine = value.lastIndexOf("\n");
-			$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
-			$(this).selectRange(pos + 1, pos + 1);
-			
-			updateBox(value.substring(endLine+1,pos), $(this), pos, value);
-		//	var lastline = value.lastIndexOf("\n");
-		//	$(this).val(value + "\n");
-		//	updateBox(value.substring(lastline+1,pos), $(this), pos, value);
-			return false; // prevent the button click from happening
-		}
-	});
+						endLine = value.lastIndexOf("\n");
+						$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
+						$(this).selectRange(pos + 1, pos + 1);
+					
+						updateBox(value.substring(endLine+1,pos), $(this), pos, value);
+					//	var lastline = value.lastIndexOf("\n");
+					//	$(this).val(value + "\n");
+					//	updateBox(value.substring(lastline+1,pos), $(this), pos, value);
+						return false; // prevent the button click from happening
+					}
+				});
 
 });
