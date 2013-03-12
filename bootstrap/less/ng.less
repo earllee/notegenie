@@ -13,6 +13,9 @@ html, body {
 		font-color: @gray;
 	}
 }
+.main {
+	height: 100%;
+}
 
 .text {
 	font-family: 'Handlee', cursive;
@@ -43,20 +46,30 @@ textarea {
 	transition: all .5s ease;
 }
 
-.preview {
-	background: white;
+#preview {
+	background-color: white;
 	visibility: hidden;
+	position: absolute;
+	padding: 20px;
+	height: 100%;
+	width: 100%;
+	-webkit-transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-ms-transition: all .5s ease;
+	-o-transition: all .5s ease;
+	transition: all .5s ease;
 }
 
 
 #footer {
+	color: #999;
+	position: relative;
+	#info {
+		line-height: 40px;
+	}
 	.navbar-inner {
 		.border-radius(0); 
 		padding-left: 10px;
-	}
-	color: #999;
-	#info {
-		line-height: 40px;
 	}
 	.dropdown-menu{
 		&:after {

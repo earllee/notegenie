@@ -8999,6 +8999,10 @@ body #footer {
   font-color: #555555;
 }
 
+.main {
+  height: 100%;
+}
+
 .text {
   font-family: 'Handlee', cursive;
   font-size: 16px;
@@ -9035,12 +9039,27 @@ textarea {
           transition: all .5s ease;
 }
 
-.preview {
-  background: white;
+#preview {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: white;
+  visibility: hidden;
+  -webkit-transition: all .5s ease;
+     -moz-transition: all .5s ease;
+      -ms-transition: all .5s ease;
+       -o-transition: all .5s ease;
+          transition: all .5s ease;
 }
 
 #footer {
+  position: relative;
   color: #999;
+}
+
+#footer #info {
+  line-height: 40px;
 }
 
 #footer .navbar-inner {
@@ -9048,10 +9067,6 @@ textarea {
   -webkit-border-radius: 0;
      -moz-border-radius: 0;
           border-radius: 0;
-}
-
-#footer #info {
-  line-height: 40px;
 }
 
 #footer .dropdown-menu:after {

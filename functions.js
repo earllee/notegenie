@@ -151,7 +151,7 @@ console.log(isPreviewActive);
 console.log(tokens);
 				preview.html(marked.parser(tokens));
 				preview.css("opacity", 1);
-				preview.css("visibility", "visibile");
+				preview.css("visibility", "visible");
 				isPreviewActive = true;
 				input.blur();
 			}
