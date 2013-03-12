@@ -1,0 +1,49 @@
+@import "bootstrap";
+@import "responsive";
+@import "variables-readable";
+@import "bootswatch";
+
+html, body {
+	background: repeat url(../../img/bg.png) 0 0;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#input {
+	font-family: 'Handlee', cursive;
+	height: 100%;
+	width: 100%;
+	background: none;
+	outline: 0;
+	border: 0;
+	padding: 20px;
+	box-sizing: border-box; //Causes width to include padding
+	resize: none; //Removes resize indicator
+	&:focus {
+		outline: 0px !important;
+		-webkit-appearance:none;
+		.box-shadow(none);
+	}
+}
+
+textarea {
+	-webkit-transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-ms-transition: all .5s ease;
+	-o-transition: all .5s ease;
+	transition: all .5s ease;
+}
+
+.navbar {
+	padding-top: 10px;
+}
+
+
+footer {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+

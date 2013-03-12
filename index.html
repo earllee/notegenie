@@ -1,38 +1,17 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="UTF-8">
 		<title>NoteGenie</title>
+		<meta name="title" content="NoteGenie | Better way to take notes" />
+		<meta name="description" content="A better way to take notes and stay informed." />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<link href='http://fonts.googleapis.com/css?family=Handlee|Indie+Flower' rel='stylesheet' type='text/css'>
 	</head>
 
 	<body>
-		<div class="container">
-			<div class="navbar">
-					<div class="navbar-inner">
-						<a class="brand" href="#">NoteGenie</a>
-					</div>
-				</div>
-			<div class="container">
-					<div class="main">
-						<div id="intro" >
-							<p>A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!</p>
-							</div>
-			<div id="output" class="container">
-				<div class="paper">
-					<div class="tape"></div>
-					<div class="red-line first"></div>
-					<div class="red-line"></div>
-					<textarea id="input" class="js-auto-expand text-input" name="comments"></textarea>
-					<div class="left-shadow"></div>
-					<div class="right-shadow"></div>
-				</div>
-			</div>
-					</br>
-					</div>
-				</div>
-			</div>
+		<textarea id="input" class="js-auto-expand text-input" name="comments" placeholder="A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!"></textarea>
 
 
 		<footer class="container">
@@ -42,17 +21,19 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
+
+		<!-- Analytics -->
 		<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-10750769-4']);
-  _gaq.push(['_trackPageview']);
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-10750769-4']);
+			_gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
 
 		</script>
 		</body>
