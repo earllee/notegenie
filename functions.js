@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
 	var input = $('#input');
+	var isPreviewActive = false;
 
 	//Set firstTime to false on first keypress
 	input.one("keypress", function() {
@@ -141,10 +142,29 @@ $(document).ready(function() {
 	//Markdown preview
 	$(document).on("keydown", function(e) {
 		if (e.keyCode == 77 && e.ctrlKey) {
-		console.log(e.keyCode);
 			//Handle Ctrl+m
-			var tokens = marked.lexer(input.val());
-			console.log(marked.parser(tokens));
+console.log('made it in');
+console.log(isPreviewActive);
+			var preview = $('#preview');
+			if(!isPreviewActive) {
+				var tokens = marked.lexer(input.val());
+console.log(tokens);
+				preview.html(marked.parser(tokens));
+				preview.css("opacity", 1);
+				preview.css("visibility", "visibile");
+				isPreviewActive = true;
+				input.blur();
+			}
+			else {
+				preview.css("opacity", 0);
+				preview.css("visibility", "hidden");
+
+				isPreviewActive = false;
+				input.focus();
+			}
+console.log(isPreviewActive);
+
+			e.preventDefault();
 			return false;
 		}
 	});
@@ -169,12 +189,12 @@ $(document).ready(function() {
 
 	//Change fonts
 	$('.font-btn').on("click", function(e) {
-		$('#input').css("font-family", $(this).data('font'));
+		$('.text').css("font-family", $(this).data('font'));
 	});
 
 	//Change font size
 	$('#font-size').on("change", function(e) {
-		$('#input').css("font-size", $(this).val() + "px");
+		$('.text').css("font-size", $(this).val() + "px");
 		e.preventDefault();
 		return false;
 	});
