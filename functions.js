@@ -1,5 +1,31 @@
 $(document).ready(function() {
 
+	var input = $('#input');
+
+	input.one("keypress", function() {
+		localStorage["firstTime"] = false;
+	});
+
+	if (Modernizr.localstorage && localStorage["text"]) {
+		var savedText = "";
+		try {
+			savedText = localStorage["text"];
+		} catch(e) {}
+		if (savedText) {
+			input.val(savedText);
+			savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
+			savedText = savedText.replace(/[ ]{2,}/gi," ");
+			savedText = savedText.replace(/\n /,"\n");
+		}
+	} 
+
+	try {
+		if(localStorage["firstTime"] == "false")
+			setInterval(function() {
+				localStorage.setItem("text", input.val());
+			}, 2000);
+	} catch(e) {}
+
 	$.fn.selectRange = function(start, end) {
 		return this.each(function() {
 			if (this.setSelectionRange) {
@@ -56,7 +82,6 @@ $(document).ready(function() {
 					text = text.substring(0, text.indexOf("Cite error:"));
 
 					firstParen = text.substring(0,15).indexOf("(");
-						//15 is an arbitrary choice, but it's to prevent all parenthetical content from being deleted
 
 					if (firstParen > -1) {
 						var parenCount = 1;
@@ -78,10 +103,8 @@ $(document).ready(function() {
 					var actval = String(box.val());
 					var extratextlen = actval.indexOf("\n", pos) - pos;
 					var newval = actval.substring(pos, extratextlen);
-					//	var newval = actval.substring(actval.indexOf(curval) + curval.length);
 
 					box.val(curval.substring(0, pos) + "\n" + text + "\n" + actval.substring(pos + 1));
-					//	box.val(curval + "\n" + text + newval);
 					box.scrollTop(9999).focus();
 
 					box.focus();
@@ -98,48 +121,53 @@ $(document).ready(function() {
 				}	//End success function
 
 				});	//End AJAX
-				}	//End updateBox
+			}	//End updateBox
 
-				
-				// catch tabs
-				$('#input').on("keydown", function(e) {
-					if (e.keyCode == 9) {
-						e.preventDefault();
-						var value = $(this).val();
-						pos = $(this).prop('selectionStart');
-						$(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
-						$(this).selectRange(pos + 1, pos+1);
-					}
-				});
-				
-				// handle enters
-				$('#input').on("keypress", function(e) {
-					if (e.keyCode == 13) {
-						var value = $(this).val();
-						pos = $(this).prop('selectionStart');	//Cursor position
-						var endLine = value.substring(0, pos).lastIndexOf("\n");
-						if (endLine == -1)
-						endLine = value.lastIndexOf("\n");
-						$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
-						$(this).selectRange(pos + 1, pos + 1);
-					
-						updateBox(value.substring(endLine+1,pos), $(this), pos, value);
-					//	var lastline = value.lastIndexOf("\n");
-					//	$(this).val(value + "\n");
-					//	updateBox(value.substring(lastline+1,pos), $(this), pos, value);
-						return false; // prevent the button click from happening
-					}
-				});
 
-				//Change fonts
-				$('.font-btn').on("click", function(e) {
-					$('#input').css("font-family", $(this).data('font'));
-				});
+	// catch tabs
+	$('#input').on("keydown", function(e) {
+		if (e.keyCode == 9) {
+			e.preventDefault();
+			var value = $(this).val();
+			pos = $(this).prop('selectionStart');
+			$(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
+			$(this).selectRange(pos + 1, pos+1);
+		}
+	});
+	
+	// handle enters
+	$('#input').on("keypress", function(e) {
+		if (e.keyCode == 13) {
+			var value = $(this).val();
+			pos = $(this).prop('selectionStart');	//Cursor position
+			var endLine = value.substring(0, pos).lastIndexOf("\n");
+			if (endLine == -1)
+			endLine = value.lastIndexOf("\n");
+			$(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
+			$(this).selectRange(pos + 1, pos + 1);
+		
+			updateBox(value.substring(endLine+1,pos), $(this), pos, value);
+			return false; // prevent the button click from happening
+		}
+	});
 
-				//Change font size
-				$('#font-size').on("change", function(e) {
-					$('#input').css("font-size", $(this).val() + "px");
-					e.preventDefault();
-					return false;
-				});
+	//Change fonts
+	$('.font-btn').on("click", function(e) {
+		$('#input').css("font-family", $(this).data('font'));
+	});
+
+	//Change font size
+	$('#font-size').on("change", function(e) {
+		$('#input').css("font-size", $(this).val() + "px");
+		e.preventDefault();
+		return false;
+	});
+
+	//Not yet implemented
+	function goFullscren(e) {
+		var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+		if (requestMethod)
+			requestMethod.call(element);
+	}
+
 });
