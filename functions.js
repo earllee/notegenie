@@ -152,13 +152,14 @@ console.log(tokens);
 				preview.html(marked.parser(tokens));
 				preview.css("opacity", 1);
 				preview.css("visibility", "visible");
-				$('body').css("background","white");
+				$('body, html').css("background","white");
 				isPreviewActive = true;
 				input.blur();
 			}
 			else {
 				preview.css("opacity", 0);
 				preview.css("visibility", "hidden");
+				$('body, html').css("background", "");
 
 				isPreviewActive = false;
 				input.focus();
