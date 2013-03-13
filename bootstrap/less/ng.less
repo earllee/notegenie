@@ -15,9 +15,10 @@ html, body {
 }
 
 .text {
-	font-family: 'Open sans', cursive;
+	font-family: 'Open sans', serif;
 	font-size: 16px;
 	line-height: 120%;
+	overflow: auto;
 }
 
 #input {
@@ -37,13 +38,6 @@ html, body {
 		.box-shadow(none);
 	}
 }
-textarea {
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	transition: all .5s ease;
-}
 
 #preview {
 	background-color: white;
@@ -60,6 +54,10 @@ textarea {
 	transition: all .5s ease;
 }
 
+.modal {
+	overflow-y: auto;
+	max-height: 90%;
+}
 
 #footer {
 	color: #999;

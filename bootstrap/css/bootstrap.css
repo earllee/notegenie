@@ -9000,7 +9000,8 @@ body #footer {
 }
 
 .text {
-  font-family: 'Open sans', cursive;
+  overflow: auto;
+  font-family: 'Open sans', serif;
   font-size: 16px;
   line-height: 120%;
 }
@@ -9027,14 +9028,6 @@ body #footer {
   -webkit-appearance: none;
 }
 
-textarea {
-  -webkit-transition: all .5s ease;
-     -moz-transition: all .5s ease;
-      -ms-transition: all .5s ease;
-       -o-transition: all .5s ease;
-          transition: all .5s ease;
-}
-
 #preview {
   position: absolute;
   width: 100%;
@@ -9048,6 +9041,11 @@ textarea {
       -ms-transition: all .5s ease;
        -o-transition: all .5s ease;
           transition: all .5s ease;
+}
+
+.modal {
+  max-height: 90%;
+  overflow-y: auto;
 }
 
 #footer {
