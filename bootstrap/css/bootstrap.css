@@ -9002,7 +9002,7 @@ body #footer {
 .text {
   font-family: 'Open sans', cursive;
   font-size: 16px;
-  line-height: 100%;
+  line-height: 120%;
 }
 
 #input {
@@ -9039,7 +9039,7 @@ textarea {
   position: absolute;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 50px;
   background-color: white;
   visibility: hidden;
   box-sizing: border-box;
@@ -9060,6 +9060,10 @@ textarea {
 
 #footer #info {
   line-height: 40px;
+}
+
+#footer #font-size {
+  width: 3em;
 }
 
 #footer .brand {

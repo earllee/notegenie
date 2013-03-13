@@ -220,6 +220,11 @@ console.log(isPreviewActive);
 		e.preventDefault();
 	});
 
+	//'Help' Modal
+	$('#help').on("click", function(e) {
+		$('#helpModal').modal();
+		e.preventDefault();
+	});
 	//Not yet implemented
 	function goFullscren(e) {
 		var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
