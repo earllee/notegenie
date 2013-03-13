@@ -215,7 +215,7 @@ console.log(isPreviewActive);
 	$('.brand').tooltip();
 
 	//'About' Popover
-	$('#about').popover({trigger: 'click', delay: {hide: 1000}, placement: 'top'});
+	$('#about').popover({trigger: 'hover', delay: {hide: 1000}, placement: 'top'});
 	$('#about').on("click", function(e) {
 		e.preventDefault();
 	});
