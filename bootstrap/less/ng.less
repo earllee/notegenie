@@ -57,6 +57,23 @@ html, body {
 .modal {
 	overflow-y: auto;
 	max-height: 90%;
+	background-color: #000;
+	color: @grayLighter;
+}
+
+.modal-backdrop {
+	background: none;
+}
+.fade.in {
+	.opacity(70);
+}
+.close {
+	color: white;
+	.opacity(70);
+	&:hover {
+		color: white;
+		.opacity(100);
+	}
 }
 
 #footer {

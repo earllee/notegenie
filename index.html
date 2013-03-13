@@ -57,53 +57,46 @@
 		<!-- 'Help' modal -->
 		<div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiess="modal" aria-hidden="true">x</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 				<h3 id="modalHeaderLabel">Help</h3>
 			</div>
 			<div class="modal-body">
 				<p>Need help using NoteGenie? Take a look below!</p>
 				<h4>Markup</h4>
 				<p>To toggle markup view, press CTRL + M.</p>
-				<h5>Headings</h5>
-				<p>'#'s at the beginning of a line indicate headers. You can use up to 6 '#'s. The more '#'s, the smaller the header.</p>
-				<h5>Quotes</h5>
-				<p>'>' precede quotes</p>
 				<table class="table">
 					<caption>Markdown Syntax</caption>
 					<colgroup />
-						<colgroup span="2" title="title" />
+						<colgroup span="1" title="title" />
 							<thead>
 								<tr>
-									<th scope="col">Headers</th>
-									<th scope="col">Bold</th>
-									<th scope="col">Italic</th>
-									<th scope="col">Quote</th>
-									<th scope="col">Horizontal Rule</th>
+									<th scope="col">Name</th>
+									<th scope="col">Syntax</th>
+									<th scope="col">Options</th>
+									<th scope="col" width="35%">Example</th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<td>Darth Vader</td>
-									<td>Dark</td>
-									<td>Sith</td>
-								</tr>
-							</tfoot>
 							<tbody>
+								<tr>
+									<td>Heading</td>
+									<td>#</td>
+									<td>Use at beginning. Up to 6 levels. Higher levels give smaller headings.</td>
+									<td><pre>##Level 2 Heading</pre></td>
+								</tr>
 							<tr>
-								<td>Obi Wan Kenobi</td>
-								<td>Light</td>
-								<td>Jedi</td>
+								<td>Horizontal Rule</td>
+								<td>---</td>
+								<td>Keep in it's own line.</td>
+								<td><pre>#Heading</br>---</br>Content goes here.</pre></td>
 							</tr>
 							<tr>
-								<td>Greedo</td>
-								<td>South</td>
-								<td>Scumbag</td>
+								<td>Unordered Lists</td>
+								<td>*,+,-</td>
+								<td>Keep a space in between list marker and item.</td>
+								<td><pre>* List item 1</br>* List item 2</pre></td>
 							</tr>
 							</tbody>
 						</table>
-			</div>
-			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 			</div>
 		</div>
 
