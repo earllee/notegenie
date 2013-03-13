@@ -13,25 +13,24 @@ html, body {
 		font-color: @gray;
 	}
 }
-.main {
-	height: 100%;
-}
 
 .text {
-	font-family: 'Handlee', cursive;
+	font-family: 'Open sans', cursive;
 	font-size: 16px;
 	line-height: 100%;
 }
+
 #input {
 	height: 100%;
 	width: 100%;
 	background: none;
 	outline: 0;
 	border: 0;
-	padding: 20px;
+	padding: 50px;
 	box-sizing: border-box; //Causes width to include padding
 	resize: none; //Removes resize indicator
 	.box-shadow(none);
+
 	&:focus {
 		outline: 0px !important;
 		-webkit-appearance:none;
@@ -66,14 +65,66 @@ textarea {
 	color: #999;
 	position: relative;
 	background: black;
+	.opacity(70);
+
 	#info {
 		line-height: 40px;
 	}
+
+	.brand {
+		font-family: 'Open sans', sans-serif;
+		text-shadow: none; 
+		color: @grayLighter; 
+	}
+
+	.nav {
+		.popover {
+			background: black;
+			width: 270px;
+			font-size: 12px;
+			.arrow {
+				border-top-color: black;	
+				&:after {
+					border-top-color: black;
+				}
+			}
+		}
+		&>li {
+			&:hover {
+				&>.dropdown-menu {
+					display: block;
+				}
+			}
+
+			&>a {
+				color: @grayLighter;
+				text-shadow: none;
+			}
+		}
+	}
+
 	.navbar-inner {
 		.border-radius(0); 
-		padding-left: 10px;
+		background-color: #000; 
+		background-image: none;
+		background-repeat: no-repeat;
+		filter: none;
+
+		&>li{
+			a {
+				color: @grayLighter;	
+				text-shadow: none;
+			}
+		}
 	}
+
 	.dropdown-menu{
+		background-color: #000;
+		
+		a {
+			color: @grayLighter;
+		}
+
 		&:after {
 			border-right: 0; 
 			border-bottom: 0;

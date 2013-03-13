@@ -1,12 +1,20 @@
 $(document).ready(function() {
 
-	var input = $('#input');
-	var isPreviewActive = false;
+	var input = $('#input'),
+	isPreviewActive = false;
 
 	//Set firstTime to false on first keypress
 	input.one("keypress", function() {
 		localStorage["firstTime"] = false;
 	});
+
+	//Set previous font
+	if (localStorage["font"] || localStorage["fontSize"]) {
+		$('.text').css("font-family", localStorage["font"]);
+		$('.text').css("font-size", localStorage["fontSize"] + "px");
+		if (localStorage["fontSize"])
+			$('#font-size').val(localStorage["fontSize"]);
+	}
 
 	//Retrieve saved text
 	if (Modernizr.localstorage && localStorage["text"]) {
@@ -26,9 +34,9 @@ $(document).ready(function() {
 	try {
 		if(localStorage["firstTime"] == "false")
 			setInterval(function() {
-				localStorage.setItem("text", input.val());
+				localStorage["text"] = input.val();
 			}, 2000);
-	} catch(e) {}
+	} catch(e) {console.log('failed');}
 
 	$.fn.selectRange = function(start, end) {
 		return this.each(function() {
@@ -192,15 +200,25 @@ console.log(isPreviewActive);
 	//Change fonts
 	$('.font-btn').on("click", function(e) {
 		$('.text').css("font-family", $(this).data('font'));
+		localStorage["font"] = $(this).data('font');
 	});
 
 	//Change font size
 	$('#font-size').on("change", function(e) {
 		$('.text').css("font-size", $(this).val() + "px");
+		localStorage["fontSize"] = $(this).val();
 		e.preventDefault();
 		return false;
 	});
 
+	//Logo Tooltip
+	$('.brand').tooltip();
+
+	//'About' Popover
+	$('#about').popover({trigger: 'hover', delay: {hide: 1000}, placement: 'top'});
+	$('#about').on("click", function(e) {
+		e.preventDefault();
+	});
 
 	//Not yet implemented
 	function goFullscren(e) {
