@@ -1,0 +1,112 @@
+extends layout
+
+block content
+    #preview.text
+    textarea#input.text(name='comments', placeholder='A better way of note-taking. Don\'t know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!')
+    #footer.navbar
+      .navbar-inner
+        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='#') NoteGenie
+        //
+           Main Nav 
+        ul.nav
+          li
+            a#about(href='#', data-content='By Earl & Shenil. Made with love from TD.') About
+          li
+            a#help(href='#') Help
+        //
+           Tools 
+        ul.nav.nav-collapse.dropup.pull-right
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              | Fonts
+              b.caret
+            ul.dropdown-menu.bottom-up
+              li
+                a.font-btn(data-font='Arial', href='#') Arial
+              li
+                a.font-btn(data-font='Consolas', href='#') Consolas
+              li
+                a.font-btn(data-font='EB Garamond', href='#') EB Garamond
+              li
+                a.font-btn(data-font='Handlee', href='#') Handlee
+              li
+                a.font-btn(data-font='Open sans', href='#') Open Sans
+          li
+            form.navbar-form
+              input#font-size(column='2', type='number', value='16', min='5')
+      //
+         End navbar-inner 
+    //
+       End navbar 
+    //
+       'Help' modal 
+    #helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-hidden='true') x
+        h3#modalHeaderLabel Help
+      .modal-body
+        p Need help using NoteGenie? Take a look below!
+        h4 Markup
+        p To toggle markup view, press CTRL + M.
+        table.table
+          caption Markdown Syntax
+          colgroup
+          colgroup(span='1', title='title')
+          thead
+            tr
+              th(scope='col') Name
+              th(scope='col') Syntax
+              th(scope='col') Options
+              th(scope='col', width='35%') Example
+          tbody
+            tr
+              td Heading
+              td #
+              td Use at beginning. Up to 6 levels. Higher levels give smaller headings.
+              td
+                pre.
+                  \n##Level 2 Heading                  
+            tr
+              td Horizontal Rule
+              td ---
+              td Keep in it's own line.
+              td
+                pre.
+                  \n#Heading                  ---                  Content goes here.                  
+            tr
+              td Unordered Lists
+              td *,+,-
+              td Keep a space in between list marker and item.
+              td
+                pre.
+                  \n* List item 1                  * List item 2                  
+            tr
+              td Images
+              td ![Title](URL)
+              td This will insert in-line images.
+              td
+                pre.
+                  \n![NoteGenie Logo](www.notegenie.io/logo.gif)                  
+  script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+  script(type='text/javascript', src='bootstrap/js/bootstrap.js')
+  script(type='text/javascript', src='http://modernizr.com/downloads/modernizr-latest.js')
+  //
+     Checks for HTML5 features 
+  script(type='text/javascript', src='marked.js')
+  script(type='text/javascript', src='functions.js')
+  //
+     Analytics 
+  script(type='text/javascript')
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10750769-4']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
