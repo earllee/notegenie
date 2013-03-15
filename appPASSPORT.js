@@ -19,10 +19,38 @@ var app = express();
 var DROPBOX_APP_KEY = keys.dropboxAppKey;
 var DROPBOX_APP_SECRET = keys.dropboxAppSecret;
 
-var client = new Dropbox.Client({
-  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", sandbox: true
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
-client.authDriver(new Dropbox.Drivers.NodeServer(8191));
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new DropboxStrategy({
+    consumerKey: DROPBOX_APP_KEY,
+    consumerSecret: DROPBOX_APP_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/dropbox/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Dropbox profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Dropbox account with a user record in your database,
+      // and return that user instead.
+      console.log('token: ' + token);
+      console.log('token secret: ' + tokenSecret);
+      console.log('using dropbox strat: ' + profile.emails[0].value);
+      return done(null, profile, token, tokenSecret);
+    });
+  }
+));
+
+//var client = new Dropbox.client({
+//  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", sandbox: true
+//});
+
 //client.authDriver(new Dropbox.Drivers.Popup({
 //  receiverURL: 'http://127.0.0.1:3000/'}));
 //client.authDriver(new Dropbox.Drivers.Redirect());
@@ -37,16 +65,22 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.session({ secret: 'keyboard cat' }));  //?
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
 
 app.get('/', function(req, res){
   res.render('index', { user: req.user });
 });
 
-app.get('/account', function(req, res){
+app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
 });
 
@@ -59,20 +93,11 @@ app.get('/login', function(req, res){
 //   request.  The first step in Dropbox authentication will involve redirecting
 //   the user to dropbox.com.  After authorization, Dropbox will redirect the user
 //   back to this application at /auth/dropbox/callback
-app.get('/auth/dropbox', function(req, res) {
-
-client.authenticate(function(error, client) {
-  client.writeFile("hello_world.txt", "Hello, world!\n", function(error, stat) {
-    if (error) {
-        return showError(error);  // Something went wrong.
-        }
-      
-        alert("File saved as revision " + stat.revisionTag);
-      });
-  client.getUserInfo(function(error, userInfo) {
-        console.log("Hello, " + userInfo.name + "!");
-      });
-    });
+app.get('/auth/dropbox',
+  passport.authenticate('dropbox'),
+  function(req, res){
+    // The request will be redirected to Dropbox for authentication, so this
+    // function will not be called.
   });
 
 // GET /auth/dropbox/callback
@@ -80,7 +105,18 @@ client.authenticate(function(error, client) {
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
+app.get('/auth/dropbox/callback', 
+  passport.authenticate('dropbox', { failureRedirect: '/login' }),
+  function(req, res) {
+    console.log(req);
+    console.log('callback on /auth/dropbox/: ' +req.user.displayName);
+    res.redirect('/');
+  });
 
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 //app.get('/', routes.index);
 //app.get('/users', user.list);
@@ -89,3 +125,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+  }
