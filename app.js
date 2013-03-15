@@ -14,6 +14,11 @@ var app = express();
 var DROPBOX_APP_KEY = keys.dropboxAppKey;
 var DROPBOX_APP_SECRET = keys.dropboxAppSecret;
 
+var client = new Dropbox.Client({
+  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
+  sandbox: true});
+
+client.authDriver(new Dropbox.Drivers.NodeServer(8191));
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -30,55 +35,30 @@ app.configure(function(){
 
 
 app.get('/', function(req, res){
-  res.render('index', { user: req.user });
+  res.render('index');
 });
 
 app.post('/', function(req, res) {
-
-  var client = new Dropbox.Client({
-    key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-    sandbox: true});
-    
-  client.authDriver(new Dropbox.Drivers.NodeServer(8191));
-  
-  client.authenticate(function(error, client) {
-    if (error) {
+  client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
+    if (error)
       return showError(error);
-    }
-    client.writeFile('testSave.txt', req.param('body'), 
-    function(error, stat) {
-      if (error) {
-        return showError(error);
-      }
-      console.log('Succesful save.');
-    });
+    console.log('Succesful save.');
   });
 });
 
+// Account page displays client info
 app.get('/account', function(req, res){
   client.getUserInfo(function(error, userInfo) {
     res.render('account', { user: userInfo});
-  
   });
 });
 
-app.get('/login', function(req, res){
-  res.render('login', { user: req.user });
-});
-
 app.get('/auth/dropbox', function(req, res) {
-  var client = new Dropbox.Client({
-    key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-    sandbox: true});
-    
-  client.authDriver(new Dropbox.Drivers.NodeServer(8191));
-  
   client.authenticate(function(error, client) {
     client.writeFile("hello_world.txt", "Hello, world!\n", 
     function(error, stat) {
-      if (error) {
+      if (error)
         return showError(error); 
-      }
       console.log("File saved as revision " + stat.revisionTag);
     });
     client.getUserInfo(function(error, userInfo) {
@@ -87,9 +67,6 @@ app.get('/auth/dropbox', function(req, res) {
     res.redirect('/');
   });
 });
-
-//app.get('/', routes.index);
-//app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
