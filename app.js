@@ -14,11 +14,6 @@ var app = express();
 var DROPBOX_APP_KEY = keys.dropboxAppKey;
 var DROPBOX_APP_SECRET = keys.dropboxAppSecret;
 
-var client = new Dropbox.Client({
-  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-  sandbox: true});
-
-client.authDriver(new Dropbox.Drivers.NodeServer(8191));
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -39,11 +34,24 @@ app.get('/', function(req, res){
 });
 
 app.post('/', function(req, res) {
-  client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
+
+  var client = new Dropbox.Client({
+    key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
+    sandbox: true});
+    
+  client.authDriver(new Dropbox.Drivers.NodeServer(8191));
+  
+  client.authenticate(function(error, client) {
     if (error) {
       return showError(error);
     }
-    console.log('Succesful save.');
+    client.writeFile('testSave.txt', req.param('body'), 
+    function(error, stat) {
+      if (error) {
+        return showError(error);
+      }
+      console.log('Succesful save.');
+    });
   });
 });
 
@@ -59,7 +67,12 @@ app.get('/login', function(req, res){
 });
 
 app.get('/auth/dropbox', function(req, res) {
-
+  var client = new Dropbox.Client({
+    key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
+    sandbox: true});
+    
+  client.authDriver(new Dropbox.Drivers.NodeServer(8191));
+  
   client.authenticate(function(error, client) {
     client.writeFile("hello_world.txt", "Hello, world!\n", 
     function(error, stat) {
@@ -71,7 +84,7 @@ app.get('/auth/dropbox', function(req, res) {
     client.getUserInfo(function(error, userInfo) {
       console.log("Hello, " + userInfo.name + "!");
     });
-    res.render('index');
+    res.redirect('/');
   });
 });
 
