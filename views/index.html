@@ -13,7 +13,7 @@
   <body>
     <div id="preview" class="text"></div>
 
-    <textarea id="input" class="text" name="comments" placeholder="A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!"></textarea>
+    <textarea form="save" name="body" id="input" class="text" name="comments" placeholder="A better way of note-taking. Don't know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!"></textarea>
     <div id="footer" class="navbar">
       <div class="navbar-inner">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -49,6 +49,9 @@
               <input id="font-size" column="2" type="number" value="16" min="5">
             </form>
             </li>
+            <li><form method="post" id="save" class="navbar-form">
+              <button type="submit" class="btn">Save</button>
+            </form></li>
           </ul>
 
       </div>  <!-- End navbar-inner -->
