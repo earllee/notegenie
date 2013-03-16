@@ -3,44 +3,48 @@ extends layout
 block content
   div#preview.text
   textarea#input.text(form="save", name="body", placeholder="A better way of note-taking. Don\'t know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!")
-  div#footer.navbar
-    div.navbar-inner
-      a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.brand(href='#') NoteGenie
-      // Main Nav 
-      ul.nav
-        li
-          a#about(href='#', data-content='By Earl & Shenil. Made with love from TD.') About
-        li
-          a#help(href='#') Help
-        li
-          a(href='auth/dropbox') Login
-      // Tools 
-      ul.nav.nav-collapse.dropup.pull-right
-        li.dropdown
-          a.dropdown-toggle(href='#', data-toggle='dropdown')
-            | Fonts
-            b.caret
-          ul.dropdown-menu.bottom-up
-            li
-              a.font-btn(data-font='Arial', href='#') Arial
-            li
-              a.font-btn(data-font='Consolas', href='#') Consolas
-            li
-              a.font-btn(data-font='EB Garamond', href='#') EB Garamond
-            li
-              a.font-btn(data-font='Handlee', href='#') Handlee
-            li
-              a.font-btn(data-font='Open sans', href='#') Open Sans
-        li
-          form.navbar-form
-            input#font-size(column='2', type='number', value='16', min='5')
-        li
-          form#save.navbar-form(method='post')
-            button.btn(type='submit', disabled=loggedOff) Save
+  div#footer-trigger
+    div#footer.navbar
+      div.navbar-inner
+        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='#') NoteGenie
+        // Main Nav 
+        ul.nav
+          li
+            a#about(href='#', data-content='By Earl & Shenil. Made with love from TD.') About
+          li
+            a#help(href='#') Help
+          li
+            a(href='auth/dropbox') Login
+        // Tools 
+        ul.nav.nav-collapse.dropup.pull-right
+          li
+            a.footerScreenTrigger(href='#') Files
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              | Fonts
+              b.caret
+            ul.dropdown-menu.bottom-up
+              li
+                a.font-btn(data-font='Arial', href='#') Arial
+              li
+                a.font-btn(data-font='Consolas', href='#') Consolas
+              li
+                a.font-btn(data-font='EB Garamond', href='#') EB Garamond
+              li
+                a.font-btn(data-font='Handlee', href='#') Handlee
+              li
+                a.font-btn(data-font='Open sans', href='#') Open Sans
+          li.nohover
+            form.navbar-form
+              input#font-size(column='2', type='number', value='16', min='5')
+          li.nohover
+            form#save.navbar-form(method='post')
+              button.btn(type='submit', disabled=loggedOff) Save
+      div.footer-screen
   // 'Help' modal 
   div#helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-header

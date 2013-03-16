@@ -225,6 +225,27 @@ console.log(isPreviewActive);
     $('#helpModal').modal();
     e.preventDefault();
   });
+
+  // Footer Screen Mode
+  var footerScreenModeOn = false;
+  $('.footerScreenTrigger').on('click', function(e){
+    if (!footerScreenModeOn) {
+      footerScreenModeOn = true;
+      $('#footer').css('height', '100%');
+    } else {
+      footerScreenModeOn = false;
+      $('#footer').css('height', '');
+    }
+    e.preventDefault();
+  });
+
+  // Footer
+  var footer = $('#footer');
+  $('#footer-trigger').hover(function(){footer.css('bottom', '0');}, function(){
+    if (!footerScreenModeOn)
+      footer.css('bottom', '-40px');
+  });
+
   //Not yet implemented
   function goFullscren(e) {
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;

@@ -48,8 +48,10 @@ app.post('/', function(req, res) {
   client = client.setCredentials(req.cookies.oauth);
   client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
     if (error)
-    return showError(error);
-    console.log('Succesful save.');
+      return showError(error);
+    client.getUserInfo(function(error, userInfo) {
+      console.log('Succesful save by ' + userInfo.email);
+    });
     res.render('index', {loggedOff: !client.isAuthenticated()});
   });
 });
@@ -61,12 +63,13 @@ app.get('/account', function(req, res){
   });
 });
 
+// Authentication
 app.get('/auth/dropbox', function(req, res) {
   client.reset();		//concurrency issues? how to lock client?
   client.authenticate(function(error, client) {
     res.cookie('oauth', client.credentials());
     client.getUserInfo(function(error, userInfo) {
-      console.log(userInfo.name + ' logged on.');
+      console.log(userInfo.email + ' logged on.');
     });
     res.redirect('/');
   });
