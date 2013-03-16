@@ -40,7 +40,7 @@ block content
             input#font-size(column='2', type='number', value='16', min='5')
         li
           form#save.navbar-form(method='post')
-            button.btn(type='submit') Save
+            button.btn(type='submit', disabled=loggedOff) Save
   // 'Help' modal 
   div#helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-header

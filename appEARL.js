@@ -40,12 +40,20 @@ app.get('/', function(req, res){
 
 app.post('/', function(req, res) {
   console.log(req.cookies.oauth);
+  console.log('client authenticated? ' + client.isAuthenticated());
   client = client.setCredentials(req.cookies.oauth);
+  console.log('client authenticated? ' + client.isAuthenticated());
+  client.getUserInfo(function(error, userInfo, object) {
+    console.log('userInfo: ' + userInfo.name);
+    console.log('object: ' + object);
+  });
   client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
     if (error)
       return showError(error);
     console.log('Succesful save.');
   });
+  res.render('index');
+  res.end();
 });
 
 // Account page displays client info
@@ -56,6 +64,7 @@ app.get('/account', function(req, res){
 });
 
 app.get('/auth/dropbox', function(req, res) {
+  client.reset();
   client.authenticate(function(error, client) {
     console.log(client.credentials());
     res.cookie('oauth', client.credentials());

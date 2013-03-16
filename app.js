@@ -21,13 +21,6 @@ var client = new Dropbox.Client({
 
 client.authDriver(new Dropbox.Drivers.NodeServer(8191));
 
-/*var client = new Dropbox.Client({
-  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-  sandbox: true});
-*/
-//client.authDriver(new Dropbox.Drivers.NodeServer(8191));
-//client.authDriver(new Dropbox.Drivers.Redirect(true, false));
-
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -44,25 +37,21 @@ app.configure(function(){
 
 app.get('/', function(req, res){
 	console.log(req.cookies);
-  res.render('index');
+  res.render('index', {loggedOff: !client.isAuthenticated()});
 });
 
 
 app.post('/', function(req, res) {
-	console.log(req.cookies.token);
-	console.log(req.cookies.tokenSecret);
-	if (! req.cookies.token || ! req.cookies.tokenSecret)
-		return;
-var client = new Dropbox.Client({
-  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-  sandbox: true, token: req.cookies.token, tokenSecret: req.cookies.tokenSecret});	
-	
+  if (! req.cookies.token || ! req.cookies.tokenSecret)
+    return;
+
+  client = client.setCredentials(req.cookies.oauth);
   client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
     if (error)
-      return showError(error);
+    return showError(error);
     console.log('Succesful save.');
+    res.render('index', {loggedOff: !client.isAuthenticated()});
   });
-	res.render('index');	// how to avoid this line?
 });
 
 // Account page displays client info
@@ -75,22 +64,9 @@ app.get('/account', function(req, res){
 app.get('/auth/dropbox', function(req, res) {
   client.reset();		//concurrency issues? how to lock client?
   client.authenticate(function(error, client) {
-console.log("token?");
-	console.log(client.credentials());
-	console.log(client.credentials().token);
-	console.log(client.credentials().tokenSecret);
-	console.log(client.credentials().uid);
-	res.cookie("token", client.credentials().token);
-	res.cookie("tokenSecret", client.credentials().tokenSecret);
-	res.cookie("uid", client.credentials().uid);
-    client.writeFile("hello_world.txt", "Hello, world!\n", 
-    function(error, stat) {
-      if (error)
-        return showError(error); 
-      console.log("File saved as revision " + stat.revisionTag);
-    });
+    res.cookie('oauth', client.credentials());
     client.getUserInfo(function(error, userInfo) {
-      console.log("Hello, " + userInfo.name + "!");
+      console.log(userInfo.name + ' logged on.');
     });
     res.redirect('/');
   });
