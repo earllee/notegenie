@@ -11,8 +11,7 @@
     "passport": "*",
     "passport-dropbox": "*",
     "dbox": "*",
-    "jade": "*",
-    "cookies": "*"
+    "jade": "*"
   },
   "subdomain": "notegenie",
   "engines": {
