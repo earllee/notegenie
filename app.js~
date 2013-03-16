@@ -44,9 +44,19 @@ app.configure(function(){
 
 app.get('/', function(req, res){
 	console.log(req.cookies);
+console.log(req.cookies.dne);
+if (! req.cookies.dne)
+	console.log("NOPE");
+  res.cookie("name", "shENIL");
   res.render('index');
 });
 
+app.get('/test', function(req, res) {
+	console.log(req.cookies);
+	res.cookie("name", "changed");
+	res.send("yup");
+	res.end();
+});
 
 app.post('/', function(req, res) {
 	console.log(req.cookies.token);
@@ -62,7 +72,8 @@ var client = new Dropbox.Client({
       return showError(error);
     console.log('Succesful save.');
   });
-	res.render('index');	// how to avoid this line?
+	res.render('index');
+	return null;
 });
 
 // Account page displays client info
