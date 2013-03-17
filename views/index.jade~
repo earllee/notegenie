@@ -18,7 +18,7 @@ block content
           li
             a#help(href='#') Help
           li
-            a(onclick="login()") Login
+            a(onclick="test()") Login
         // Tools 
         ul.nav.nav-collapse.dropup.pull-right
           li
