@@ -19,7 +19,7 @@ var client = new Dropbox.Client({
   key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
   sandbox: true});
 
-client.authDriver(new Dropbox.Drivers.NodeServer(8191));
+client.authDriver(new Dropbox.Drivers.NodeServer(process.env.PORT || 8191));
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
