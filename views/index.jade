@@ -2,17 +2,22 @@ extends layout
 
 block content
   div#preview.text
+  div#saveAlert.alert.alert-block.fade.in.hide
+    p Hey! You already have a file open. Make sure to save before opening this new one, or else you'll lose all your changes!
+    a#saveOpen.btn.btn-success Save &amp; Open
+    a#open.btn.btn-warning Open
+    a#closeAlert.btn() Close
   textarea#input.text(form="save", name="body", placeholder="A better way of note-taking. Don\'t know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!")
   div#footer-trigger
     div#footer.navbar
       div.navbar-inner
-        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+        a.btn.btn-navbar.navbar-inverse(data-toggle='collapse', data-target='.nav-collapse')
           span.icon-bar
           span.icon-bar
           span.icon-bar
         a.brand(href='#', data-content='Hi') NoteGenie
         // Main Nav 
-        ul.nav
+        ul.nav.nav-collapse.pull-left
           li
             a#about.footerScreenTrigger(href='#', data-target='aboutScreen') About
           li
@@ -20,9 +25,12 @@ block content
           li
             a#login(href='#') Login
         // Tools 
-        ul.nav.nav-collapse.dropup.pull-right
+        ul.nav.nav-collapse.collapse.pull-right
           li
-            a.footerScreenTrigger(href='#', data-target='filesScreen') Files
+            a#files.footerScreenTrigger(href='#', data-target='filesScreen') Files
+          li.nohover
+            form.navbar-form
+              input#fileName(type='text', column='8', placeholder='File Name')
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               | Fonts
@@ -44,8 +52,9 @@ block content
           li.nohover
             button#save.btn(type='submit') Save
       div#filesScreen.footer-screen
-        p 
-          | The files interface is still under construction. For now, you can just save one file called 'test.txt' by clicking the save button!
+        div#currentFile
+          h3 No file currently open. You are working on the scratch notepad. 
+        ul#fileList
       div#aboutScreen.footer-screen
         p 
           | This is a better way to take notes.
@@ -92,6 +101,7 @@ block content
               td
                 pre.
                   \n![NoteGenie Logo](www.notegenie.io/logo.gif)                  
+
   // 'Help' modal 
   div#helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-header

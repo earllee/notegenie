@@ -218,11 +218,13 @@ $(document).ready(function() {
     screen = e.target.dataset.target; // Screen to be opened
     if (!footerScreenModeOn) {
       footerScreenModeOn = true;
+      console.log(footerScreenModeOn);
       openScreen = screen;
       $('#footer').css('height', '100%');
       $('#' + screen).fadeIn();
     } else if (screen === openScreen){
       footerScreenModeOn = false;
+      console.log(footerScreenModeOn);
       $('#footer').removeAttr('style');
       $('#' + screen).fadeOut();
     } else {
@@ -237,25 +239,28 @@ $(document).ready(function() {
 
   $(document).on('keydown', function(e) {
     if (e.keyCode == KEYCODE_ESC) {
-      footerScreenModeOn = false;
-      screen = openScreen = 'none';
-      $("[id$='Screen']").fadeOut();
-      $('#footer').removeAttr('style');
+      closeAll();
     } 
   });
 
   // Footer
   var footer = $('#footer');
-  $('#footer-trigger').hover(function(){footer.css('bottom', '0');}, function(){
-    if (!footerScreenModeOn)
-      footer.css('bottom', '-40px');
+  $('#footer-trigger').hover(function(){footer.css('top', '0');}, function(){
+    if (!footerScreenModeOn) {
+      footer.css('top', '-40px');
+      $('.nav-collapse').collapse('hide');
+    }
   });
 
-  //Not yet implemented
-  function goFullscren(e) {
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-    if (requestMethod)
-      requestMethod.call(element);
-  }
 
 });
+
+function closeAll(){
+  $("[id$='Screen']").fadeOut();
+  $('.nav-collapse').collapse('hide');
+  $('#saveAlert').removeAttr('style');
+  $('#footer').removeAttr('style');
+  screen = openScreen = 'none';
+  footerScreenModeOn = false;
+  console.log(footerScreenModeOn);
+}
