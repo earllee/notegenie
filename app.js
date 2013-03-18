@@ -37,7 +37,7 @@ app.configure(function(){
 
 app.get('/', function(req, res){
 //  console.log(req.cookies);
-  res.render('index', {loggedOff: !client.isAuthenticated()});
+  res.render('index');
 });
 
 
