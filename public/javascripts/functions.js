@@ -221,22 +221,45 @@ console.log(isPreviewActive);
   });
 
   //'Help' Modal
-  $('#help').on("click", function(e) {
-    $('#helpModal').modal();
-    e.preventDefault();
-  });
+  //$('#help').on("click", function(e) {
+  //  $('#helpModal').modal();
+  //  e.preventDefault();
+  //});
 
   // Footer Screen Mode
   var footerScreenModeOn = false;
+  var screen = 'none';
+  var openScreen = 'none';
+  $("[id$='Screen']").fadeOut();
   $('.footerScreenTrigger').on('click', function(e){
+    screen = e.target.dataset.target; // Screen to be opened
+    console.log(screen);
     if (!footerScreenModeOn) {
       footerScreenModeOn = true;
+      openScreen = screen;
       $('#footer').css('height', '100%');
-    } else {
+      $('#' + screen).fadeIn();
+    } else if (screen === openScreen){
       footerScreenModeOn = false;
-      $('#footer').css('height', '');
+      $('#footer').removeAttr('style');
+      $('#' + screen).fadeOut();
+    } else {
+      $('#' + openScreen).fadeOut();
+      $('#' + screen).fadeIn();
+      openScreen = screen;
     }
     e.preventDefault();
+  });
+
+  var KEYCODE_ESC = 27;
+
+  $(document).on('keydown', function(e) {
+    if (e.keyCode == KEYCODE_ESC) {
+      footerScreenModeOn = false;
+      screen = openScreen = 'none';
+      $("[id$='Screen']").fadeOut();
+      $('#footer').removeAttr('style');
+    } 
   });
 
   // Footer

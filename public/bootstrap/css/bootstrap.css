@@ -9080,7 +9080,7 @@ body #footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 60px;
+  height: 70px;
 }
 
 #footer {
@@ -9148,9 +9148,10 @@ body #footer {
 }
 
 #footer .footer-screen {
+  position: absolute;
   height: 100%;
   padding: 50px;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 #footer .navbar-inner {

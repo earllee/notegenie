@@ -14,15 +14,15 @@ block content
         // Main Nav 
         ul.nav
           li
-            a#about(href='#', data-content='By Earl & Shenil. Made with love from TD.') About
+            a#about.footerScreenTrigger(href='#', data-target='aboutScreen', data-content='By Earl & Shenil. Made with love from TD.') About
           li
-            a#help(href='#') Help
+            a#help.footerScreenTrigger(href='#', data-target='helpScreen') Help
           li
             a#login(href='#') Login
         // Tools 
         ul.nav.nav-collapse.dropup.pull-right
           li
-            a.footerScreenTrigger(href='#') Files
+            a.footerScreenTrigger(href='#', data-target='filesScreen') Files
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               | Fonts
@@ -42,9 +42,56 @@ block content
             form.navbar-form
               input#font-size(column='2', type='number', value='16', min='5')
           li.nohover
-            //form#save.navbar-form(method='post')
             button#save.btn(type='submit') Save
-      div.footer-screen
+      div#filesScreen.footer-screen
+        p 
+          | The files interface is still under construction. For now, you can just save one file called 'test.txt' by clicking the save button!
+      div#aboutScreen.footer-screen
+        p 
+          | This is a better way to take notes.
+      div#helpScreen.footer-screen
+        p Need help using NoteGenie? Take a look below!
+        h4 Markup
+        p To toggle markup view, press CTRL + M.
+        table.table
+          caption Markdown Syntax
+          colgroup
+          colgroup(span='1', title='title')
+          thead
+            tr
+              th(scope='col') Name
+              th(scope='col') Syntax
+              th(scope='col') Options
+              th(scope='col', width='35%') Example
+          tbody
+            tr
+              td Heading
+              td #
+              td Use at beginning. Up to 6 levels. Higher levels give smaller headings.
+              td
+                pre.
+                  \n##Level 2 Heading                  
+            tr
+              td Horizontal Rule
+              td ---
+              td Keep in it's own line.
+              td
+                pre.
+                  \n#Heading                  ---                  Content goes here.                  
+            tr
+              td Unordered Lists
+              td *,+,-
+              td Keep a space in between list marker and item.
+              td
+                pre.
+                  \n* List item 1                  * List item 2                  
+            tr
+              td Images
+              td ![Title](URL)
+              td This will insert in-line images.
+              td
+                pre.
+                  \n![NoteGenie Logo](www.notegenie.io/logo.gif)                  
   // 'Help' modal 
   div#helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-header
