@@ -15,11 +15,11 @@ var app = express();
 var DROPBOX_APP_KEY = keys.dropboxAppKey;
 var DROPBOX_APP_SECRET = keys.dropboxAppSecret;
 
-var client = new Dropbox.Client({
-  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-  sandbox: true});
+//var client = new Dropbox.Client({
+//  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
+//  sandbox: true});
 
-client.authDriver(new Dropbox.Drivers.NodeServer(process.env.PORT));
+//client.authDriver(new Dropbox.Drivers.NodeServer(process.env.PORT));
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -36,44 +36,44 @@ app.configure(function(){
 
 
 app.get('/', function(req, res){
-	console.log(req.cookies);
+//  console.log(req.cookies);
   res.render('index', {loggedOff: !client.isAuthenticated()});
 });
 
 
-app.post('/', function(req, res) {
-  if (! req.cookies.token || ! req.cookies.tokenSecret)
-    return;
-
-  client = client.setCredentials(req.cookies.oauth);
-  client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
-    if (error)
-      return showError(error);
-    client.getUserInfo(function(error, userInfo) {
-      console.log('Succesful save by ' + userInfo.email);
-    });
-    res.render('index', {loggedOff: !client.isAuthenticated()});
-  });
-});
+//app.post('/', function(req, res) {
+//  if (! req.cookies.token || ! req.cookies.tokenSecret)
+//    return;
+//
+//  client = client.setCredentials(req.cookies.oauth);
+//  client.writeFile('testSave.txt', req.param('body'), function(error, stat) {
+//    if (error)
+//      return showError(error);
+//    client.getUserInfo(function(error, userInfo) {
+//      console.log('Succesful save by ' + userInfo.email);
+//    });
+//    res.render('index', {loggedOff: !client.isAuthenticated()});
+//  });
+//});
 
 // Account page displays client info
-app.get('/account', function(req, res){
-  client.getUserInfo(function(error, userInfo) {
-    res.render('account', { user: userInfo});
-  });
-});
+//app.get('/account', function(req, res){
+//  client.getUserInfo(function(error, userInfo) {
+//    res.render('account', { user: userInfo});
+//  });
+//});
 
 // Authentication
-app.get('/auth/dropbox', function(req, res) {
-  client.reset();		//concurrency issues? how to lock client?
-  client.authenticate(function(error, client) {
-    res.cookie('oauth', client.credentials());
-    client.getUserInfo(function(error, userInfo) {
-      console.log(userInfo.email + ' logged on.');
-    });
-    res.redirect('/');
-  });
-});
+//app.get('/auth/dropbox', function(req, res) {
+//  client.reset();   //concurrency issues? how to lock client?
+//  client.authenticate(function(error, client) {
+//    res.cookie('oauth', client.credentials());
+//    client.getUserInfo(function(error, userInfo) {
+//      console.log(userInfo.email + ' logged on.');
+//    });
+//    res.redirect('/');
+//  });
+//});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

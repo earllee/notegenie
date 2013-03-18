@@ -18,7 +18,7 @@ block content
           li
             a#help(href='#') Help
           li
-            a(onclick="login()") Login
+            a#login(href='#') Login
         // Tools 
         ul.nav.nav-collapse.dropup.pull-right
           li
@@ -42,8 +42,8 @@ block content
             form.navbar-form
               input#font-size(column='2', type='number', value='16', min='5')
           li.nohover
-            form#save.navbar-form(method='post')
-              button.btn(type='submit', disabled=loggedOff) Save
+            //form#save.navbar-form(method='post')
+            button#save.btn(type='submit') Save
       div.footer-screen
   // 'Help' modal 
   div#helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')

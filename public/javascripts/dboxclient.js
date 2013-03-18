@@ -35,10 +35,6 @@ var client = new Dropbox.Client({
 client.authDriver (new Dropbox.Drivers.Redirect({rememberUser: false, useQuery: false}));
 
 client.authenticate({interactive: true}, function(error, client2) {
-	alert("logged in " + client.isAuthenticated());
-	client.getUserInfo({}, function (err, userInfo) {
-		alert("hello " + userInfo.name);
-		});
     });
 
 var params = getHashParams();
