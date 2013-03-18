@@ -7,7 +7,7 @@ block content
     a#saveAction.btn.btn-success Save &amp; Action
     a#action.btn.btn-warning Action
     a#closeAlert.btn() Close
-  textarea#input.text(form="save", name="body", placeholder="A better way of note-taking. Don\'t know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!")
+  textarea#input.text(form="save", name="body", placeholder="A better way of note-taking. Don\'t know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Also, press CTRL+M to see a neater version of your notes (Supports markdown). Just try it out!")
   div#footer-trigger
     div#footer.navbar
       div.navbar-inner
@@ -60,15 +60,39 @@ block content
         ul#fileList
       div#aboutScreen.footer-screen
         p 
-          | This is a better way to take notes. Originally conceived during a history class and prototyped during the 2013 Yale Boot Up/Yale College Council Hackathon, NoteGenie allows you to take notes while seamlessly pulling descriptions of unknown terms from popular databases. 
+          | This is a better way to take notes. Originally conceived during a history class and prototyped during the 2013 Yale Boot Up/Yale College Council Hackathon, NoteGenie allows you to take notes while seamlessly pulling descriptions of unknown terms from popular databases.
         p by 
           a(href='mailto:earl.lee@yale.edu') Earl 
           | and 
           a(href='mailto:shenil.dodhia@yale.edu') Shenil
+        h4 Features
+        ul
+          li Pulls descriptions of historical events, concepts, places, names, etc.
+          li Automatically saves your notes every 2 seconds.
+          li Saves your font preferences.
+          li Supports markdown.
+          li Supports Dropbox integration.
+            li Save text files to Dropbox
+            li Open text files from Dropbox
+        h5 The Stack
+        ul
+          li jQuery
+          li HTML5
+          li 
+            a(href='http://twitter.github.com/bootstrap/') 
+              | Twitter Bootstrap
+          li 
+            a(href='https://github.com/chjj/marked') 
+              | Marked.js
+          li 
+            a(href='https://github.com/dropbox/dropbox-js') 
+              | Dropbox API
       div#helpScreen.footer-screen
-        p Need help using NoteGenie? Take a look below!
-        h4 Markup
-        p To toggle markup view, press CTRL + M.
+        h5 How to Use NoteGenie
+        p Take notes like you normally would. If there is something you need to look up, press enter, type in that something, then press enter again.
+          | Need to bold, italicize, and more? Take a look below!
+        h5 Markdown
+        p Use the following syntax to do special stuff to your text. Then press CTRL + M to see the effects.
         table.table
           caption Markdown Syntax
           colgroup
@@ -81,31 +105,48 @@ block content
               th(scope='col', width='35%') Example
           tbody
             tr
+              td Bold
+              td **text**
+              td Wrap text that needs go be bold in '**'.
+              td
+                pre
+                  | **Bolded text**
+            tr
+              td Italics
+              td *text*
+              td Wrap text that needs go be italicized in '*'.
+              td
+                pre
+                  | *Italicized text*
+            tr
               td Heading
               td #
               td Use at beginning. Up to 6 levels. Higher levels give smaller headings.
               td
-                pre.
-                  \n##Level 2 Heading                  
+                pre
+                  | ##Level 2 Heading                  
             tr
               td Horizontal Rule
               td ---
               td Keep in it's own line.
               td
-                pre.
-                  \n#Heading                  ---                  Content goes here.                  
+                pre
+                  | #Heading                  
+                  | ---                  
+                  | Content goes here.                  
             tr
               td Unordered Lists
               td *,+,-
               td Keep a space in between list marker and item.
               td
                 pre.
-                  \n* List item 1                  * List item 2                  
+                  | * List item 1
+                  | * List item 2                  
             tr
               td Images
               td ![Title](URL)
               td This will insert in-line images.
               td
                 pre.
-                  \n![NoteGenie Logo](www.notegenie.io/logo.gif)                  
+                  | ![NoteGenie Logo](www.notegenie.io/logo.gif)                  
   div#saveAlert.modal-backdrop.fade.in

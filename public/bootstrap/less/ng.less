@@ -1,5 +1,6 @@
 @import "bootstrap";
 @import "responsive";
+@blueLighter : #33c3ff;
 
 html, body {
 	background: repeat url(../../images/bg.png) 0 0;
@@ -112,12 +113,13 @@ html, body {
   height: 65px;
 }
 #footer {
-	color: #999;
+  color: @grayLighter;
   width: 100%;
   height: 40px;
 	position: fixed;
   top: 0px;
 	background: black;
+  overflow: auto;
 	.opacity(70);
   .transition(all .5s ease); 
 
@@ -170,6 +172,12 @@ html, body {
     overflow: auto;
     height: 100%;
     padding: 50px;
+    a {
+      color: @blueLighter;
+      &:hover {
+        color: @white;
+      }
+    }
   }
 
 	.navbar-inner {
