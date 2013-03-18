@@ -12,6 +12,15 @@ html, body {
 	}
 }
 
+#saveAlert {
+  display: none;
+}
+
+.modal-backdrop {
+  z-index: 0;
+  position: absolute;
+}
+
 .text {
 	font-family: 'Open sans', serif;
 	font-size: 16px;
@@ -87,6 +96,13 @@ html, body {
     border: 0;
     .box-shadow(none);
   }
+}
+
+#closeScreen {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  left: 25px;
 }
 
 #footer-trigger {

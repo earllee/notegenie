@@ -8999,6 +8999,15 @@ body #footer {
   font-color: #555555;
 }
 
+#saveAlert {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  z-index: 0;
+}
+
 .text {
   overflow: auto;
   font-family: 'Open sans', serif;
@@ -9060,7 +9069,7 @@ body #footer {
 }
 
 .alert .btn {
-  padding: 0 10px 0 10px;
+  margin: 10px 5px 0 0;
 }
 
 .close {
@@ -9090,6 +9099,13 @@ body #footer {
   -webkit-box-shadow: none;
      -moz-box-shadow: none;
           box-shadow: none;
+}
+
+#closeScreen {
+  position: absolute;
+  left: 25px;
+  z-index: 10;
+  display: block;
 }
 
 #footer-trigger {

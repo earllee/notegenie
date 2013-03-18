@@ -46,10 +46,26 @@ $(document).ready(function() {
     }
   });
 
+  // New File
+  $('#new').on('click', function() {
+    if (client.isAuthenticated()) {
+      setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?');
+      $('[id="saveAlert"]').css('display', 'block');
+
+    } else {
+        //Must login first message!
+    }
+  });
+
+  function newFile(fileName) {  //fileName is not used. Just for convention.
+    $('#input, #fileName').val('');
+    $('#save').removeAttr('disabled');
+  }
+
   // Save Button
   $('#save').on('click', function(e){
     if (client.isAuthenticated())
-    saveFile(currentFile);
+      saveFile();
   });
 
   // Save File
@@ -57,9 +73,14 @@ $(document).ready(function() {
   function saveFile(content, path) {
     content = content || $('#input').val();
     path = path || '';
+    currentFile = $('#fileName').val();
+    if (currentFile.length - 4 != currentFile.indexOf('.txt'))  // Ensure txt file
+      currentFile += '.txt';
     client.writeFile(path + currentFile, content, function(err, stat) {
       if (err)
-      showError(err); 
+        showError(err); 
+      $('#fileName').attr('disabled', 'true');
+      $('#fileName').val(currentFile);
     }); 
   }
 
@@ -82,7 +103,8 @@ $(document).ready(function() {
     $('.file').on('click', function(e) {
       var fileName = e.target.innerText;
       e.preventDefault();
-      setupAlertButtons(fileName);
+      //setupAlertButtons(fileName);
+      setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
       $('#saveAlert').css('display', 'block');
     });
   }
@@ -99,20 +121,23 @@ $(document).ready(function() {
       });
   }
 
-  // Save Alert
-  function setupAlertButtons(newFile) {
-    $('#saveOpen').on('click', function(e) {
+  // Sets Up Alert
+  function setupAlert(action, actionName, fileName, content) {
+    $('#saveContent').html(content);
+    $('#saveAction').html('Save &amp; ' + actionName).on('click', function(e) {
       saveFile(currentFile); 
-      loadFile(newFile);
+      action(fileName);
       closeAll();
     });
-    $('#open').on('click', function(e) {
-      loadFile(newFile); 
+    $('#action').html(actionName).on('click', function(e) {
+      action(fileName);
       closeAll();
     });
     $('#closeAlert').on('click', function(e){
-      $('#saveAlert').removeAttr('style');
+      $('#saveAlert').removeAttr('style');  // Removes display attr
+      $('[id="saveAlert"]').removeAttr('style');
     });
+   
   }
 
   function login(callback) {

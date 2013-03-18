@@ -222,15 +222,12 @@ $(document).ready(function() {
     ngw.screen = e.target.dataset.target; // Screen to be opened
     if (!ngw.isFooterScreenOn) {
       ngw.isFooterScreenOn = true;
-      console.log(ngw.isFooterScreenOn);
       ngw.openScreen = ngw.screen;
       $('#footer').css('height', '100%');
       $('#' + ngw.screen).fadeIn();
+      $('#closeScreen').fadeIn();
     } else if (ngw.screen === ngw.openScreen){
-      ngw.isFooterScreenOn = false;
-      console.log(ngw.isFooterScreenOn);
-      $('#footer').removeAttr('style');
-      $('#' + ngw.screen).fadeOut();
+      closeAll();
     } else {
       $('#' + ngw.openScreen).fadeOut();
       $('#' + ngw.screen).fadeIn();
@@ -245,6 +242,10 @@ $(document).ready(function() {
     if (e.keyCode == KEYCODE_ESC) {
       closeAll();
     } 
+  });
+
+  $('#closeScreen').on('click', function(e) {
+    closeAll();
   });
 
   // Footer
@@ -266,7 +267,7 @@ function footerTriggerInit(){
 function closeAll(){
   $("[id$='Screen']").fadeOut();
   $('.nav-collapse').collapse('hide');
-  $('#saveAlert').removeAttr('style');
+  $('[id="saveAlert"]').removeAttr('style');
   $('#footer').removeAttr('style');
   $('#footer').css('top', '-40px');
   ngw.screen = ngw.openScreen = 'none';

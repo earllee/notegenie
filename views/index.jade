@@ -3,9 +3,9 @@ extends layout
 block content
   div#preview.text
   div#saveAlert.alert.alert-block.fade.in.hide
-    p Hey! You already have a file open. Make sure to save before opening this new one, or else you'll lose all your changes!
-    a#saveOpen.btn.btn-success Save &amp; Open
-    a#open.btn.btn-warning Open
+    p#saveContent Hey! You already have a file open. Make sure to save before opening this new one, or else you'll lose all your changes!
+    a#saveAction.btn.btn-success Save &amp; Action
+    a#action.btn.btn-warning Action
     a#closeAlert.btn() Close
   textarea#input.text(form="save", name="body", placeholder="A better way of note-taking. Don\'t know a certain term, event, or person? Just type in the name in its own line and press enter! The Note Genie will give you a brief description of that term right inside your notes. Just try it out!")
   div#footer-trigger
@@ -26,6 +26,8 @@ block content
             a#login(href='#') Login
         // Tools 
         ul.nav.nav-collapse.collapse.pull-right
+          li
+            a#new(href='#') New
           li
             a#files.footerScreenTrigger(href='#', data-target='filesScreen') Files
           li.nohover
@@ -51,13 +53,18 @@ block content
               input#font-size(column='2', type='number', value='16', min='5')
           li.nohover
             button#save.btn(type='submit') Save
+      a#closeScreen.close(href='#') &times;
       div#filesScreen.footer-screen
         div#currentFile
           h3 No file currently open. You are working on the scratch notepad. 
         ul#fileList
       div#aboutScreen.footer-screen
         p 
-          | This is a better way to take notes.
+          | This is a better way to take notes. Originally conceived during a history class and prototyped during the 2013 Yale Boot Up/Yale College Council Hackathon, NoteGenie allows you to take notes while seamlessly pulling descriptions of unknown terms from popular databases. 
+        p by 
+          a(href='mailto:earl.lee@yale.edu') Earl 
+          | and 
+          a(href='mailto:shenil.dodhia@yale.edu') Shenil
       div#helpScreen.footer-screen
         p Need help using NoteGenie? Take a look below!
         h4 Markup
@@ -101,54 +108,4 @@ block content
               td
                 pre.
                   \n![NoteGenie Logo](www.notegenie.io/logo.gif)                  
-
-  // 'Help' modal 
-  div#helpModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    .modal-header
-      button.close(type='button', data-dismiss='modal', aria-hidden='true') x
-      h3#modalHeaderLabel Help
-    .modal-body
-      p Need help using NoteGenie? Take a look below!
-      h4 Markup
-      p To toggle markup view, press CTRL + M.
-      table.table
-        caption Markdown Syntax
-        colgroup
-        colgroup(span='1', title='title')
-        thead
-          tr
-            th(scope='col') Name
-            th(scope='col') Syntax
-            th(scope='col') Options
-            th(scope='col', width='35%') Example
-        tbody
-          tr
-            td Heading
-            td #
-            td Use at beginning. Up to 6 levels. Higher levels give smaller headings.
-            td
-              pre.
-                \n##Level 2 Heading                  
-          tr
-            td Horizontal Rule
-            td ---
-            td Keep in it's own line.
-            td
-              pre.
-                \n#Heading                  ---                  Content goes here.                  
-          tr
-            td Unordered Lists
-            td *,+,-
-            td Keep a space in between list marker and item.
-            td
-              pre.
-                \n* List item 1                  * List item 2                  
-          tr
-            td Images
-            td ![Title](URL)
-            td This will insert in-line images.
-            td
-              pre.
-                \n![NoteGenie Logo](www.notegenie.io/logo.gif)                  
- 
-
+  div#saveAlert.modal-backdrop.fade.in
