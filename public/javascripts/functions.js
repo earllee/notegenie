@@ -137,6 +137,8 @@ $(document).ready(function() {
           var offset = actval.length - curval.length;
           $(box).selectRange(pos +offset,pos+offset);
         }
+
+          hideParsingBar();
         } //End success function
 
         }); //End AJAX
@@ -154,6 +156,23 @@ $(document).ready(function() {
     }
   });
   
+  //Core keypress parser
+  $('#input').on("keypress", function(e) {
+    if (e.keyCode == 13) {
+      //Handle 'Enter'
+      var value = $(this).val();
+      pos = $(this).prop('selectionStart'); //Cursor position
+      var endLine = value.substring(0, pos).lastIndexOf("\n");
+      if (endLine == -1)
+      endLine = value.lastIndexOf("\n");
+      $(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
+      $(this).selectRange(pos + 1, pos + 1);
+      showParsingBar();  
+      updateBox(value.substring(endLine+1,pos), $(this), pos, value);
+      return false; // prevent the button click from happening
+    } 
+  });
+
   //Markdown preview
   $(document).on("keydown", function(e) {
     if (e.keyCode == 77 && e.ctrlKey) {
@@ -180,23 +199,6 @@ $(document).ready(function() {
       e.preventDefault();
       return false;
     }
-  });
-
-  //Core keypress parser
-  $('#input').on("keypress", function(e) {
-    if (e.keyCode == 13) {
-      //Handle 'Enter'
-      var value = $(this).val();
-      pos = $(this).prop('selectionStart'); //Cursor position
-      var endLine = value.substring(0, pos).lastIndexOf("\n");
-      if (endLine == -1)
-      endLine = value.lastIndexOf("\n");
-      $(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
-      $(this).selectRange(pos + 1, pos + 1);
-    
-      updateBox(value.substring(endLine+1,pos), $(this), pos, value);
-      return false; // prevent the button click from happening
-    } 
   });
 
   //Change fonts
@@ -275,3 +277,11 @@ function closeAll(){
   console.log(ngw.isFooterScreenOn);
   footerTriggerInit();
   }
+
+function showParsingBar() {
+  $('body').prepend('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+}
+
+function hideParsingBar() {
+  $('.progress:first').remove();
+}
