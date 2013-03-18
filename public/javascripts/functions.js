@@ -287,7 +287,6 @@ function showParsingBar() {
 }
 
 function hideParsingBar(type) {
-  console.log(type);
   if (type == 'success') {
     $('.progress:first').addClass('progress-success').delay(800).fadeOut();
   } else if (type == 'error') {
@@ -295,5 +294,6 @@ function hideParsingBar(type) {
   } else {
     $('.progress:first').delay(800).fadeOut();  
   }
+  $('.progress[style="display: none;"]').remove();
     
 }
