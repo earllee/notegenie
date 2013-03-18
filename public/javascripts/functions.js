@@ -151,12 +151,9 @@ $(document).ready(function() {
   $(document).on("keydown", function(e) {
     if (e.keyCode == 77 && e.ctrlKey) {
       //Handle Ctrl+m
-console.log('made it in');
-console.log(isPreviewActive);
       var preview = $('#preview');
       if(!isPreviewActive) {
         var tokens = marked.lexer(input.val());
-console.log(tokens);
         preview.html(marked.parser(tokens));
         preview.css("opacity", 1);
         preview.css("visibility", "visible");
@@ -172,7 +169,6 @@ console.log(tokens);
         isPreviewActive = false;
         input.focus();
       }
-console.log(isPreviewActive);
 
       e.preventDefault();
       return false;
@@ -181,7 +177,6 @@ console.log(isPreviewActive);
 
   //Core keypress parser
   $('#input').on("keypress", function(e) {
-    console.log(e.keyCode);
     if (e.keyCode == 13) {
       //Handle 'Enter'
       var value = $(this).val();
@@ -212,19 +207,7 @@ console.log(isPreviewActive);
   });
 
   //Logo Tooltip
-  $('.brand').tooltip();
-
-  //'About' Popover
-  $('#about').popover({trigger: 'hover', delay: {hide: 1000}, placement: 'top'});
-  $('#about').on("click", function(e) {
-    e.preventDefault();
-  });
-
-  //'Help' Modal
-  //$('#help').on("click", function(e) {
-  //  $('#helpModal').modal();
-  //  e.preventDefault();
-  //});
+  $('.brand').tooltip({trigger: 'hover', delay: {hide: 1000}, placement: 'top'});
 
   // Footer Screen Mode
   var footerScreenModeOn = false;
@@ -233,7 +216,6 @@ console.log(isPreviewActive);
   $("[id$='Screen']").fadeOut();
   $('.footerScreenTrigger').on('click', function(e){
     screen = e.target.dataset.target; // Screen to be opened
-    console.log(screen);
     if (!footerScreenModeOn) {
       footerScreenModeOn = true;
       openScreen = screen;
