@@ -1,7 +1,14 @@
 $(document).ready(function() {
 
-  var input = $('#input'),
-  isPreviewActive = false;
+  var ngw = window.ngw || (window.ngw = {
+    isFooterScreenOn : false, //footerScreenModeOn
+    isPreviewOn : false,  //isPreviewActive
+    screen : 'none',
+    openScreen : 'none'
+  }); 
+
+  var input = $('#input');
+  ngw.isPreviewOn = false;
 
   //Set firstTime to false on first keypress
   input.one("keypress", function() {
@@ -152,13 +159,13 @@ $(document).ready(function() {
     if (e.keyCode == 77 && e.ctrlKey) {
       //Handle Ctrl+m
       var preview = $('#preview');
-      if(!isPreviewActive) {
+      if(!ngw.isPreviewOn) {
         var tokens = marked.lexer(input.val());
         preview.html(marked.parser(tokens));
         preview.css("opacity", 1);
         preview.css("visibility", "visible");
         $('body, html').css("background","white");
-        isPreviewActive = true;
+        ngw.isPreviewOn = true;
         input.blur();
       }
       else {
@@ -166,7 +173,7 @@ $(document).ready(function() {
         preview.css("visibility", "hidden");
         $('body, html').css("background", "");
 
-        isPreviewActive = false;
+        ngw.isPreviewOn = false;
         input.focus();
       }
 
@@ -210,27 +217,24 @@ $(document).ready(function() {
   $('.brand').tooltip({trigger: 'hover', delay: {hide: 1000}, placement: 'top'});
 
   // Footer Screen Mode
-  var footerScreenModeOn = false;
-  var screen = 'none';
-  var openScreen = 'none';
   $("[id$='Screen']").fadeOut();
   $('.footerScreenTrigger').on('click', function(e){
-    screen = e.target.dataset.target; // Screen to be opened
-    if (!footerScreenModeOn) {
-      footerScreenModeOn = true;
-      console.log(footerScreenModeOn);
-      openScreen = screen;
+    ngw.screen = e.target.dataset.target; // Screen to be opened
+    if (!ngw.isFooterScreenOn) {
+      ngw.isFooterScreenOn = true;
+      console.log(ngw.isFooterScreenOn);
+      ngw.openScreen = ngw.screen;
       $('#footer').css('height', '100%');
-      $('#' + screen).fadeIn();
-    } else if (screen === openScreen){
-      footerScreenModeOn = false;
-      console.log(footerScreenModeOn);
+      $('#' + ngw.screen).fadeIn();
+    } else if (ngw.screen === ngw.openScreen){
+      ngw.isFooterScreenOn = false;
+      console.log(ngw.isFooterScreenOn);
       $('#footer').removeAttr('style');
-      $('#' + screen).fadeOut();
+      $('#' + ngw.screen).fadeOut();
     } else {
-      $('#' + openScreen).fadeOut();
-      $('#' + screen).fadeIn();
-      openScreen = screen;
+      $('#' + ngw.openScreen).fadeOut();
+      $('#' + ngw.screen).fadeIn();
+      ngw.openScreen = ngw.screen;
     }
     e.preventDefault();
   });
@@ -244,23 +248,29 @@ $(document).ready(function() {
   });
 
   // Footer
+  footerTriggerInit();
+
+
+});
+
+function footerTriggerInit(){
   var footer = $('#footer');
   $('#footer-trigger').hover(function(){footer.css('top', '0');}, function(){
-    if (!footerScreenModeOn) {
+    if (!ngw.isFooterScreenOn) {
       footer.css('top', '-40px');
       $('.nav-collapse').collapse('hide');
     }
   });
-
-
-});
+}
 
 function closeAll(){
   $("[id$='Screen']").fadeOut();
   $('.nav-collapse').collapse('hide');
   $('#saveAlert').removeAttr('style');
   $('#footer').removeAttr('style');
-  screen = openScreen = 'none';
-  footerScreenModeOn = false;
-  console.log(footerScreenModeOn);
-}
+  $('#footer').css('top', '-40px');
+  ngw.screen = ngw.openScreen = 'none';
+  ngw.isFooterScreenOn = false;
+  console.log(ngw.isFooterScreenOn);
+  footerTriggerInit();
+  }

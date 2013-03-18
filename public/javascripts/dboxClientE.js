@@ -1,64 +1,72 @@
-  $(document).ready(function() {
-    var client = new Dropbox.Client({
-      key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
-      sandbox: true});
-      client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
+$(document).ready(function() {
+  var ngw = window.ngw || (window.ngw = {
+    isFooterScreenOn : false, //footerScreenModeOn
+    isPreviewOn : false,  //isPreviewActive
+    screen : 'none',
+    openScreen : 'none'
 
-      var currentFile = $('#fileName').val();
+  }); 
 
-      // Load Current File Name from Cache
-      // Current file text is loaded in functions.js
-      if (localStorage.getItem('currentFile'))
-      currentFile = localStorage.getItem('currentFile');
+  var client = new Dropbox.Client({
+    key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
+    sandbox: true});
+    client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
 
-      // Check cached credentials
-    client.authenticate({interactive: false}, function(error, client) {
-      if (error) {
-        return handleError(error);
-      }
-      if (client.isAuthenticated()) {
-        $('#login').html('Logout');
-      } else {
-        $('#save').attr('disabled', 'true');
-        $('#login').html('Login');
-      }
-    });
+    var currentFile = $('#fileName').val();
 
-    // Login Button
-    $('#login').on('click', function(e){
-      e.preventDefault();
-      if (!client.isAuthenticated()) {
-        login();
-      } else {
-        client.signOut(function(){
-          console.log('Signed off');
-          $('#login').html('Login');
-          $('#save').attr('disabled', 'true');
-        });
-      }
-    });
+    // Load Current File Name from Cache
+    // Current file text is loaded in functions.js
+    if (localStorage.getItem('currentFile'))
+    currentFile = localStorage.getItem('currentFile');
 
-    // Save Button
-    $('#save').on('click', function(e){
-      if (client.isAuthenticated())
-      saveFile(currentFile);
-    });
-
-    // Save File
-    // @param path must end in /
-    function saveFile(content, path) {
-      content = content || $('#input').val();
-      path = path || '';
-      client.writeFile(path + currentFile, content, function(err, stat) {
-        if (err)
-        showError(err); 
-      }); 
+    // Check cached credentials
+  client.authenticate({interactive: false}, function(error, client) {
+    if (error) {
+      return handleError(error);
     }
+    if (client.isAuthenticated()) {
+      $('#login').html('Logout');
+    } else {
+      $('#save').attr('disabled', 'true');
+      $('#login').html('Login');
+    }
+  });
 
-    // Read Directory
-    $('#files').on('click', function(e) {
-      if (client.isAuthenticated()) {
-      client.readdir('/', {httpCache : true}, 
+  // Login Button
+  $('#login').on('click', function(e){
+    e.preventDefault();
+    if (!client.isAuthenticated()) {
+      login();
+    } else {
+      client.signOut(function(){
+        console.log('Signed off');
+        $('#login').html('Login');
+        $('#save').attr('disabled', 'true');
+      });
+    }
+  });
+
+  // Save Button
+  $('#save').on('click', function(e){
+    if (client.isAuthenticated())
+    saveFile(currentFile);
+  });
+
+  // Save File
+  // @param path must end in /
+  function saveFile(content, path) {
+    content = content || $('#input').val();
+    path = path || '';
+    client.writeFile(path + currentFile, content, function(err, stat) {
+      if (err)
+      showError(err); 
+    }); 
+  }
+
+  // Read Directory
+  $('#files').on('click', function(e) {
+    if (client.isAuthenticated()) {
+    client.readdir('/', {httpCache : true}, 
       function(err, dir, stat, dirstat) {
         $('#fileList').html('');
         $.each(dir, function(index, value) {
@@ -76,21 +84,19 @@
       e.preventDefault();
       setupAlertButtons(fileName);
       $('#saveAlert').css('display', 'block');
-      console.log(e); 
     });
   }
 
   function loadFile(fileName) {
-  client.readFile(fileName, {httpCache: true}, 
-    function(err, file, stat, rangeInfo){
-      currentFile = fileName;
-      $('#input').val(file);
-      $('#fileName').val(currentFile);
-      $('#fileName').attr('disabled', 'true');
-      $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
-      localStorage.setItem('currentFile', currentFile);
-      closeAll();
-    });
+    client.readFile(fileName, {httpCache: true}, 
+      function(err, file, stat, rangeInfo){
+        currentFile = fileName;
+        $('#input').val(file);
+        $('#fileName').val(currentFile);
+        $('#fileName').attr('disabled', 'true');
+        $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
+        localStorage.setItem('currentFile', currentFile);
+      });
   }
 
   // Save Alert
@@ -98,9 +104,11 @@
     $('#saveOpen').on('click', function(e) {
       saveFile(currentFile); 
       loadFile(newFile);
+      closeAll();
     });
     $('#open').on('click', function(e) {
       loadFile(newFile); 
+      closeAll();
     });
     $('#closeAlert').on('click', function(e){
       $('#saveAlert').removeAttr('style');
@@ -116,4 +124,4 @@
     callback();
   }
 
-  });
+});
