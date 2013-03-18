@@ -71,6 +71,7 @@ $(document).ready(function() {
       url: '//en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', 
       data: {page:wikipediaPage, uselang:'en'}, 
       async: false, 
+      error: function(){hideParsingBar('error');},
       success: function(json,wikipediaPage) {
         try {
           var text = json.parse.text["*"];
@@ -130,15 +131,19 @@ $(document).ready(function() {
           var offsetSelect = actval.length - curval.length;
           var selectpos = pos + text.length + 1 + offsetSelect;
           $(box).selectRange(selectpos, selectpos); 
+          console.log(text);
+          if (text === '')
+            hideParsingBar('error');
+          else
+            hideParsingBar('success');
         }
         catch (err) {
           var actval = String(box.val());
           box.val(curval.substring(0,pos) + actval.substring(pos));
           var offset = actval.length - curval.length;
           $(box).selectRange(pos +offset,pos+offset);
-        }
-
-          hideParsingBar();
+          hideParsingBar('error');
+        } // End try catch
         } //End success function
 
         }); //End AJAX
@@ -167,7 +172,7 @@ $(document).ready(function() {
       endLine = value.lastIndexOf("\n");
       $(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
       $(this).selectRange(pos + 1, pos + 1);
-      showParsingBar();  
+      showParsingBar();
       updateBox(value.substring(endLine+1,pos), $(this), pos, value);
       return false; // prevent the button click from happening
     } 
@@ -274,7 +279,6 @@ function closeAll(){
   $('#footer').css('top', '-40px');
   ngw.screen = ngw.openScreen = 'none';
   ngw.isFooterScreenOn = false;
-  console.log(ngw.isFooterScreenOn);
   footerTriggerInit();
   }
 
@@ -282,6 +286,14 @@ function showParsingBar() {
   $('body').prepend('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
 }
 
-function hideParsingBar() {
-  $('.progress:first').remove();
+function hideParsingBar(type) {
+  console.log(type);
+  if (type == 'success') {
+    $('.progress:first').addClass('progress-success').delay(800).fadeOut();
+  } else if (type == 'error') {
+    $('.progress:first').addClass('progress-danger').delay(800).fadeOut();  
+  } else {
+    $('.progress:first').delay(800).fadeOut();  
+  }
+    
 }
