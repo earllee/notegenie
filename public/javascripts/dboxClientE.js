@@ -95,6 +95,8 @@ $(document).ready(function() {
         });
         openFile();
       });
+    } else {
+      $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
     }
   });
 
