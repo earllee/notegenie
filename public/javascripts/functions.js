@@ -68,7 +68,7 @@ $(document).ready(function() {
     var req1 = $.ajax({ 
       type: 'GET', 
       dataType: "json", 
-      url: 'http://en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', 
+      url: '//en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', 
       data: {page:wikipediaPage, uselang:'en'}, 
       async: false, 
       success: function(json,wikipediaPage) {

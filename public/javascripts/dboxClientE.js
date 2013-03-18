@@ -53,7 +53,7 @@ $(document).ready(function() {
       $('[id="saveAlert"]').css('display', 'block');
 
     } else {
-        //Must login first message!
+      login(setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?'));
     }
   });
 
