@@ -9003,6 +9003,14 @@ body #footer {
   display: none;
 }
 
+#saveNotice {
+  display: none;
+  -webkit-transition: none;
+     -moz-transition: none;
+       -o-transition: none;
+          transition: none;
+}
+
 .modal-backdrop {
   position: absolute;
   z-index: 0;
@@ -9139,7 +9147,6 @@ body #footer {
   top: 0;
   width: 100%;
   height: 40px;
-  overflow: auto;
   color: #eeeeee;
   background: black;
   opacity: 0.7;
@@ -9202,8 +9209,9 @@ body #footer {
 #footer .footer-screen {
   position: absolute;
   height: 100%;
-  padding: 0 50px 50px 50px;
+  padding: 20px  50px 50px 50px;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 #footer .footer-screen .screenImage {

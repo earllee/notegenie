@@ -17,6 +17,11 @@ html, body {
   display: none;
 }
 
+#saveNotice {
+  display: none;
+  .transition(none);
+}
+
 .modal-backdrop {
   z-index: 0;
   position: absolute;
@@ -137,7 +142,6 @@ html, body {
 	position: fixed;
   top: 0px;
 	background: black;
-  overflow: auto;
 	.opacity(70);
   .transition(all .5s ease); 
 
@@ -189,7 +193,8 @@ html, body {
     position: absolute;
     overflow: auto;
     height: 100%;
-    padding: 0 50px 50px 50px;
+    padding: 20px  50px 50px 50px;
+    box-sizing: border-box;
 
     .screenImage {
       width: 100%;

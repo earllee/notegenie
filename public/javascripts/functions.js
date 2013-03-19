@@ -258,6 +258,14 @@ $(document).ready(function() {
   // Footer
   footerTriggerInit();
 
+  // Manually clear stuck loading bars
+  try {
+      setInterval(function() {
+        if($('.progress'))
+        $('.progress').fadeOut();
+      }, 5000);
+  } catch(e) {console.log('failed');}
+
 
 });
 

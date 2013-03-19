@@ -22,7 +22,7 @@ $(document).ready(function() {
     // Check cached credentials
   client.authenticate({interactive: false}, function(error, client) {
     if (error) {
-      return handleError(error);
+      return showError(error);
     }
     if (client.isAuthenticated()) {
       $('#login').html('Logout');
@@ -57,32 +57,14 @@ $(document).ready(function() {
     }
   });
 
-  function newFile(fileName) {  //fileName is not used. Just for convention.
-    $('#input, #fileName').val('');
-    $('#save').removeAttr('disabled');
-  }
-
   // Save Button
   $('#save').on('click', function(e){
     if (client.isAuthenticated())
-      saveFile();
+    saveFile($('#input').val(), '', function(){
+      $('#saveNotice').fadeIn().delay(800).fadeOut(); 
+    });
   });
 
-  // Save File
-  // @param path must end in /
-  function saveFile(content, path) {
-    content = content || $('#input').val();
-    path = path || '';
-    currentFile = $('#fileName').val();
-    if (currentFile.length - 4 != currentFile.indexOf('.txt'))  // Ensure txt file
-      currentFile += '.txt';
-    client.writeFile(path + currentFile, content, function(err, stat) {
-      if (err)
-        showError(err); 
-      $('#fileName').attr('disabled', 'true');
-      $('#fileName').val(currentFile);
-    }); 
-  }
 
   // Read Directory
   $('#files').on('click', function(e) {
@@ -100,6 +82,12 @@ $(document).ready(function() {
     }
   });
 
+  // Creates New Notepad
+  function newFile(fileName) {  //fileName is not used. Just for convention.
+    $('#input, #fileName').val('');
+    $('#save').removeAttr('disabled');
+  }
+
   // Open File
   function openFile(){
     $('.file').on('click', function(e) {
@@ -111,6 +99,7 @@ $(document).ready(function() {
     });
   }
 
+  // Loads File
   function loadFile(fileName) {
     client.readFile(fileName, {httpCache: true}, 
       function(err, file, stat, rangeInfo){
@@ -121,6 +110,25 @@ $(document).ready(function() {
         $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
         localStorage.setItem('currentFile', currentFile);
       });
+  }
+
+  // Saves File
+  // @param path must end in /
+  function saveFile(content, path, callback) {
+    content = content || $('#input').val();
+    path = path || '';
+    currentFile = $('#fileName').val();
+    if (currentFile.length - 4 != currentFile.indexOf('.txt'))  // Ensure txt file
+      currentFile += '.txt';
+    client.writeFile(path + currentFile, content, function(err, stat) {
+      if (err)
+        showError(err); 
+      else {
+        $('#fileName').attr('disabled', 'true');
+        $('#fileName').val(currentFile);
+        callback();
+      }
+    }); 
   }
 
   // Sets Up Alert
