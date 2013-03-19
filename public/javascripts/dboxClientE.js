@@ -22,6 +22,7 @@ $(document).ready(function() {
     // Check cached credentials
   client.authenticate({interactive: false}, function(error, client) {
     if (error) {
+      $('#save').attr('disabled', 'true');
       return showError(error);
     }
     if (client.isAuthenticated()) {
@@ -71,6 +72,8 @@ $(document).ready(function() {
     if (client.isAuthenticated()) {
     client.readdir('/', {httpCache : true}, 
       function(err, dir, stat, dirstat) {
+	if (err)
+		return showError(err);
         $('#fileList').html('');
         $.each(dir, function(index, value) {
           $('#fileList').append('<li><a class="file" href="#">' + dir[index] + '</a></li>');
@@ -86,6 +89,7 @@ $(document).ready(function() {
   function newFile(fileName) {  //fileName is not used. Just for convention.
     $('#input, #fileName').val('');
     $('#save').removeAttr('disabled');
+    $('#fileName').removeAttr('disabled');
   }
 
   // Open File
@@ -103,6 +107,8 @@ $(document).ready(function() {
   function loadFile(fileName) {
     client.readFile(fileName, {httpCache: true}, 
       function(err, file, stat, rangeInfo){
+	if (err)
+		return showError(err);
         currentFile = fileName;
         $('#input').val(file);
         $('#fileName').val(currentFile);
@@ -118,6 +124,17 @@ $(document).ready(function() {
     content = content || $('#input').val();
     path = path || '';
     currentFile = $('#fileName').val();
+
+	//clean up and check the file name
+    currentFile = currentFile.replace(/^\s+/,"");    // trim whitespace
+    currentFile = currentFile.replace(/\s+$/,"");
+    if ((!/[a-z0-9\._\- ]/i.test(currentFile)) || currentFile == "")  // invalid filename
+    {
+        alert("Invalid filename");
+        return;
+    }
+
+
     if (currentFile.length - 4 != currentFile.indexOf('.txt'))  // Ensure txt file
       currentFile += '.txt';
     client.writeFile(path + currentFile, content, function(err, stat) {
@@ -152,7 +169,11 @@ $(document).ready(function() {
 
   function login(callback) {
     client.authenticate({interactive: true}, function(error, client) {
+	if (err)
+		return showError(err);
       client.getUserInfo(function(error, userInfo) {
+	if (err)
+		return showError(err);
         console.log(userInfo.name + ' got authenticated by login().');
       });
     });
