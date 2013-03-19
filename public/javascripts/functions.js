@@ -65,10 +65,59 @@ $(document).ready(function() {
   }
 
   function updateBox(wikipediaPage, box, pos, curval) {
-   if (wikipediaPage == "" || !(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))))
+   if (wikipediaPage === "" || !(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))) || 
+	wikipediaPage === "?" || wikipediaPage === "!")
       {
             return false;
       }
+
+//duckduckgo dictionary definition look up
+
+ if (wikipediaPage.charAt(0) == '?' && wikipediaPage !== '?')
+{
+	showParsingBar();
+   var jqxhr = $.getJSON("http://api.duckduckgo.com/?q=define+" + wikipediaPage.substring(1) + "&format=json&pretty=1&callback=?&", function() {
+        
+    }).done(function(data) {
+	text = data.Abstract;
+	console.log(data.Abstract);
+
+	try
+	{
+         var actval = String(box.val());
+          var extratextlen = actval.indexOf("\n", pos) - pos;
+          var newval = actval.substring(pos, extratextlen);
+
+          box.val(curval.substring(0, pos) + "\n" + text + "\n" + actval.substring(pos + 1));
+          box.scrollTop(9999).focus();
+
+          box.focus();
+          var offsetSelect = actval.length - curval.length;
+          var selectpos = pos + text.length + 1 + offsetSelect;
+          $(box).selectRange(selectpos, selectpos); 
+          console.log(text);
+          if (text === '')
+            hideParsingBar('error');
+          else
+            hideParsingBar('success');
+
+	}
+	catch (err)
+	{
+          var actval = String(box.val());
+          box.val(curval.substring(0,pos) + actval.substring(pos));
+          var offset = actval.length - curval.length;
+          $(box).selectRange(pos +offset,pos+offset);
+          hideParsingBar('error');
+	}
+
+    }).error(function() {
+        hideParsingBar("error");
+    });
+	return;
+}
+
+// wikipedia look up
 
     showParsingBar();
     var req1 = $.ajax({ 
