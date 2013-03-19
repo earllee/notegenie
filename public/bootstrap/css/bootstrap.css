@@ -9193,6 +9193,10 @@ body #footer {
   background: none;
 }
 
+#footer .nav > li .active {
+  background: #049cdb;
+}
+
 #footer .nav > li:hover {
   background: #049cdb;
 }
