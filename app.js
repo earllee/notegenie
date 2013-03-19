@@ -5,15 +5,14 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var Dropbox = require('dropbox');
-var keys = require('./keys');
 var cookie = require('cookies');
 
 // Create Express object
 var app = express();
 
 // Configure Dropbox 
-var DROPBOX_APP_KEY = keys.dropboxAppKey;
-var DROPBOX_APP_SECRET = keys.dropboxAppSecret;
+//var DROPBOX_APP_KEY = keys.dropboxAppKey;
+//var DROPBOX_APP_SECRET = keys.dropboxAppSecret;
 
 //var client = new Dropbox.Client({
 //  key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
