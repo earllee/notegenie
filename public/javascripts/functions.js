@@ -65,6 +65,12 @@ $(document).ready(function() {
   }
 
   function updateBox(wikipediaPage, box, pos, curval) {
+   if (wikipediaPage == "" || !(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))))
+      {
+            return false;
+      }
+
+    showParsingBar();
     var req1 = $.ajax({ 
       type: 'GET', 
       dataType: "json", 
@@ -172,7 +178,11 @@ $(document).ready(function() {
       endLine = value.lastIndexOf("\n");
       $(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
       $(this).selectRange(pos + 1, pos + 1);
-      showParsingBar();
+
+      // Note: do NOT try to access value here - leads to extra lines being inserted
+
+
+      //showParsingBar();	moving this to the update function itself
       updateBox(value.substring(endLine+1,pos), $(this), pos, value);
       return false; // prevent the button click from happening
     } 
