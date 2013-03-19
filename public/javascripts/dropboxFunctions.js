@@ -8,7 +8,7 @@ $(document).ready(function() {
   }); 
 
   var client = new Dropbox.Client({
-    key: "Nlo4FSFkSkA=|QpwDRe2cRVnNap3sKxLywfO8pM245+xXmQuWH2g5lQ==", 
+    key: "KhJyIJt6dgA=|a7T1MMYdqjM/sHdA+5Ext3zvnBMVtcqe60UGqX8Upg==", 
     sandbox: true});
     client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
 
@@ -51,9 +51,10 @@ $(document).ready(function() {
   $('#new').on('click', function() {
     if (client.isAuthenticated()) {
       setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?');
-      $('[id="saveAlert"]').css('display', 'block');
+      $('[id="alertBox"]').fadeIn();
 
     } else {
+      console.log('login first');
       login(setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?'));
     }
   });
@@ -72,8 +73,9 @@ $(document).ready(function() {
     if (client.isAuthenticated()) {
     client.readdir('/', {httpCache : true}, 
       function(err, dir, stat, dirstat) {
-	if (err)
-		return showError(err);
+        if (err) {
+          return showError(err);
+        }
         $('#fileList').html('');
         $.each(dir, function(index, value) {
           $('#fileList').append('<li><a class="file" href="#">' + dir[index] + '</a></li>');
@@ -97,9 +99,13 @@ $(document).ready(function() {
     $('.file').on('click', function(e) {
       var fileName = e.target.innerText;
       e.preventDefault();
-      //setupAlertButtons(fileName);
-      setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
-      $('#saveAlert').css('display', 'block');
+      if ($('#input').val()) {
+        setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
+        $('[id="alertBox"]').fadeIn();
+      } else {
+        loadFile(fileName);
+        closeAll(); 
+      }
     });
   }
 
@@ -107,8 +113,8 @@ $(document).ready(function() {
   function loadFile(fileName) {
     client.readFile(fileName, {httpCache: true}, 
       function(err, file, stat, rangeInfo){
-	if (err)
-		return showError(err);
+        if (err)
+          return showError(err);
         currentFile = fileName;
         $('#input').val(file);
         $('#fileName').val(currentFile);
@@ -128,7 +134,7 @@ $(document).ready(function() {
 	//clean up and check the file name
     currentFile = currentFile.replace(/^\s+/,"");    // trim whitespace
     currentFile = currentFile.replace(/\s+$/,"");
-    if ((!/[a-z0-9\._\- ]/i.test(currentFile)) || currentFile == "")  // invalid filename
+    if ((!/[a-z0-9\._\- ]/i.test(currentFile)) || currentFile === "")  // invalid filename
     {
         alert("Invalid filename");
         return;
@@ -146,25 +152,6 @@ $(document).ready(function() {
         callback();
       }
     }); 
-  }
-
-  // Sets Up Alert
-  function setupAlert(action, actionName, fileName, content) {
-    $('#saveContent').html(content);
-    $('#saveAction').html('Save &amp; ' + actionName).on('click', function(e) {
-      saveFile(currentFile); 
-      action(fileName);
-      closeAll();
-    });
-    $('#action').html(actionName).on('click', function(e) {
-      action(fileName);
-      closeAll();
-    });
-    $('#closeAlert').on('click', function(e){
-      $('#saveAlert').removeAttr('style');  // Removes display attr
-      $('[id="saveAlert"]').removeAttr('style');
-    });
-   
   }
 
   function login(callback) {

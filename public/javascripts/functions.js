@@ -284,7 +284,7 @@ function footerTriggerInit(){
 function closeAll(){
   $("[id$='Screen']").fadeOut();
   $('.nav-collapse').collapse('hide');
-  $('[id="saveAlert"]').removeAttr('style');
+  $('[id="alertBox"]').fadeOut();
   $('#footer').removeAttr('style');
   $('#footer').css('top', '-40px');
   $('#preview').css("opacity", 0);
@@ -334,4 +334,28 @@ function togglePreviewMode() {
     ngw.isPreviewOn = false;
     input.focus();
   }
+}
+
+// Sets Up Alert
+// If first three vars are null, just show cloes button.
+function setupAlert(action, actionName, fileName, content) {
+  $('#alertContent').html(content);
+  if (action !== null) {
+    $('#saveAction, #action').css('visibility', 'visible');
+    $('#saveAction').html('Save &amp; ' + actionName).on('click', function(e) {
+      saveFile(currentFile); 
+      action(fileName);
+      closeAll();
+    });
+    $('#action').html(actionName).on('click', function(e) {
+      action(fileName);
+      closeAll();
+    });
+  } else {
+    $('#saveAction, #action').css('visibility', 'hidden');
+  }
+  $('#closeAlert').on('click', function(e){
+    $('[id="alertBox"]').fadeOut();
+  });
+
 }

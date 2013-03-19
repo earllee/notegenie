@@ -4,8 +4,8 @@ block content
   div#preview.text
   div#saveNotice.alert.alert-success
     p File successfully saved!
-  div#saveAlert.alert.alert-block.fade.in.hide
-    p#saveContent Hey! You already have a file open. Make sure to save before opening this new one, or else you'll lose all your changes!
+  div#alertBox.alert.alert-block.fade.in.hide
+    p#alertContent Hey! You already have a file open. Make sure to save before opening this new one, or else you'll lose all your changes!
     a#saveAction.btn.btn-success Save &amp; Action
     a#action.btn.btn-warning Action
     a#closeAlert.btn() Close
@@ -153,4 +153,4 @@ block content
               td
                 pre.
                   | ![NoteGenie Logo](www.notegenie.io/logo.gif)                  
-  div#saveAlert.modal-backdrop.fade.in
+  div#alertBox.modal-backdrop.fade.in

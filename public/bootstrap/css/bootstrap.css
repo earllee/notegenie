@@ -8999,8 +8999,12 @@ body #footer {
   font-color: #555555;
 }
 
-#saveAlert {
+#alertBox {
   display: none;
+  -webkit-transition: none;
+     -moz-transition: none;
+       -o-transition: none;
+          transition: none;
 }
 
 #saveNotice {
