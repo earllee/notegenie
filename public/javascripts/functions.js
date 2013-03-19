@@ -182,28 +182,17 @@ $(document).ready(function() {
   $(document).on("keydown", function(e) {
     if (e.keyCode == 77 && e.ctrlKey) {
       //Handle Ctrl+m
-      var preview = $('#preview');
-      if(!ngw.isPreviewOn) {
-        var tokens = marked.lexer(input.val());
-        preview.html(marked.parser(tokens));
-        preview.css("opacity", 1);
-        preview.css("visibility", "visible");
-        $('body, html').css("background","white");
-        ngw.isPreviewOn = true;
-        input.blur();
-      }
-      else {
-        preview.css("opacity", 0);
-        preview.css("visibility", "hidden");
-        $('body, html').css("background", "");
-
-        ngw.isPreviewOn = false;
-        input.focus();
-      }
-
+      togglePreviewMode();
       e.preventDefault();
       return false;
     }
+  });
+
+  $('#markdownMode').on('click', function(e){
+    if (localStorage.getItem('firstTime'))  // Broken
+      $('#input').val('###GLBL 265: Dilemmas of the Nuclear Age\nJonathan Schell -\nJonathan Edward Schell (born 1943) is an author and visiting fellow at Yale University, whose work primarily deals with campaigning against nuclear weapons.\n\n**Nuclear Strategy**\n* Disarmament\n* Deterrence\n---\n####Deterrence Strategy\n\nEmbargo\n\nAn embargo is the partial or complete prohibition of commerce and trade with a particular country. Embargoes are considered strong diplomatic measures imposed in an effort, by the imposing country, to elicit a given national-interest result from the country on which it is imposed. Embargoes are similar to economic sanctions and are generally considered legal barriers to trade, not to be confused with blockades, which are often considered to be acts of war.###GLBL 265: Dilemmas of the Nuclear Age');
+    togglePreviewMode();
+    e.preventDefault();
   });
 
   //Change fonts
@@ -228,6 +217,7 @@ $(document).ready(function() {
   $('.footerScreenTrigger').on('click', function(e){
     ngw.screen = e.target.dataset.target; // Screen to be opened
     if (!ngw.isFooterScreenOn) {
+      $('#' + e.currentTarget.id).addClass('active');
       ngw.isFooterScreenOn = true;
       ngw.openScreen = ngw.screen;
       $('#footer').css('height', '100%');
@@ -236,6 +226,8 @@ $(document).ready(function() {
     } else if (ngw.screen === ngw.openScreen){
       closeAll();
     } else {
+      $('a.active').removeClass('active');
+      $('#' + e.currentTarget.id).addClass('active');
       $('#' + ngw.openScreen).fadeOut();
       $('#' + ngw.screen).fadeIn();
       ngw.openScreen = ngw.screen;
@@ -285,10 +277,15 @@ function closeAll(){
   $('[id="saveAlert"]').removeAttr('style');
   $('#footer').removeAttr('style');
   $('#footer').css('top', '-40px');
+  $('#preview').css("opacity", 0);
+  $('#preview').css("visibility", "hidden");
+  $('body, html').css("background", "");
+  $('a.active').removeClass('active');
   ngw.screen = ngw.openScreen = 'none';
   ngw.isFooterScreenOn = false;
+  ngw.isPreviewOn = false;
   footerTriggerInit();
-  }
+}
 
 function showParsingBar() {
   $('body').prepend('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
@@ -304,4 +301,27 @@ function hideParsingBar(type) {
   }
   $('.progress[style="display: none;"]').remove();
     
+}
+
+function togglePreviewMode() {
+  var preview = $('#preview');
+  if(!ngw.isPreviewOn) {
+    var tokens = marked.lexer($('#input').val());
+    preview.html(marked.parser(tokens));
+    preview.css("opacity", 1);
+    preview.css("visibility", "visible");
+    $('body, html').css("background","white");
+    $('#markdownMode').addClass('active');
+    ngw.isPreviewOn = true;
+    input.blur();
+  }
+  else {
+    preview.css("opacity", 0);
+    preview.css("visibility", "hidden");
+    $('body, html').css("background", "");
+    $('#markdownMode').removeClass('active');
+
+    ngw.isPreviewOn = false;
+    input.focus();
+  }
 }
