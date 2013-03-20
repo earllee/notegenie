@@ -248,8 +248,8 @@ $(document).ready(function() {
   });
 
   $('#markdownMode').on('click', function(e){
-    if (localStorage.getItem('firstTime'))  // Broken
-      $('#input').val('###GLBL 265: Dilemmas of the Nuclear Age\nJonathan Schell -\nJonathan Edward Schell (born 1943) is an author and visiting fellow at Yale University, whose work primarily deals with campaigning against nuclear weapons.\n\n**Nuclear Strategy**\n* Disarmament\n* Deterrence\n---\n####Deterrence Strategy\n\nEmbargo\n\nAn embargo is the partial or complete prohibition of commerce and trade with a particular country. Embargoes are considered strong diplomatic measures imposed in an effort, by the imposing country, to elicit a given national-interest result from the country on which it is imposed. Embargoes are similar to economic sanctions and are generally considered legal barriers to trade, not to be confused with blockades, which are often considered to be acts of war.###GLBL 265: Dilemmas of the Nuclear Age');
+    if ($('#input').val() === '')  // Broken
+      $('#input').val('###GLBL 265: Dilemmas of the Nuclear Age\nJonathan Schell -\nJonathan Edward Schell (born 1943) is an author and visiting fellow at Yale University, whose work primarily deals with campaigning against nuclear weapons.\n\n**Nuclear Strategy**\n\n* Disarmament\n* Deterrence\n\n---\n\n####Deterrence Strategy\n\nEmbargo\n\nAn embargo is the partial or complete prohibition of commerce and trade with a particular country. Embargoes are considered strong diplomatic measures imposed in an effort, by the imposing country, to elicit a given national-interest result from the country on which it is imposed. Embargoes are similar to economic sanctions and are generally considered legal barriers to trade, not to be confused with blockades, which are often considered to be acts of war.');
     togglePreviewMode();
     e.preventDefault();
   });
@@ -322,12 +322,19 @@ $(document).ready(function() {
 
 function footerTriggerInit(){
   var footer = $('#footer');
-  $('#footer-trigger').hover(function(){footer.css('top', '0');}, function(){
-    if (!ngw.isFooterScreenOn) {
+  $('#footer-trigger').hoverIntent({
+    over: function(){footer.css('top','0');},
+    out: function(){
       footer.css('top', '-40px');
-      $('.nav-collapse').collapse('hide');
-    }
+      $('.nav-collapse').collapse('hide');},
+    timeout: 1000
   });
+//hover(function(){footer.css('top', '0');}, function(){
+//    if (!ngw.isFooterScreenOn) {
+//      footer.animate({top : '-=40'}, {queue: true});
+//      $('.nav-collapse').collapse('hide');
+//    }
+//  });
 }
 
 function closeAll(){
@@ -335,7 +342,7 @@ function closeAll(){
   $('.nav-collapse').collapse('hide');
   $('[id="alertBox"]').fadeOut();
   $('#footer').removeAttr('style');
-  $('#footer').css('top', '-40px');
+  //$('#footer').css('top', '-40px');
   $('#preview').css("opacity", 0);
   $('#preview').css("visibility", "hidden");
   $('body, html').css("background", "");

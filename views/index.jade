@@ -61,7 +61,7 @@ block content
       div#filesScreen.footer-screen
         div#currentFile
           h3 No file currently open. You are working on the scratch notepad. 
-        div#fileScreenToolbar
+        //div#fileScreenToolbar
           a.btn.btn-small(href='#') New Folder
         ul#fileList
       div#aboutScreen.footer-screen
@@ -95,12 +95,11 @@ block content
               | Dropbox API
       div#helpScreen.footer-screen
         h5 How to Use NoteGenie
-        p Take notes like you normally would. If there is something you need to look up, press enter, type in that something, then press enter again.
-          | Need to bold, italicize, and more? Take a look below!
-        h5 Markdown
-        p Use the following syntax to do special stuff to your text. Then press CTRL + M to see the effects.
+        p Take notes like you normally would. If there is something you need to look up, press enter, type in a term, then press enter again. (If you want pure definitions, put a '?' before each term).
+          | NoteGenie can handle a variety of terms from famous people's names to economics topics.
+        h5 Formatting &amp; Markdown
+        p Need to bold, italicize, and more? Use the following syntax to indicate words in bold. Then, press CTRL + M to see the effects.
         table.table
-          caption Markdown Syntax
           colgroup
           colgroup(span='1', title='title')
           thead
