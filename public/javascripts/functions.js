@@ -85,12 +85,12 @@ $(document).ready(function() {
             var extratextlen = actval.indexOf("\n", pos) - pos;
             var newval = actval.substring(pos, extratextlen);
 
-            box.val(curval.substring(0, pos) + "\n" + text + "\n" + actval.substring(pos + 1));
+            box.val(curval.substring(0, pos) + "\n\n> " + text + "\n\n" + actval.substring(pos + 1));
             box.scrollTop(9999).focus();
 
             box.focus();
             var offsetSelect = actval.length - curval.length;
-            var selectpos = pos + text.length + 1 + offsetSelect;
+            var selectpos = pos + text.length + 5 + offsetSelect;
             $(box).selectRange(selectpos, selectpos); 
             console.log(text);
             if (text === '')
@@ -177,7 +177,7 @@ $(document).ready(function() {
 
           box.focus();
           var offsetSelect = actval.length - curval.length;
-          var selectpos = pos + text.length + 1 + offsetSelect;
+          var selectpos = pos + text.length + 5 + offsetSelect;
           $(box).selectRange(selectpos, selectpos); 
           console.log(text);
           if (text === '')
