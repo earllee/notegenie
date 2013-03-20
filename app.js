@@ -4,6 +4,17 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var mongoose = require('mongoose');
+var keys = require('./keys');
+
+var MONGO_PASS = keys.MONGO_PASS;
+
+mongoose.connect('mongodb://nodejitsu_earllee:' + MONGO_PASS + '@ds051977.mongolab.com:51977/nodejitsu_earllee_nodejitsudb9586039269');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {});
+var userSchema = mongoose.Schema({ uid: String, email: String, name: String });
+var User = mongoose.model('User', userSchema);
 
 // Create Express object
 var app = express();
@@ -26,6 +37,28 @@ app.configure(function(){
 
 app.get('/', function(req, res){
   res.render('index');
+});
+
+app.post('/', function(req, res){
+  var user = new User(req.body);
+  User.findOne({uid: user.uid}, function(err, isThereUser){
+    if (!isThereUser) {
+      user.save(function(err, user) {
+        if (err)
+          console.log(err);
+      });
+    }
+  });
+  res.end();
+});
+
+app.get('/show', function(req, res){
+  User.find(function(err, users) {
+    if (err)
+      console.log(err);
+    console.log(users);
+  });
+  res.end();
 });
 
 http.createServer(app).listen(app.get('port'), function(){

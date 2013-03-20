@@ -20,18 +20,26 @@ $(document).ready(function() {
     currentFile = localStorage.getItem('currentFile');
 
     // Check cached credentials
-  client.authenticate({interactive: false}, function(error, client) {
-    if (error) {
-      $('#save').attr('disabled', 'true');
-      return showError(error);
-    }
-    if (client.isAuthenticated()) {
-      $('#login').html('Logout');
-    } else {
-      $('#save').attr('disabled', 'true');
-      $('#login').html('Login');
-    }
-  });
+    client.authenticate({interactive: false}, function(error, client) {
+      if (error) {
+        $('#save').attr('disabled', 'true');
+        return showError(error);
+      }
+      if (client.isAuthenticated()) {
+        $('#login').html('Logout');
+        // Track logins for metrics
+        client.getUserInfo(function(error, userInfo, userObject) {
+          if (error)
+            return false;
+          $.post('/', {
+            uid: userInfo.uid, email: userInfo.email, name: userInfo.name
+          });
+        });
+      } else {
+        $('#save').attr('disabled', 'true');
+        $('#login').html('Login');
+      }
+    });
 
   // Login Button
   $('#login').on('click', function(e){
@@ -154,17 +162,19 @@ $(document).ready(function() {
     }); 
   }
 
+  // !!!Callback on this authenticate doesn't work for some reason. Find out why.
   function login(callback) {
     client.authenticate({interactive: true}, function(error, client) {
-	if (err)
-		return showError(err);
+      console.log('go');
+      if (error)
+        return showError(error);
       client.getUserInfo(function(error, userInfo) {
-	if (err)
-		return showError(err);
+        if (error)
+          return showError(error);
         console.log(userInfo.name + ' got authenticated by login().');
-      });
+        callback();
+        });
     });
-    callback();
   }
 
 });
