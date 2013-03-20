@@ -21,6 +21,10 @@ $(document).ready(function() {
     $('.text').css("font-size", localStorage["fontSize"] + "px");
     if (localStorage["fontSize"])
       $('#font-size').val(localStorage["fontSize"]);
+    else {
+      ngw.fontSize = 16;
+      localStorage.setItem('fontSize', '16');
+    }
   }
 
   //Retrieve saved text
@@ -249,7 +253,7 @@ $(document).ready(function() {
 
   $('#markdownMode').on('click', function(e){
     if ($('#input').val() === '')  // Broken
-      $('#input').val('###GLBL 265: Dilemmas of the Nuclear Age\nJonathan Schell -\nJonathan Edward Schell (born 1943) is an author and visiting fellow at Yale University, whose work primarily deals with campaigning against nuclear weapons.\n\n**Nuclear Strategy**\n\n* Disarmament\n* Deterrence\n\n---\n\n####Deterrence Strategy\n\nEmbargo\n\nAn embargo is the partial or complete prohibition of commerce and trade with a particular country. Embargoes are considered strong diplomatic measures imposed in an effort, by the imposing country, to elicit a given national-interest result from the country on which it is imposed. Embargoes are similar to economic sanctions and are generally considered legal barriers to trade, not to be confused with blockades, which are often considered to be acts of war.');
+    $('#input').val('Using this tool\n ---------------\n \n This page lets you create HTML by entering text in a simple format that\'s easy to read and write.\n \n - Type Markdown text in the left window - See the HTML in the right \n Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site] [1]:\n\n > The overriding design goal for Markdown\'s\n > formatting syntax is to make it as readable\n > as possible. The idea is that a\n > Markdown-formatted document should be\n > publishable as-is, as plain text, without\n > looking like it\'s been marked up with tags\n > or formatting instructions.\n \n This document is written in Markdown; you can see the plain-text version on the left.  To get a feel for Markdown\'s syntax, type some text into the left window and watch the results in the right.  You can see a Markdown syntax guide by switching the right-hand window from *Preview* to *Syntax Guide*.\n \n Showdown is a Javascript port of Markdown.  You can get the full [source code] by clicking on the version number at the bottom of the page.\n \n **Start with a [blank page] or edit this document in the left window.**\n \n [john gruber]: http://daringfireball.net/\n [1]: http://daringfireball.net/projects/markdown/\n [source code]: http://www.attacklab.net/showdown-v0.9.zip\n [blank page]: ?blank=1 "Clear all text"\n \n \n ## Syntax highlighting\n \n When combined with [highlight.js][] this starts looking as a kind of IDE :-)\n \n HTML:\n \n <h1>HTML code</h1>\n <p class="some">This is an example</p>\n \n Python:\n \n def func():\n for i in [1, 2, 3]:\n print "%s" % i\n \n \n [highlight.js]: http://softwaremaniacs.org/soft/highlight/en/\n');
     togglePreviewMode();
     e.preventDefault();
   });
@@ -262,8 +266,12 @@ $(document).ready(function() {
 
   //Change font size
   $('#font-size').on("change", function(e) {
-    $('.text').css("font-size", $(this).val() + "px");
-    localStorage["fontSize"] = $(this).val();
+    //$('.text').css("font-size", $(this).val() + "px");
+    var newSize = $(this).val();
+    var sizeChange = newSize - ngw.fontSize;
+    $('#input, #preview, h6, h5, h4, h3, h2, h1').css("font-size", '+=' + sizeChange);
+    ngw.fontSize = newSize;
+    localStorage.setItem('fontSize', newSize);
     e.preventDefault();
     return false;
   });
