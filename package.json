@@ -12,12 +12,9 @@
   },
   "dependencies": {
     "express": "3.1.0",
-    "dropbox": "*",
-    "passport": "*",
-    "passport-dropbox": "*",
-    "dbox": "*",
-    "jade": "*",
-    "cookies": "*"
+    "dropbox": "0.9.1",
+    "dbox": "0.6.2",
+    "jade": "0.28.2"
   },
   "engines": {
     "node": ">=0.6.0"
