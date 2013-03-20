@@ -1,8 +1,11 @@
 {
   "name": "notegenie",
   "subdomain": "notegenie",
-  "domains": ["notegenie.io", "www.notegenie.io"],
-  "version": "0.0.1-27",
+  "domains": [
+    "notegenie.io",
+    "www.notegenie.io"
+  ],
+  "version": "0.0.1-28",
   "private": true,
   "scripts": {
     "start": "node app.js"
