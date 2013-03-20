@@ -9223,10 +9223,7 @@ body #footer {
 }
 
 #footer .footer-screen .screenImage {
-  width: 100%;
-  height: 200px;
   margin-bottom: 15px;
-  overflow: hidden;
 }
 
 #footer .footer-screen a {
