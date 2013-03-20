@@ -14,8 +14,7 @@
     "express": "3.1.0",
     "dropbox": "0.9.1",
     "dbox": "0.6.2",
-    "mongoose": "2.2.3",
-    "mongodb": ">=0.0.0",
+    "mongoose": "2.5.x",
     "jade": "0.28.2"
   },
   "engines": {
