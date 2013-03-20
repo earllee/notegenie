@@ -8,8 +8,9 @@ var mongoose = require('mongoose');
 
 try {
   var keys = require('./keys');
-  var MONGO_PASS = keys.MONGO_PASS;
 } catch(err){}
+
+var MONGO_PASS = process.env.MONGO_PASS || keys.MONGO_PASS;
 
 mongoose.connect('mongodb://nodejitsu_earllee:' + MONGO_PASS + '@ds051977.mongolab.com:51977/nodejitsu_earllee_nodejitsudb9586039269');
 var db = mongoose.connection;
