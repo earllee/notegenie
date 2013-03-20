@@ -5,9 +5,11 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
-var keys = require('./keys');
 
-var MONGO_PASS = keys.MONGO_PASS;
+try {
+  var keys = require('./keys');
+  var MONGO_PASS = keys.MONGO_PASS;
+} catch(err){}
 
 mongoose.connect('mongodb://nodejitsu_earllee:' + MONGO_PASS + '@ds051977.mongolab.com:51977/nodejitsu_earllee_nodejitsudb9586039269');
 var db = mongoose.connection;
