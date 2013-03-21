@@ -333,10 +333,15 @@ $(document).ready(function() {
 function footerTriggerInit(){
   var footer = $('#footer');
   $('#footer-trigger').hoverIntent({
-    over: function(){footer.css('top','0');},
+    over: function(){
+      footer.css('top','0px');
+      $('.progress.progress-striped.active').css('top','40px');
+  },
     out: function(){
       footer.css('top', '-40px');
-      $('.nav-collapse').collapse('hide');},
+      $('.nav-collapse').collapse('hide');
+      $('.progress.progress-striped.active').css('top','0px');
+    },
     timeout: 1000
   });
 //hover(function(){footer.css('top', '0');}, function(){
@@ -365,6 +370,8 @@ function closeAll(){
 
 function showParsingBar() {
   $('body').prepend('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+  if ($('#footer').css('top') === '0px')
+      $('.progress').css('top', '40px');
 }
 
 function hideParsingBar(type) {
@@ -375,7 +382,7 @@ function hideParsingBar(type) {
   } else {
     $('.progress:first').delay(800).fadeOut();  
   }
-  $('.progress[style="display: none;"]').remove();
+  $('.progress[style$="display: none;"]').remove();
     
 }
 
