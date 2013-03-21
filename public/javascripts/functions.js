@@ -79,16 +79,32 @@ $(document).ready(function() {
       showParsingBar();
       var jqxhr = $.getJSON("http://api.duckduckgo.com/?q=define+" + wikipediaPage.substring(1) + "&format=json&pretty=1&callback=?&", function() {}).done(function(data) {
           text = data.Abstract;
-          
+
           try {
+		  // process/cleanup the definition
+
+		  if (data.AbstractSource === "Merriam-Webster" && text.indexOf("definition:") > -1)
+		  {
+		       text = text.substring(text.indexOf("definition:") + 12);
+		  }
+		  else if (data.AbstractSource === "The Free Dictionary" && text.indexOf("\u00b7") > -1)
+		  {
+	console.log(text.substring(text.lastIndexOf("\u00b7")));
+		       temptext = text.substring(text.lastIndexOf("\u00b7"));
+		       text = temptext.substring(temptext.indexOf(" ") + 1);
+		  }
+                  if (text === "")
+			throw "blank page";
+
+
             var actval = String(box.val());
             var extratextlen = actval.indexOf("\n", pos) - pos;
             var newval = actval.substring(pos, extratextlen);
 
             box.val(curval.substring(0, pos) + "\n\n> " + text + "\n\n" + actval.substring(pos + 1));
-            box.scrollTop(9999).focus();
+            //box.scrollTop(9999).focus();
 
-            box.focus();
+            //box.focus();
             var offsetSelect = actval.length - curval.length;
             var selectpos = pos + text.length + 5 + offsetSelect;
             $(box).selectRange(selectpos, selectpos); 
@@ -173,9 +189,9 @@ $(document).ready(function() {
           var newval = actval.substring(pos, extratextlen);
 
           box.val(curval.substring(0, pos) + "\n\n> " + text + "\n\n" + actval.substring(pos + 1));
-          box.scrollTop(9999).focus();
+          //box.scrollTop(9999).focus();
 
-          box.focus();
+         // box.focus();
           var offsetSelect = actval.length - curval.length;
           var selectpos = pos + text.length + 5 + offsetSelect;
           $(box).selectRange(selectpos, selectpos); 
