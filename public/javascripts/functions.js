@@ -1,20 +1,30 @@
 $(document).ready(function() {
 
+  // ngw is an object that stores variables to the browser window. Used to communicate some variables with functionsDropbox.js.
   var ngw = window.ngw || (window.ngw = {
-    isFooterScreenOn : false, //footerScreenModeOn
-    isPreviewOn : false,  //isPreviewActive
+    isFooterScreenOn : false,
+    isPreviewOn : false,
     screen : 'none',
     openScreen : 'none'
   }); 
 
-  var input = $('#input');
+  var KEYCODE_ESC = 27;
+  var KEYCODE_ENTER = 13;
+  var KEYCODE_TAB = 7;
+  var KEYCODE_M = 77;
 
-  //Set firstTime to false on first keypress
-  $('#input').one("keypress", function() {
-    localStorage.setItem('firstTime', false);
-  });
+  // Set firstTime to false on first keypress
+  if (!localStorage.getItem('firstTime'))
+    $('#input').one('change', function() {
+      localStorage.setItem('firstTime', 'false');
+      footer.css('top', '-40px');
+      $('.nav-collapse').collapse('hide');
+    });
 
-  //Set previous font family and size
+  // Footer
+  footerTriggerInit();
+
+  // Retrieve and set previous font family and size
   if (localStorage.getItem('font') || localStorage.getItem('fontSize')) {
     $('.text').css("font-family", localStorage.getItem('font'));
     if (localStorage.getItem('fontSize')) {
@@ -28,7 +38,7 @@ $(document).ready(function() {
     changeFontSize();
   }
 
-  //Retrieve saved text
+  // Retrieve and set saved text
   if (Modernizr.localstorage && localStorage.getItem('text')) {
     var savedText = "";
     try {
@@ -42,14 +52,16 @@ $(document).ready(function() {
     }
   } 
 
-  //Save text on interval
+  // Save text on interval
   try {
-    if(localStorage.getItem('firstTime') == "false")
+    if(localStorage.getItem('firstTime') === 'false')
       setInterval(function() {
-        localStorage('text', $('#input').val());
+        localStorage.setItem('text', $('#input').val());
+console.log('saved');
       }, 2000);
   } catch(e) {console.log('Could not save.');}
 
+  // Parsing engine
   $.fn.selectRange = function(start, end) {
     return this.each(function() {
       if (this.setSelectionRange) {
@@ -217,7 +229,7 @@ $(document).ready(function() {
 
   // Catch tabs
   $('#input').on("keydown", function(e) {
-    if (e.keyCode == 9) {
+    if (e.keyCode == KEYCODE_TAB) {
       e.preventDefault();
       var value = $(this).val();
       pos = $(this).prop('selectionStart');
@@ -228,8 +240,7 @@ $(document).ready(function() {
   
   // Core keypress parser
   $('#input').on("keypress", function(e) {
-    if (e.keyCode == 13) {
-      // Handle 'Enter'
+    if (e.keyCode == KEYCODE_ENTER) {
       var value = $(this).val();
       pos = $(this).prop('selectionStart'); //Cursor position
       var endLine = value.substring(0, pos).lastIndexOf("\n");
@@ -243,10 +254,9 @@ $(document).ready(function() {
     } 
   });
 
-  //Markdown preview
+  // Markdown preview
   $(document).on("keydown", function(e) {
-    if (e.keyCode == 77 && e.ctrlKey) {
-      //Handle Ctrl+m
+    if (e.keyCode == KEYCODE_M && e.ctrlKey) {
       togglePreviewMode();
       e.preventDefault();
       return false;
@@ -260,18 +270,17 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  //Change fonts
+  // Change fonts
   $('.font-btn').on("click", function(e) {
     $('.text').css("font-family", $(this).data('font'));
     localStorage.setItem('font', $(this).data('font'));
   });
 
-  //Change font size
+  // Change font size
   $('#font-size').on("change", function(e) {
       changeFontSize(e);
   });
 
-  var KEYCODE_ENTER = 13;
   $('#font-size').on("keydown", function(e) {
     if (e.keyCode == KEYCODE_ENTER) {
       e.preventDefault();
@@ -279,10 +288,6 @@ $(document).ready(function() {
       return false;
     }
   });
-
-
-  //Logo Tooltip
-  $('.brand').tooltip({trigger: 'hover', delay: {hide: 1000}, placement: 'top'});
 
   // Footer Screen Mode
   $("[id$='Screen']").fadeOut();
@@ -307,8 +312,6 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  var KEYCODE_ESC = 27;
-
   $(document).on('keydown', function(e) {
     if (e.keyCode == KEYCODE_ESC) {
       closeAll();
@@ -319,8 +322,6 @@ $(document).ready(function() {
     closeAll();
   });
 
-  // Footer
-  footerTriggerInit();
 
   // Manually clear stuck loading bars
   try {
@@ -330,6 +331,41 @@ $(document).ready(function() {
       }, 5000);
   } catch(e) {console.log('failed');}
 
+  function frameLooper(myArray) {
+    if(myArray.length > 0) {
+      $('#input').val($('#input').val() + myArray.shift()); 
+    }
+  }
+
+  try {
+    if(!localStorage.getItem("firstTime")) {
+      var rand = 300;
+      // Typing Animation - First time users only
+      var introText = "(Refresh to skip this intro)\n\n\nAbout\n-----\n\nHello! I created this small webapp to help people write without any distractions.\nIt does not store any of your stories/poems on the server or send them anywhere so feel free to type whatever you want.\n\nThis is the first time intro and you'll never see this again.\n\nSome Features\n------------\n\n* Markdown support. (Press CTRL+M to view the preview)\n* Autosave using HTML5 localStorage.\n* More features coming soon.\n\nTo start typing, just remove everything from here or refresh the page. Happy writing :)";
+
+      var myString = introText,
+      frameRate = 100,
+      myArray = myString.split(""),
+      isStop = false;
+
+      $('#input').val('');
+
+
+      (function loop() {
+        if(isStop)
+        rand = 300;
+        else
+        rand = Math.round(Math.random() * (150 - 20)) + 20;
+
+        setTimeout(function() {
+          frameLooper(myArray);
+          loop();  
+        }, rand);
+      }());
+    } else {
+      console.log('not first time');
+    }
+    } catch(e) {}
 
 });
 
@@ -347,12 +383,6 @@ function footerTriggerInit(){
     },
     timeout: 1000
   });
-//hover(function(){footer.css('top', '0');}, function(){
-//    if (!ngw.isFooterScreenOn) {
-//      footer.animate({top : '-=40'}, {queue: true});
-//      $('.nav-collapse').collapse('hide');
-//    }
-//  });
 }
 
 function closeAll(){
