@@ -3,7 +3,8 @@ $(document).ready(function() {
     isFooterScreenOn : false, //footerScreenModeOn
     isPreviewOn : false,  //isPreviewActive
     screen : 'none',
-    openScreen : 'none'
+    openScreen : 'none',
+    dblclick : false
 
   }); 
 
@@ -48,7 +49,6 @@ $(document).ready(function() {
       login();
     } else {
       client.signOut(function(){
-        console.log('Signed off');
         $('#login').html('Login');
         $('#save').attr('disabled', 'true');
       });
@@ -62,7 +62,6 @@ $(document).ready(function() {
       $('[id="alertBox"]').fadeIn();
 
     } else {
-      console.log('login first');
       login(setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?'));
     }
   });
@@ -79,21 +78,98 @@ $(document).ready(function() {
   // Read Directory
   $('#files').on('click', function(e) {
     if (client.isAuthenticated()) {
-    client.readdir('/', {httpCache : true}, 
+      loadDir();
+    } else {
+      $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
+    }
+  });
+
+  // Load Directory
+  function loadDir(path) {
+    path = path || '';
+    client.readdir(path, {httpCache : true}, 
       function(err, dir, stat, dirstat) {
+          console.log(dirstat);
+          console.log(dir);
         if (err) {
           return showError(err);
         }
         $('#fileList').html('');
         $.each(dir, function(index, value) {
-          $('#fileList').append('<li><a class="file" href="#">' + dir[index] + '</a></li>');
+          var type = dirstat[index].isFolder ? 'folder' : 'file';
+          $('#fileList').append('<li><a class="' + type + '" href="#">' + dir[index] + '</a></li>');
         });
-        openFile();
+        openFile(path);
       });
-    } else {
-      $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
     }
-  });
+
+  // Open File Setup
+  function openFile(path){
+    path = path || '';
+    $('.file').on('click', function(e) {
+      setTimeout(function(e){
+        if (!ngw.dblclick) {
+          var fileName = e.target.innerText;
+          e.preventDefault();
+          if ($('#input').val()) {
+            setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
+            $('[id="alertBox"]').fadeIn();
+          } else {
+            loadFile(path + fileName);
+            closeAll(); 
+          }
+        } else
+          ngw.dblclick = false;
+      }, 300);
+    });
+    $('.file').on('dblclick', function(){
+      setupRename(this, 'file');
+    });
+    $('.folder').on('click', function(e) {
+      setTimeout(function(){
+        if (!ngw.dblclick) {
+          var folderName = e.target.innerText;
+          e.preventDefault();
+          loadDir(path + folderName + '/');
+        } 
+      }, 300);
+    });
+    $('#newFolder').off('click').on('click', function(){
+      newFolder(path);
+    });
+    $('.folder').on('dblclick', function(){
+      setupRename(this, 'folder');
+    });
+    $('#path').html(path);
+  }
+
+  function setupRename(target, type) {
+      if (!ngw.dblclick) {
+        ngw.dblclick = true;
+        var name = $(target).html();
+        $(target).replaceWith('<textarea id="renameBox" >' + name + '</textarea>');
+        $('#renameBox').on('keypress', function(e){
+          if (e.keyCode == KEYCODE_ENTER) {
+            rename(path, name, $(this).val(), function(newFileName){
+              $('#renameBox').replaceWith('<a class="' + type + '" href="#">' + newFileName +'</a>');
+              ngw.dblclick = false;
+            });
+          }
+        });
+        $('#renameBox').on('blur', function(){
+          rename(path, name, $(this).val(), function(newFileName){
+            $('#renameBox').replaceWith('<a class="' + type + ' href="#">' + newFileName +'</a>');
+            ngw.dblclick = false;
+          });
+        });
+      }
+  }
+  function rename(path, fileName, newFileName, callback) {
+    client.move(path + fileName, path + newFileName, function(){
+      $('#saveNotice').fadeIn().delay(800).fadeOut(); 
+      callback(newFileName);
+    }); 
+  }
 
   // Creates New Notepad
   function newFile(fileName) {  //fileName is not used. Just for convention.
@@ -102,18 +178,27 @@ $(document).ready(function() {
     $('#fileName').removeAttr('disabled');
   }
 
-  // Open File
-  function openFile(){
-    $('.file').on('click', function(e) {
-      var fileName = e.target.innerText;
-      e.preventDefault();
-      if ($('#input').val()) {
-        setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
-        $('[id="alertBox"]').fadeIn();
-      } else {
-        loadFile(fileName);
-        closeAll(); 
-      }
+  function newFolder(path, name) {
+    path = path || '';
+    name = name || 'New Folder';
+    console.log('making folder: ' + path);
+    
+    function checkExists (path, name, callback) {
+      client.stat(path + name, function(err, stat) {
+        if (stat && !stat.isRemoved) {
+          name += ' COPY';
+          checkExists(path, name, callback);
+        } else {
+          callback(path, name);
+        }
+      });
+    }
+    checkExists(path, name, function(path, name) {
+      client.mkdir(path + name, function(err, stat) {
+        if (err)
+          showError(err);
+        loadDir(path);    
+      });
     });
   }
 
@@ -142,8 +227,7 @@ $(document).ready(function() {
 	//clean up and check the file name
     currentFile = currentFile.replace(/^\s+/,"");    // trim whitespace
     currentFile = currentFile.replace(/\s+$/,"");
-    if ((!/[a-z0-9\._\- ]/i.test(currentFile)) || currentFile === "")  // invalid filename
-    {
+    if ((!/[a-z0-9\._\- ]/i.test(currentFile)) || currentFile === "") {
         alert("Invalid filename");
         return;
     }
@@ -165,13 +249,11 @@ $(document).ready(function() {
   // !!!Callback on this authenticate doesn't work for some reason. Find out why.
   function login(callback) {
     client.authenticate({interactive: true}, function(error, client) {
-      console.log('go');
       if (error)
         return showError(error);
       client.getUserInfo(function(error, userInfo) {
         if (error)
           return showError(error);
-        console.log(userInfo.name + ' got authenticated by login().');
         callback();
         });
     });

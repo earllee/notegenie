@@ -1,3 +1,10 @@
+var KEYCODE_ESC = 27;
+var KEYCODE_ENTER = 13;
+var KEYCODE_TAB = 9;
+var KEYCODE_BACKSPACE = 8;
+var KEYCODE_M = 77;
+var KEYCODE_S = 83;
+
 $(document).ready(function() {
 
   // ngw is an object that stores variables to the browser window. Used to communicate some variables with functionsDropbox.js.
@@ -9,12 +16,6 @@ $(document).ready(function() {
   }); 
 
   var input = $('#input');
-  var KEYCODE_ESC = 27;
-  var KEYCODE_ENTER = 13;
-  var KEYCODE_TAB = 9;
-  var KEYCODE_BACKSPACE = 8;
-  var KEYCODE_M = 77;
-  var KEYCODE_S = 83;
 
   ngw.key = [document.getElementById('key1'),
               document.getElementById('key2'),
@@ -460,7 +461,6 @@ function setupAlert(action, actionName, fileName, content) {
   $('#closeAlert').on('click', function(e){
     $('[id="alertBox"]').fadeOut();
   });
-
 }
 
 // Changes font size

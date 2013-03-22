@@ -63,8 +63,11 @@ block content
       div#filesScreen.footer-screen
         div#currentFile
           h3 No file currently open. You are working on the scratch notepad. 
-        //div#fileScreenToolbar
-          a.btn.btn-small(href='#') New Folder
+        div
+          h3#path
+        div#fileScreenToolbar
+          h5
+            a#newFolder.btn(href='#') Create New Folder
         ul#fileList
       div#aboutScreen.footer-screen
         img.screenImage(src='images/flight-cover.jpg')
@@ -85,10 +88,10 @@ block content
             li Save text files to Dropbox
             li Open text files from Dropbox
         h4 Privacy
-          ul
-            li We do NOT have access to your Dropbox password.
-            li We do NOT store your files.
-            li Text currently in the notepad is saved in your browser's cache.
+        ul
+          li We do NOT have access to your Dropbox password.
+          li We do NOT store your files.
+          li Text currently in the notepad is saved in your browser's cache.
       div#helpScreen.footer-screen
         h5 How to Use NoteGenie
         p Take notes like you normally would. If there is something you need to look up, press enter, type in a term, then press SHIFT + ENTER. (If you want pure definitions, put a '?' before each term).

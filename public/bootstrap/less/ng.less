@@ -205,6 +205,23 @@ html, body {
     padding: 20px  50px 50px 50px;
     box-sizing: border-box;
 
+    #fileList {
+      li {
+      .transition(all 0.5s ease);
+      }
+    }
+
+    #fileScreenToolbar {
+      padding-bottom: 10px;
+      a {
+        color: black;
+        &:hover{color: white; text-shadow: none;} 
+      }
+      .btn:hover {
+        background: @blue;
+      }
+    }
+
     .screenImage {
       margin-bottom: 15px; 
     }

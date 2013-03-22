@@ -9227,6 +9227,30 @@ body #footer {
   box-sizing: border-box;
 }
 
+#footer .footer-screen #fileList li {
+  -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+
+#footer .footer-screen #fileScreenToolbar {
+  padding-bottom: 10px;
+}
+
+#footer .footer-screen #fileScreenToolbar a {
+  color: black;
+}
+
+#footer .footer-screen #fileScreenToolbar a:hover {
+  color: white;
+  text-shadow: none;
+}
+
+#footer .footer-screen #fileScreenToolbar .btn:hover {
+  background: #049cdb;
+}
+
 #footer .footer-screen .screenImage {
   margin-bottom: 15px;
 }
