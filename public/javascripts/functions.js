@@ -355,7 +355,7 @@ console.log('saved');
       }, 5000);
   } catch(e) {console.log('failed');}
 
-  var tutorial = '###NoteGenie 101\nThe first note-taking that writes descriptions of unfamiliar terms for you. To use NoteGenie, take notes like you normally would, but when you want to look up an unfamiliar term, type it in a new line and then press SHIFT + ENTER. Like this,\n\nDiscrete Mathematics\n> Discrete mathematics is the study of mathematical structures that are fundamentally discrete rather than continuous. In contrast to real numbers that have the property of varying \"smoothly\", the objects studied in discrete mathematics \u2013 such as integers, graphs, and statements in logic \u2013 do not vary smoothly in this way, but have distinct, separated values. Discrete mathematics therefore excludes topics in \"continuous mathematics\" such as calculus and analysis. Discrete objects can often be enumerated by integers. More formally, discrete mathematics has been characterized as the branch of mathematics dealing with countable sets (sets that have the same cardinality as subsets of the natural numbers, including rational numbers but not real numbers). However, there is no exact, universally agreed, definition of the term \"discrete mathematics.\" Indeed, discrete mathematics is described less by what is included than by what is excluded: continuously varying quantities and related notions.\n\n####Formatting\n- To take bulleted notes, put a dash before each line.\n\t- You can indent bullets.\n- To create a heading, put hash symbols at the beginning of a line. \n\t- 1 hash = biggest heading. 6 hashes = smallest heading.\n- To bold, surround text in **two** asterisks. \n- To italicize, surround text in *one* asterisk.\n---\n1. To create numbered bullets, type in a number and a period before each line.\n2. To insert links, use this format: [NoteGenie](http://notegenie.io)\n3. To insert images, use this format: ![Flight](http://notegenie.io/images/flight-cover.jpg)\n\nWhen you\'re done press **CTRL + M** to see a formatted version of your notes that includes the links and images.\n\n####Saving Notes\n1. Login\n2. Type in a name in the navbar file name field\n3. Press \"Save\"\n\n####Loading Notes\n1. Press \"Files\"\n2. Click the file you want to open\n\t- Note: NoteGenie only access files under Apps/NoteGenie/ in your Dropbox storage.\n';
+  var tutorial = '###NoteGenie 101\nThe first note-taking app that writes descriptions of unfamiliar terms for you. To use NoteGenie, take notes like you normally would, but when you want to look up an unfamiliar term, type it in a new line and then press SHIFT + ENTER. Like this,\n\nDiscrete Mathematics\n> Discrete mathematics is the study of mathematical structures that are fundamentally discrete rather than continuous. In contrast to real numbers that have the property of varying \"smoothly\", the objects studied in discrete mathematics \u2013 such as integers, graphs, and statements in logic \u2013 do not vary smoothly in this way, but have distinct, separated values. Discrete mathematics therefore excludes topics in \"continuous mathematics\" such as calculus and analysis. \n\n####Formatting\n- To take bulleted notes, put a dash before each line.\n\t- You can indent bullets.\n- To create a heading, put hash symbols at the beginning of a line. \n\t- 1 hash = biggest heading. 6 hashes = smallest heading.\n- To bold, surround text in **two** asterisks. \n- To italicize, surround text in *one* asterisk.\n---\n1. To create numbered bullets, type in a number and a period before each line.\n2. To insert links, use this format: [NoteGenie](http://notegenie.io)\n3. To insert images, use this format: ![Flight](http://notegenie.io/images/flight-cover.jpg)\n\nWhen you\'re done press **CTRL + M** to see a formatted version of your notes with links and images& and press **CTRL + M** to go back into editing mode.\n\n####Saving Notes\n1. Login\n2. Type in a name in the navbar file name field\n3. Press \"Save\"\n\n####Loading Notes\n1. Press \"Files\"\n2. Click the file you want to open\n\t- Note: NoteGenie only accesses files under Apps/NoteGenie/ in your Dropbox storage.\n\nThat\'s all. Try it out today!';
   $('#tutorial').on('click', function(){
     clearInterval(ngw.interval);
     autoType(tutorial, $('#input'));
@@ -477,8 +477,11 @@ function changeFontSize(e) {
 function autoType(text, input) {
   var textArray = text.split("");
   var rand = 50;
+  var toggledelay = 500;
+  var toggletrack = 0;
 
   function frameLooper(textArray) {
+console.log("welcome");
     if(textArray.length > 0) {
       if (textArray[0] == '\n')
         playSound('enter');
@@ -489,9 +492,43 @@ function autoType(text, input) {
       if (textArray[0] === '>')
         while (textArray[0] != '\n')
           $('#input').val($('#input').val() + textArray.shift()); 
+      if (textArray[0] === '&') // Handle toggle in and out of preview mode
+      {
+	togprev = function () {
+
+	  var preview = $('#preview');
+	  if(!ngw.isPreviewOn) {
+	    var tokens = marked.lexer($('#input').val());
+	    preview.html(marked.parser(tokens));
+	    preview.css("opacity", 1);
+	    preview.css("visibility", "visible");
+	    $('body, html').css("background","white");
+	    $('#markdownMode').addClass('active');
+	    ngw.isPreviewOn = true;
+	    $('#input').blur();
+	    clearInterval(ngw.interval);
+            ngw.interval = setInterval(togprev, 3000);
+	  }
+	  else {
+	    preview.css("opacity", 0);
+	    preview.css("visibility", "hidden");
+	    $('body, html').css("background", "");
+	    $('#markdownMode').removeClass('active');
+
+	    ngw.isPreviewOn = false;
+	    $('#input').focus();
+	clearInterval(ngw.interval);
+           textArray.shift();
+         ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
+	  }
+	 }
+	clearInterval(ngw.interval);
+        ngw.interval = setInterval(togprev, rand);
+	
+      }
     } else {
       clearInterval(ngw.interval);
-      togglePreviewMode();
+       //togglePreviewMode();	// show preview mode at end?
     }
   }
   
