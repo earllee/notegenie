@@ -8,33 +8,34 @@ $(document).ready(function() {
   }); 
 
   var input = $('#input');
-  ngw.isPreviewOn = false;
 
   //Set firstTime to false on first keypress
-  input.one("keypress", function() {
-    localStorage["firstTime"] = false;
+  $('#input').one("keypress", function() {
+    localStorage.setItem('firstTime', false);
   });
 
-  //Set previous font
-  if (localStorage["font"] || localStorage["fontSize"]) {
-    $('.text').css("font-family", localStorage["font"]);
-    $('.text').css("font-size", localStorage["fontSize"] + "px");
-    if (localStorage["fontSize"])
-      $('#font-size').val(localStorage["fontSize"]);
+  //Set previous font family and size
+  if (localStorage.getItem('font') || localStorage.getItem('fontSize')) {
+    $('.text').css("font-family", localStorage.getItem('font'));
+    if (localStorage.getItem('fontSize')) {
+      $('#font-size').val(localStorage.getItem('fontSize'));
+      ngw.fontSize = 16;  // Temporary set this var to 16 so initial changeFontSize call works.
+    }
     else {
       ngw.fontSize = 16;
       localStorage.setItem('fontSize', '16');
     }
+    changeFontSize();
   }
 
   //Retrieve saved text
-  if (Modernizr.localstorage && localStorage["text"]) {
+  if (Modernizr.localstorage && localStorage.getItem('text')) {
     var savedText = "";
     try {
-      savedText = localStorage["text"];
+      savedText = localStorage.getItem('text');
     } catch(e) {}
     if (savedText) {
-      input.val(savedText);
+      $('#input').val(savedText);
       savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
       savedText = savedText.replace(/[ ]{2,}/gi," ");
       savedText = savedText.replace(/\n /,"\n");
@@ -43,11 +44,11 @@ $(document).ready(function() {
 
   //Save text on interval
   try {
-    if(localStorage["firstTime"] == "false")
+    if(localStorage.getItem('firstTime') == "false")
       setInterval(function() {
-        localStorage["text"] = input.val();
+        localStorage('text', $('#input').val());
       }, 2000);
-  } catch(e) {console.log('failed');}
+  } catch(e) {console.log('Could not save.');}
 
   $.fn.selectRange = function(start, end) {
     return this.each(function() {
@@ -81,20 +82,20 @@ $(document).ready(function() {
           text = data.Abstract;
 
           try {
-		  // process/cleanup the definition
+      // process/cleanup the definition
 
-		  if (data.AbstractSource === "Merriam-Webster" && text.indexOf("definition:") > -1)
-		  {
-		       text = text.substring(text.indexOf("definition:") + 12);
-		  }
-		  else if (data.AbstractSource === "The Free Dictionary" && text.indexOf("\u00b7") > -1)
-		  {
-	console.log(text.substring(text.lastIndexOf("\u00b7")));
-		       temptext = text.substring(text.lastIndexOf("\u00b7"));
-		       text = temptext.substring(temptext.indexOf(" ") + 1);
-		  }
+      if (data.AbstractSource === "Merriam-Webster" && text.indexOf("definition:") > -1)
+      {
+           text = text.substring(text.indexOf("definition:") + 12);
+      }
+      else if (data.AbstractSource === "The Free Dictionary" && text.indexOf("\u00b7") > -1)
+      {
+  console.log(text.substring(text.lastIndexOf("\u00b7")));
+           temptext = text.substring(text.lastIndexOf("\u00b7"));
+           text = temptext.substring(temptext.indexOf(" ") + 1);
+      }
                   if (text === "")
-			throw "blank page";
+      throw "blank page";
 
 
             var actval = String(box.val());
@@ -208,13 +209,13 @@ $(document).ready(function() {
           $(box).selectRange(pos +offset,pos+offset);
           hideParsingBar('error');
         } // End try catch
-        } //End success function
+        } // End success function
 
-        }); //End AJAX
-      } //End updateBox
+        }); // End AJAX
+      } // End updateBox
 
 
-  // catch tabs
+  // Catch tabs
   $('#input').on("keydown", function(e) {
     if (e.keyCode == 9) {
       e.preventDefault();
@@ -225,10 +226,10 @@ $(document).ready(function() {
     }
   });
   
-  //Core keypress parser
+  // Core keypress parser
   $('#input').on("keypress", function(e) {
     if (e.keyCode == 13) {
-      //Handle 'Enter'
+      // Handle 'Enter'
       var value = $(this).val();
       pos = $(this).prop('selectionStart'); //Cursor position
       var endLine = value.substring(0, pos).lastIndexOf("\n");
@@ -236,11 +237,7 @@ $(document).ready(function() {
       endLine = value.lastIndexOf("\n");
       $(this).val(value.substring(0, pos) + "\n" + value.substring(pos));
       $(this).selectRange(pos + 1, pos + 1);
-
       // Note: do NOT try to access value here - leads to extra lines being inserted
-
-
-      //showParsingBar();	moving this to the update function itself
       updateBox(value.substring(endLine+1,pos), $(this), pos, value);
       return false; // prevent the button click from happening
     } 
@@ -257,7 +254,7 @@ $(document).ready(function() {
   });
 
   $('#markdownMode').on('click', function(e){
-    if ($('#input').val() === '')  // Broken
+    if ($('#input').val() === '')
     $('#input').val('####NoteGenie 101\n---\n \nNoteGenie is a better way to write. It\'s a notepad powered by the infinite knowledge of databases. You type in a term you don\'t know in it\'s own line, press enter, and NoteGenie will paste a description of the term right below the term.\n \n- NoteGenie also supports Markdown, which allows you to format text using symbols.\n- For example, the \"NoteGenie 101\" up top becomes a header because it has hash symbols at the beginning. You can give it 1-6 hash symbols depending on how big you want the header. More hashes means **smaller** header.\n- Did I mention that two asterisks surrounding text makes that text **bold**?\n- Also, one asterisk surrounding text makes it *italicized*.\n- A single dash at the start of a line indicates a list item.\n* So does an asterisk.\n\nYou can even do quotes like this:\n\n> Just put a greater than sign in front of text,\n> and you get a quoted message!\n\nAnd numbered lists like this:\n\n1. One caveat: You must put an empty line between lists, quotes, and headers. \n2. Otherwise, everything gets smashed together.\n3. See for yourself.\n \nYou can also write [links](http://notegenie.io). And insert images:\n\n![Flight](images/flight.jpg) \n \n##### Syntax highlighting\n \nYou can also write code!\n \nHTML:\n \n\t<h1>HTML code</h1>\n\t<p class=\"some\">This is an example</p>\n \nPython:\n \n\tdef func():\n\tfor i in [1, 2, 3]:\n\tprint \"%s\" % i');
     togglePreviewMode();
     e.preventDefault();
@@ -266,13 +263,12 @@ $(document).ready(function() {
   //Change fonts
   $('.font-btn').on("click", function(e) {
     $('.text').css("font-family", $(this).data('font'));
-    localStorage["font"] = $(this).data('font');
+    localStorage.setItem('font', $(this).data('font'));
   });
 
   //Change font size
   $('#font-size').on("change", function(e) {
       changeFontSize(e);
-
   });
 
   var KEYCODE_ENTER = 13;
@@ -283,15 +279,6 @@ $(document).ready(function() {
       return false;
     }
   });
-
-  function changeFontSize(event) {
-    //$('.text').css("font-size", $(this).val() + "px");
-    var newSize = $('#font-size').val();
-    var sizeChange = newSize - ngw.fontSize;
-    $('#input, #preview, h6, h5, h4, h3, h2, h1').css("font-size", '+=' + sizeChange);
-    ngw.fontSize = newSize;
-    localStorage.setItem('fontSize', newSize);
-  }
 
 
   //Logo Tooltip
@@ -412,7 +399,7 @@ function togglePreviewMode() {
     $('body, html').css("background","white");
     $('#markdownMode').addClass('active');
     ngw.isPreviewOn = true;
-    input.blur();
+    $('#input').blur();
   }
   else {
     preview.css("opacity", 0);
@@ -421,7 +408,7 @@ function togglePreviewMode() {
     $('#markdownMode').removeClass('active');
 
     ngw.isPreviewOn = false;
-    input.focus();
+    $('#input').focus();
   }
 }
 
@@ -447,4 +434,14 @@ function setupAlert(action, actionName, fileName, content) {
     $('[id="alertBox"]').fadeOut();
   });
 
+}
+
+// Changes font size
+function changeFontSize(e) {
+  var newSize = $('#font-size').val();
+  var sizeChange = newSize - ngw.fontSize;
+  $('.text').css("font-size", '+=' + sizeChange);
+  $('#input, #preview, .text').find('body, h6, h5, h4, h3, h2, h1, blockquote').css("font-size", '+=' + sizeChange);
+  ngw.fontSize = newSize;
+  localStorage.setItem('fontSize', newSize);
 }
