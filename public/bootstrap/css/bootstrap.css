@@ -9247,6 +9247,10 @@ body #footer {
   text-shadow: none;
 }
 
+#footer .footer-screen #fileScreenToolbar .btn {
+  margin-right: 10px;
+}
+
 #footer .footer-screen #fileScreenToolbar .btn:hover {
   background: #049cdb;
 }

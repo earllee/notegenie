@@ -449,11 +449,11 @@ function setupAlert(action, actionName, fileName, content) {
     $('#saveAction').html('Save &amp; ' + actionName).on('click', function(e) {
       saveFile(currentFile); 
       action(fileName);
-      closeAll();
+      $('[id="alertBox"]').fadeOut();
     });
     $('#action').html(actionName).on('click', function(e) {
       action(fileName);
-      closeAll();
+      $('[id="alertBox"]').fadeOut();
     });
   } else {
     $('#saveAction, #action').css('visibility', 'hidden');

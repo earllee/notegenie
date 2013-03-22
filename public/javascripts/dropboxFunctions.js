@@ -3,22 +3,18 @@ $(document).ready(function() {
     isFooterScreenOn : false, //footerScreenModeOn
     isPreviewOn : false,  //isPreviewActive
     screen : 'none',
-    openScreen : 'none',
-    dblclick : false
-
+    openScreen : 'none'
   }); 
+
+    ngw.dblclick = false;
+    ngw.path = '';
+    ngw.filePath = '';
+    ngw.currentFile = '';
 
   var client = new Dropbox.Client({
     key: "KhJyIJt6dgA=|a7T1MMYdqjM/sHdA+5Ext3zvnBMVtcqe60UGqX8Upg==", 
     sandbox: true});
     client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
-
-    var currentFile = $('#fileName').val();
-
-    // Load Current File Name from Cache
-    // Current file text is loaded in functions.js
-    if (localStorage.getItem('currentFile'))
-    currentFile = localStorage.getItem('currentFile');
 
     // Check cached credentials
     client.authenticate({interactive: false}, function(error, client) {
@@ -55,30 +51,45 @@ $(document).ready(function() {
     }
   });
 
-  // New File
-  $('#new').on('click', function() {
+  // Clear Textarea
+  $('#clear').on('click', function() {
     if (client.isAuthenticated()) {
-      setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?');
+      setupAlert(function(){clearTextarea(null, null, function(){}); ngw.path = '';}, 'Clear', '', 'Are you sure you want to clear the note pad without saving?');
       $('[id="alertBox"]').fadeIn();
-
     } else {
-      login(setupAlert(newFile, 'Create New', '', 'Are you sure you want to create a new file without saving?'));
+      clearTextarea();
+      ngw.path = '';
     }
   });
 
   // Save Button
   $('#save').on('click', function(e){
     if (client.isAuthenticated())
-    saveFile($('#input').val(), '', function(){
+    saveFile(null, null, function(){
       $('#saveNotice').fadeIn().delay(800).fadeOut(); 
     });
+    else
+      ;// Must login
   });
 
+  // Create New Folder
+  $('#newFolder').on('click', function(){
+    createNewFolder(ngw.path);
+  });
+
+  // Create New Note
+  $('#newFile').on('click', function(){
+    checkExists(ngw.path, 'New Note.txt', function(path, newFileName){
+      clearTextarea(null, ngw.path + newFileName, function(){
+        saveFile(null, null, function(){loadDir(ngw.path);});
+      });
+    });
+  });
 
   // Read Directory
   $('#files').on('click', function(e) {
     if (client.isAuthenticated()) {
-      loadDir();
+      loadDir(ngw.path);
     } else {
       $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
     }
@@ -87,6 +98,7 @@ $(document).ready(function() {
   // Load Directory
   function loadDir(path) {
     path = path || '';
+
     client.readdir(path, {httpCache : true}, 
       function(err, dir, stat, dirstat) {
           console.log(dirstat);
@@ -94,21 +106,41 @@ $(document).ready(function() {
         if (err) {
           return showError(err);
         }
+        console.log(path);
+        if (path.length > 0) {
+          var pathArray = path.split('/');
+          var link = '';
+          var expandedPath = 'Working Directory: <a href="#" data-target="">~</a>/';
+          for (var i = 0; i < pathArray.length - 1; i++) {
+            link += pathArray[i] + '/';
+            expandedPath += '<a href="#" data-target="' + link + '">' + pathArray[i] + '</a>/';
+          }
+          $('#path').html(expandedPath);
+          $('#path > a').on('click', function(e) {
+            console.log(e);
+            loadDir(e.target.dataset.target);
+          });
+        } else {
+          $('#path').html('');
+        }
         $('#fileList').html('');
         $.each(dir, function(index, value) {
           var type = dirstat[index].isFolder ? 'folder' : 'file';
           $('#fileList').append('<li><a class="' + type + '" href="#">' + dir[index] + '</a></li>');
         });
+        ngw.dblclick = false;
+        ngw.path = path;
         openFile(path);
       });
     }
 
   // Open File Setup
   function openFile(path){
-    path = path || '';
+    path = path || ngw.path;
     $('.file').on('click', function(e) {
-      setTimeout(function(e){
+      setTimeout(function(){
         if (!ngw.dblclick) {
+          console.log(e);
           var fileName = e.target.innerText;
           e.preventDefault();
           if ($('#input').val()) {
@@ -118,8 +150,7 @@ $(document).ready(function() {
             loadFile(path + fileName);
             closeAll(); 
           }
-        } else
-          ngw.dblclick = false;
+        }
       }, 300);
     });
     $('.file').on('dblclick', function(){
@@ -134,13 +165,9 @@ $(document).ready(function() {
         } 
       }, 300);
     });
-    $('#newFolder').off('click').on('click', function(){
-      newFolder(path);
-    });
     $('.folder').on('dblclick', function(){
       setupRename(this, 'folder');
     });
-    $('#path').html(path);
   }
 
   function setupRename(target, type) {
@@ -148,51 +175,62 @@ $(document).ready(function() {
         ngw.dblclick = true;
         var name = $(target).html();
         $(target).replaceWith('<textarea id="renameBox" >' + name + '</textarea>');
+        $('#renameBox').focus().select();
         $('#renameBox').on('keypress', function(e){
           if (e.keyCode == KEYCODE_ENTER) {
-            rename(path, name, $(this).val(), function(newFileName){
+            rename(ngw.path, name, $(this).val(), function(newFileName){
               $('#renameBox').replaceWith('<a class="' + type + '" href="#">' + newFileName +'</a>');
               ngw.dblclick = false;
+              openFile();
             });
           }
         });
         $('#renameBox').on('blur', function(){
-          rename(path, name, $(this).val(), function(newFileName){
+          rename(ngw.path, name, $(this).val(), function(newFileName){
             $('#renameBox').replaceWith('<a class="' + type + ' href="#">' + newFileName +'</a>');
             ngw.dblclick = false;
+            openFile();
           });
         });
       }
   }
   function rename(path, fileName, newFileName, callback) {
-    client.move(path + fileName, path + newFileName, function(){
+    console.log('Moving: ' + path + fileName +'\nto: ' + path + newFileName);
+    client.move(path + fileName, path + newFileName, function(err, stat){
+      if (err)
+        showError(err);
       $('#saveNotice').fadeIn().delay(800).fadeOut(); 
       callback(newFileName);
     }); 
   }
 
-  // Creates New Notepad
-  function newFile(fileName) {  //fileName is not used. Just for convention.
-    $('#input, #fileName').val('');
-    $('#save').removeAttr('disabled');
-    $('#fileName').removeAttr('disabled');
+  // Checks If Name Exists in Path
+  function checkExists (path, name, callback) {
+    client.stat(path + name, function(err, stat) {
+      if (stat && !stat.isRemoved) {
+        name = 'Copy of ' + name;
+        checkExists(path, name, callback);
+      } else {
+        callback(path, name);
+      }
+    });
   }
 
-  function newFolder(path, name) {
+  // Creates New Notepad
+  function clearTextarea(path, fileName, callback) {  //fileName is not used. Just for convention.
+    fileName = fileName || '';
+    $('#fileName').val(fileName);
+    $('#input').val('');
+    $('#save').removeAttr('disabled');
+    $('#fileName').removeAttr('disabled');
+    callback();
+  }
+
+  function createNewFolder(path, name) {
     path = path || '';
     name = name || 'New Folder';
     console.log('making folder: ' + path);
     
-    function checkExists (path, name, callback) {
-      client.stat(path + name, function(err, stat) {
-        if (stat && !stat.isRemoved) {
-          name += ' COPY';
-          checkExists(path, name, callback);
-        } else {
-          callback(path, name);
-        }
-      });
-    }
     checkExists(path, name, function(path, name) {
       client.mkdir(path + name, function(err, stat) {
         if (err)
@@ -204,13 +242,13 @@ $(document).ready(function() {
 
   // Loads File
   function loadFile(fileName) {
-    client.readFile(fileName, {httpCache: true}, 
+    client.readFile(ngw.path + fileName, {httpCache: true}, 
       function(err, file, stat, rangeInfo){
         if (err)
           return showError(err);
-        currentFile = fileName;
+        ngw.currentFile = ngw.path + fileName;
         $('#input').val(file);
-        $('#fileName').val(currentFile);
+        $('#fileName').val(ngw.currentFile);
         $('#fileName').attr('disabled', 'true');
         $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
         localStorage.setItem('currentFile', currentFile);
@@ -219,28 +257,22 @@ $(document).ready(function() {
 
   // Saves File
   // @param path must end in /
-  function saveFile(content, path, callback) {
-    content = content || $('#input').val();
-    path = path || '';
-    currentFile = $('#fileName').val();
+  function saveFile(path, fileName, callback) {
+    var content = $('#input').val();
+    //path = path || ngw.filePath;
+    ngw.currentFile = $('#fileName').val();
 
-	//clean up and check the file name
-    currentFile = currentFile.replace(/^\s+/,"");    // trim whitespace
-    currentFile = currentFile.replace(/\s+$/,"");
-    if ((!/[a-z0-9\._\- ]/i.test(currentFile)) || currentFile === "") {
-        alert("Invalid filename");
-        return;
-    }
+    ngw.currentFile = ngw.currentFile.replace(/^\s+/,"");
+    ngw.currentFile = ngw.currentFile.replace(/\s+$/,"");
 
-
-    if (currentFile.length - 4 != currentFile.indexOf('.txt'))  // Ensure txt file
-      currentFile += '.txt';
-    client.writeFile(path + currentFile, content, function(err, stat) {
+    if (ngw.currentFile.length - 4 != ngw.currentFile.indexOf('.txt'))  // Ensure txt file
+      ngw.currentFile += '.txt';
+      client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
       if (err)
         showError(err); 
       else {
         $('#fileName').attr('disabled', 'true');
-        $('#fileName').val(currentFile);
+        $('#fileName').val(ngw.currentFile);
         callback();
       }
     }); 
