@@ -23,6 +23,8 @@ block content
           li
             a#about.footerScreenTrigger(href='#', data-target='aboutScreen') About
           li
+            a#tutorial(href='#') Tutorial
+          li
             a#help.footerScreenTrigger(href='#', data-target='helpScreen') Help
           li
             a#login(href='#') Login
@@ -31,12 +33,12 @@ block content
           li
             a#new(href='#') New
           li
-            a#markdownMode(href='#') Preview
+            a#markdownMode(href='#') Prettify
           li
             a#files.footerScreenTrigger(href='#', data-target='filesScreen') Files
           li.nohover
             form.navbar-form
-              input#fileName(type='text', column='8', placeholder='File Name')
+              input#fileName(type='text', column='1', placeholder='File Name')
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               | Fonts
@@ -68,40 +70,31 @@ block content
         img.screenImage(src='images/flight-cover.jpg')
         img.screenImage(src='images/flight-cover.jpg', style='left: 0; top: 0; position: absolute;')
         p 
-          | This is a better way to take notes. Originally conceived during a history class and prototyped during the 2013 Yale Boot Up/Yale College Council Hackathon, NoteGenie allows you to take notes while seamlessly pulling descriptions of unknown terms from popular databases.
+          | NoteGenie is the first note-taking app that writes descriptions of terms for you. It's a new way to take notes in situations where you're bombarded with new concepts, people, places, etc.
         p by 
           a(href='mailto:earl.lee@yale.edu') Earl 
           | and 
           a(href='mailto:shenil.dodhia@yale.edu') Shenil
         h4 Features
         ul
-          li Pulls descriptions of historical events, concepts, places, names, etc.
-          li Automatically saves your notes every 2 seconds.
-          li Saves your font preferences.
-          li Light-weight and fast.
-          li Supports markdown.
+          li Writes descriptions of historical events, concepts, places, names, etc for you.
+          li Automatically saves your notes every 2 seconds and saves your font preferences, without having to login.
+          li Light-weight, distraction-free, fast.
+          li Supports Markdown.
           li Supports Dropbox integration.
             li Save text files to Dropbox
             li Open text files from Dropbox
-        h5 The Stack
-        ul
-          li jQuery
-          li HTML5
-          li 
-            a(href='http://twitter.github.com/bootstrap/') 
-              | Twitter Bootstrap
-          li 
-            a(href='https://github.com/chjj/marked') 
-              | Marked.js
-          li 
-            a(href='https://github.com/dropbox/dropbox-js') 
-              | Dropbox API
+        h4 Privacy
+          ul
+            li We do NOT have access to your Dropbox password.
+            li We do NOT store your files.
+            li Text currently in the notepad is saved in your browser's cache.
       div#helpScreen.footer-screen
         h5 How to Use NoteGenie
-        p Take notes like you normally would. If there is something you need to look up, press enter, type in a term, then press enter again. (If you want pure definitions, put a '?' before each term).
+        p Take notes like you normally would. If there is something you need to look up, press enter, type in a term, then press SHIFT + ENTER. (If you want pure definitions, put a '?' before each term).
           | NoteGenie can handle a variety of terms from famous people's names to economics topics.
         h5 Formatting &amp; Markdown
-        p Need to bold, italicize, and more? Use the following syntax to indicate words in bold. Then, press CTRL + M to see the effects. For a more detailed guide, go 
+        p Need to bold, italicize, and more? Use the following syntax to indicate words in bold. Then, press <strong>CTRL + M</strong> to see the effects. For a more detailed guide, go 
           a(href='http://softwaremaniacs.org/playground/showdown-highlight/') here 
           | or
           a(href='http://daringfireball.net/projects/markdown/')  here.

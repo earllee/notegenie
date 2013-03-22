@@ -8,10 +8,27 @@ $(document).ready(function() {
     openScreen : 'none'
   }); 
 
+  var input = $('#input');
   var KEYCODE_ESC = 27;
   var KEYCODE_ENTER = 13;
-  var KEYCODE_TAB = 7;
+  var KEYCODE_TAB = 9;
+  var KEYCODE_BACKSPACE = 8;
   var KEYCODE_M = 77;
+  var KEYCODE_S = 83;
+
+  ngw.key = [document.getElementById('key1'),
+              document.getElementById('key2'),
+              document.getElementById('key3'),
+              document.getElementById('key4')];
+  ngw.backspace = [document.getElementById('backspace1'),
+                    document.getElementById('backspace2'),
+                    document.getElementById('backspace3'),
+                    document.getElementById('backspace4')];
+  ngw.enter = [document.getElementById('enter1'),
+              document.getElementById('enter2'),
+              document.getElementById('enter3'),
+              document.getElementById('enter4'),
+              document.getElementById('enter5')];
 
   // Set firstTime to false on first keypress
   if (!localStorage.getItem('firstTime'))
@@ -231,16 +248,18 @@ console.log('saved');
   $('#input').on("keydown", function(e) {
     if (e.keyCode == KEYCODE_TAB) {
       e.preventDefault();
+      playSound('key');
       var value = $(this).val();
       pos = $(this).prop('selectionStart');
       $(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
       $(this).selectRange(pos + 1, pos+1);
     }
   });
-  
+
   // Core keypress parser
   $('#input').on("keypress", function(e) {
     if (e.keyCode == KEYCODE_ENTER) {
+      playSound('enter');
       var value = $(this).val();
       pos = $(this).prop('selectionStart'); //Cursor position
       var endLine = value.substring(0, pos).lastIndexOf("\n");
@@ -251,7 +270,11 @@ console.log('saved');
       // Note: do NOT try to access value here - leads to extra lines being inserted
       updateBox(value.substring(endLine+1,pos), $(this), pos, value);
       return false; // prevent the button click from happening
-    } 
+      } else if (e.keyCode != KEYCODE_BACKSPACE) {
+        playSound('key');
+      } else {
+        playSound('backspace');
+      }
   });
 
   // Markdown preview
@@ -331,41 +354,16 @@ console.log('saved');
       }, 5000);
   } catch(e) {console.log('failed');}
 
-  function frameLooper(myArray) {
-    if(myArray.length > 0) {
-      $('#input').val($('#input').val() + myArray.shift()); 
-    }
-  }
+  var tutorial = '###NoteGenie 101\nThe first note-taking that writes descriptions of unfamiliar terms for you. To use NoteGenie, take notes like you normally would, but when you want to look up an unfamiliar term, type it in a new line and then press SHIFT + ENTER. Like this,\n\nDiscrete Mathematics\n> Discrete mathematics is the study of mathematical structures that are fundamentally discrete rather than continuous. In contrast to real numbers that have the property of varying \"smoothly\", the objects studied in discrete mathematics \u2013 such as integers, graphs, and statements in logic \u2013 do not vary smoothly in this way, but have distinct, separated values. Discrete mathematics therefore excludes topics in \"continuous mathematics\" such as calculus and analysis. Discrete objects can often be enumerated by integers. More formally, discrete mathematics has been characterized as the branch of mathematics dealing with countable sets (sets that have the same cardinality as subsets of the natural numbers, including rational numbers but not real numbers). However, there is no exact, universally agreed, definition of the term \"discrete mathematics.\" Indeed, discrete mathematics is described less by what is included than by what is excluded: continuously varying quantities and related notions.\n\n####Formatting\n- To take bulleted notes, put a dash before each line.\n\t- You can indent bullets.\n- To create a heading, put hash symbols at the beginning of a line. \n\t- 1 hash = biggest heading. 6 hashes = smallest heading.\n- To bold, surround text in **two** asterisks. \n- To italicize, surround text in *one* asterisk.\n---\n1. To create numbered bullets, type in a number and a period before each line.\n2. To insert links, use this format: [NoteGenie](http://notegenie.io)\n3. To insert images, use this format: ![Flight](http://notegenie.io/images/flight-cover.jpg)\n\nWhen you\'re done press **CTRL + M** to see a formatted version of your notes that includes the links and images.\n\n####Saving Notes\n1. Login\n2. Type in a name in the navbar file name field\n3. Press \"Save\"\n\n####Loading Notes\n1. Press \"Files\"\n2. Click the file you want to open\n\t- Note: NoteGenie only access files under Apps/NoteGenie/ in your Dropbox storage.\n';
+  $('#tutorial').on('click', function(){
+    clearInterval(ngw.interval);
+    autoType(tutorial, $('#input'));
+  });
 
-  try {
-    if(!localStorage.getItem("firstTime")) {
-      var rand = 300;
-      // Typing Animation - First time users only
-      var introText = "(Refresh to skip this intro)\n\n\nAbout\n-----\n\nHello! I created this small webapp to help people write without any distractions.\nIt does not store any of your stories/poems on the server or send them anywhere so feel free to type whatever you want.\n\nThis is the first time intro and you'll never see this again.\n\nSome Features\n------------\n\n* Markdown support. (Press CTRL+M to view the preview)\n* Autosave using HTML5 localStorage.\n* More features coming soon.\n\nTo start typing, just remove everything from here or refresh the page. Happy writing :)";
-
-      var myString = introText,
-      frameRate = 100,
-      myArray = myString.split(""),
-      isStop = false;
-
-      $('#input').val('');
-
-
-      (function loop() {
-        if(isStop)
-        rand = 300;
-        else
-        rand = Math.round(Math.random() * (150 - 20)) + 20;
-
-        setTimeout(function() {
-          frameLooper(myArray);
-          loop();  
-        }, rand);
-      }());
-    } else {
-      console.log('not first time');
-    }
-    } catch(e) {}
+    if(localStorage.getItem('firstTime') != 'false') {
+      localStorage.setItem('firstTime', 'false');
+      autoType(tutorial, $('#input'));
+    }  
 
 });
 
@@ -390,7 +388,6 @@ function closeAll(){
   $('.nav-collapse').collapse('hide');
   $('[id="alertBox"]').fadeOut();
   $('#footer').removeAttr('style');
-  //$('#footer').css('top', '-40px');
   $('#preview').css("opacity", 0);
   $('#preview').css("visibility", "hidden");
   $('body, html').css("background", "");
@@ -474,4 +471,59 @@ function changeFontSize(e) {
   $('#input, #preview, .text').find('body, h6, h5, h4, h3, h2, h1, blockquote').css("font-size", '+=' + sizeChange);
   ngw.fontSize = newSize;
   localStorage.setItem('fontSize', newSize);
+}
+
+// Autotyper
+function autoType(text, input) {
+  var textArray = text.split("");
+  var rand = 50;
+
+  function frameLooper(textArray) {
+    if(textArray.length > 0) {
+      if (textArray[0] == '\n')
+        playSound('enter');
+      else if (textArray[0] == ' ')
+        playSound('key');
+      $('#input').val($('#input').val() + textArray.shift()); 
+      // Handle description pasting
+      if (textArray[0] === '>')
+        while (textArray[0] != '\n')
+          $('#input').val($('#input').val() + textArray.shift()); 
+    } else {
+      clearInterval(ngw.interval);
+      togglePreviewMode();
+    }
+  }
+  
+  input.val('');
+
+  ngw.interval = setInterval(function(){
+    frameLooper(textArray); 
+  }, rand);
+}
+
+var keyNum = 0;
+var backspaceNum = 0;
+var enterNum = 0;
+// Sounds
+function playSound(type) {
+  if (type === 'key') {
+    if (keyNum > 3)
+      keyNum = 0;
+    ngw.key[keyNum].volume = (Math.random() * 0.3);
+    ngw.key[keyNum].play();
+    keyNum++;
+  } else if (type === 'enter') {
+    if (enterNum > 4)
+      enterNum = 0;
+    ngw.enter[enterNum].volume = 0.5 + (Math.random() * 0.5);
+    ngw.enter[enterNum].play();
+    enterNum++;
+  } else if (type === 'backspace') {
+    if (backspaceNum > 3)
+      backspaceNum = 0;
+    ngw.backspace[backspaceNum].volume = 0.5 + (Math.random() * 0.5);
+    ngw.backspace[backspaceNum].play();
+    backspaceNum++;
+  }
 }
