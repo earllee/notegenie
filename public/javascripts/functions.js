@@ -459,6 +459,7 @@ function autoType(text, input) {
   var i = 0;
 
   function frameLooper(textArray) {
+console.log("welcome");
     if(textArray.length > 0) {
       if (textArray[0] == '\n')
         playSound('enter');
@@ -473,22 +474,27 @@ function autoType(text, input) {
       if (textArray[0] === '&') {
         clearInterval(ngw.interval);
         togglePreviewMode();
-        ngw.interval = setTimeout(function(){togglePreviewMode();}, 3000);
+        ngw.interval = setTimeout(function(){
+          togglePreviewMode();
+          ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
+        }, 3000);
         textArray.shift();
-        ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
       } else if (i % 20 === 0) {
         rand = Math.random() * 120;
         clearInterval(ngw.interval);
         ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
       }
-  } else {
+    } else {
       clearInterval(ngw.interval);
-      togglePreviewMode();
+       togglePreviewMode();
     }
   }
-
+  
   input.val('');
-  ngw.interval = setInterval(function(){frameLooper(textArray); }, rand);
+
+  ngw.interval = setInterval(function(){
+    frameLooper(textArray); 
+  }, rand);
 }
 
 var keyNum = 0;
