@@ -138,7 +138,7 @@ $(document).ready(function() {
     $('.file').on('click', function(e) {
       setTimeout(function(){
         if (!ngw.dblclick) {
-          var fileName = e.target.innerText;
+          var fileName = e.target.text;
           e.preventDefault();
           if ($('#input').val()) {
             setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
@@ -156,7 +156,7 @@ $(document).ready(function() {
     $('.folder').on('click', function(e) {
       setTimeout(function(){
         if (!ngw.dblclick) {
-          var folderName = e.target.innerText;
+          var folderName = e.target.text;
           e.preventDefault();
           loadDir(path + folderName + '/');
         } 
@@ -290,12 +290,15 @@ function setupAlert(action, actionName, fileName, content) {
   if (action !== null) {
     $('#saveAction, #action').css('visibility', 'visible');
     $('#saveAction').html('Save &amp; ' + actionName).off('click').on('click', function(e) {
-      if (fileName.length === 0 || fileName === '') {
+      ngw.currentFile = $('#fileName').val();
+      if (ngw.currentFile.length === 0) {
         checkExists(ngw.path, "New Note.txt", function(path, name) {
-          $('fileName').val(path + name);
+          $('#fileName').val(path + name);
           saveFile(null, null, action(fileName));
         });
       } else {
+        saveFile();
+        action(fileName);
       }
       $('[id="alertBox"]').fadeOut();
     });
