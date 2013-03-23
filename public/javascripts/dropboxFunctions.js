@@ -54,7 +54,7 @@ $(document).ready(function() {
   // Clear Textarea
   $('#clear').on('click', function() {
     if (client.isAuthenticated()) {
-      setupAlert(function(){clearTextarea(null, null, function(){}); ngw.path = '';}, 'Clear', '', 'Are you sure you want to clear the note pad without saving?');
+      setupAlert(function(){clearTextarea(); ngw.path = '';}, 'Clear', '', 'Are you sure you want to clear the note pad without saving?');
       $('[id="alertBox"]').fadeIn();
     } else {
       clearTextarea();
@@ -147,7 +147,7 @@ $(document).ready(function() {
             setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
             $('[id="alertBox"]').fadeIn();
           } else {
-            loadFile(path + fileName);
+            loadFile(fileName);
             closeAll(); 
           }
         }
@@ -223,7 +223,8 @@ $(document).ready(function() {
     $('#input').val('');
     $('#save').removeAttr('disabled');
     $('#fileName').removeAttr('disabled');
-    callback();
+    if (callback)
+      callback();
   }
 
   function createNewFolder(path, name) {
@@ -255,6 +256,7 @@ $(document).ready(function() {
       });
   }
 
+  
   // Saves File
   // @param path must end in /
   function saveFile(path, fileName, callback) {
@@ -273,10 +275,12 @@ $(document).ready(function() {
       else {
         $('#fileName').attr('disabled', 'true');
         $('#fileName').val(ngw.currentFile);
-        callback();
+        if (callback)
+          callback();
       }
     }); 
   }
+  ngw.saveFile = saveFile;
 
   // !!!Callback on this authenticate doesn't work for some reason. Find out why.
   function login(callback) {
