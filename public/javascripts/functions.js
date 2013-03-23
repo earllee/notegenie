@@ -459,7 +459,6 @@ function autoType(text, input) {
   var i = 0;
 
   function frameLooper(textArray) {
-console.log("welcome");
     if(textArray.length > 0) {
       if (textArray[0] == '\n')
         playSound('enter');
