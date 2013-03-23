@@ -141,7 +141,7 @@ $(document).ready(function() {
       setTimeout(function(){
         if (!ngw.dblclick) {
           console.log(e);
-          var fileName = e.target.innerText;
+          var fileName = e.target.text;
           e.preventDefault();
           if ($('#input').val()) {
             setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
@@ -159,7 +159,7 @@ $(document).ready(function() {
     $('.folder').on('click', function(e) {
       setTimeout(function(){
         if (!ngw.dblclick) {
-          var folderName = e.target.innerText;
+          var folderName = e.target.text;
           e.preventDefault();
           loadDir(path + folderName + '/');
         } 
