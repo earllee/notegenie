@@ -114,6 +114,9 @@ html, body {
 
 .navbar {
   margin-bottom: 0px;
+  .nav > li > a {
+    padding: ((@navbarHeight - @baseLineHeight) / 2) 10px ((@navbarHeight - @baseLineHeight) / 2);
+  }
   .btn-navbar {
     background-color: transparent;
     background-image: none;
@@ -160,7 +163,7 @@ html, body {
   }
 
 	#font-size {
-		width: 3em;
+		width: 91%;
 	}
 	.brand {
 		font-family: 'Open sans', sans-serif;
@@ -206,8 +209,12 @@ html, body {
     box-sizing: border-box;
 
     #fileList {
+      ul{
+        .transition(all 0.5s ease);
+}
+        .transition(all 0.5s ease);
       li {
-      .transition(all 0.5s ease);
+        .transition(all 0.5s ease);
       }
     }
 
@@ -219,6 +226,7 @@ html, body {
         &:hover{color: white; text-shadow: none;} 
       }
       .btn {
+        .transition(all 0.5s ease);
         margin-right: 10px;
 
         &:hover {

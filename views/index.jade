@@ -19,17 +19,20 @@ block content
           span.icon-bar
         a.brand(href='#', data-content='Hi') NoteGenie
         // Main Nav 
-        ul.nav.nav-collapse.pull-left
+        ul.nav.pull-left
           li
             a#about.footerScreenTrigger(href='#', data-target='aboutScreen') About
-          li
-            a#tutorial(href='#') Tutorial
-          li
-            a#help.footerScreenTrigger(href='#', data-target='helpScreen') Help
+          li.dropdown
+            a#tutorial.dropdown-toggle(href='#', data-toggle='dropdown', data-target='helpScreen') Tutorial
+            ul.dropdown-menu
+              li
+                a#tutorial(href='#') Tutorial
+              li
+                a#help.footerScreenTrigger(href='#', data-toggle='dropdown', data-target='helpScreen') Guide
           li
             a#login(href='#') Login
         // Tools 
-        ul.nav.nav-collapse.collapse.pull-right
+        ul.nav.pull-right.nav-collapse.collapse
           li
             a#clear(href='#') Clear
           li
@@ -38,12 +41,15 @@ block content
             a#files.footerScreenTrigger(href='#', data-target='filesScreen') Files
           li.nohover
             form.navbar-form
-              input#fileName(type='text', column='1', placeholder='File Name')
+              input#fileName(type='text', placeholder='File Name')
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               | Fonts
               b.caret
             ul.dropdown-menu
+              li.nohover
+                form.navbar-form
+                  input#font-size(type='number', value='16', min='5')
               li
                 a.font-btn(data-font='Arial', href='#') Arial
               li
@@ -54,9 +60,6 @@ block content
                 a.font-btn(data-font='Handlee', href='#') Handlee
               li
                 a.font-btn(data-font='Open sans', href='#') Open Sans
-          li.nohover
-            form.navbar-form
-              input#font-size(column='2', type='number', value='16', min='5')
           li.nohover
             button#save.btn(type='submit') Save
       a#closeScreen.close(href='#') &times;

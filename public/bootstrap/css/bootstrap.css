@@ -8826,7 +8826,7 @@ a.badge:focus {
   }
 }
 
-@media (max-width: 1020px) {
+@media (max-width: 867px) {
   body {
     padding-top: 0;
   }
@@ -8978,7 +8978,7 @@ a.badge:focus {
   }
 }
 
-@media (min-width: 1021px) {
+@media (min-width: 868px) {
   .nav-collapse.collapse {
     height: auto !important;
     overflow: visible !important;
@@ -9124,6 +9124,10 @@ body #footer {
   margin-bottom: 0;
 }
 
+.navbar .nav > li > a {
+  padding: 10px 10px 10px;
+}
+
 .navbar .btn-navbar {
   background-color: transparent;
   background-image: none;
@@ -9175,7 +9179,7 @@ body #footer {
 }
 
 #footer #font-size {
-  width: 3em;
+  width: 91%;
 }
 
 #footer .brand {
@@ -9227,6 +9231,20 @@ body #footer {
   box-sizing: border-box;
 }
 
+#footer .footer-screen #fileList {
+  -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+
+#footer .footer-screen #fileList ul {
+  -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+
 #footer .footer-screen #fileList li {
   -webkit-transition: all 0.5s ease;
      -moz-transition: all 0.5s ease;
@@ -9249,6 +9267,10 @@ body #footer {
 
 #footer .footer-screen #fileScreenToolbar .btn {
   margin-right: 10px;
+  -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
 }
 
 #footer .footer-screen #fileScreenToolbar .btn:hover {

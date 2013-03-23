@@ -1,3 +1,5 @@
+var KEYCODE_S = 83;
+
 $(document).ready(function() {
   var ngw = window.ngw || (window.ngw = {
     isFooterScreenOn : false, //footerScreenModeOn
@@ -65,12 +67,45 @@ $(document).ready(function() {
 
   // Save Button
   $('#save').on('click', function(e){
-    if (client.isAuthenticated())
-    saveFile(null, null, function(){
-      $('#saveNotice').fadeIn().delay(800).fadeOut(); 
-    });
-    else
-      ;// Must login
+    if (client.isAuthenticated()) {
+      ngw.currentFile = $('#fileName').val();
+      if (ngw.currentFile.length === 0) {
+        checkExists(ngw.path, "New Note.txt", function(path, name) {
+          $('#fileName').val(path + name);
+          saveFile(null, null, function(){
+            $('#saveNotice').fadeIn().delay(800).fadeOut();
+          });
+        });
+      } else {
+        saveFile(null, null, function(){
+          $('#saveNotice').fadeIn().delay(800).fadeOut();
+        });
+      }
+    } else {
+      // Must login  
+    }
+  });
+
+  $('#input').on('keydown', function(e){
+    if (e.keyCode == KEYCODE_S && (e.ctrlKey || e.metaKey)) {
+      if (client.isAuthenticated()) {
+        ngw.currentFile = $('#fileName').val();
+        if (ngw.currentFile.length === 0) {
+          checkExists(ngw.path, "New Note.txt", function(path, name) {
+            $('#fileName').val(path + name);
+            saveFile(null, null, function(){
+              $('#saveNotice').fadeIn().delay(800).fadeOut();
+            });
+          });
+        } else {
+          saveFile(null, null, function(){
+            $('#saveNotice').fadeIn().delay(800).fadeOut();
+          });
+        }
+        } else {
+          // Must login  
+        }
+      }
   });
 
   // Create New Folder
@@ -225,6 +260,7 @@ $(document).ready(function() {
     if (callback)
       callback();
   }
+  ngw.clearTextarea = clearTextarea;
 
   function createNewFolder(path, name) {
     path = path || '';
@@ -297,8 +333,7 @@ function setupAlert(action, actionName, fileName, content) {
           saveFile(null, null, action(fileName));
         });
       } else {
-        saveFile();
-        action(fileName);
+        saveFile(null, null, action(fileName));
       }
       $('[id="alertBox"]').fadeOut();
     });
@@ -313,6 +348,7 @@ function setupAlert(action, actionName, fileName, content) {
     $('[id="alertBox"]').fadeOut();
   });
 }
+ngw.setupAlert = setupAlert;
   // !!!Callback on this authenticate doesn't work for some reason. Find out why.
   function login(callback) {
     client.authenticate({interactive: true}, function(error, client) {

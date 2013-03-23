@@ -75,7 +75,6 @@ $(document).ready(function() {
     if(localStorage.getItem('firstTime') === 'false')
       setInterval(function() {
         localStorage.setItem('text', $('#input').val());
-//console.log('saved');
       }, 2000);
   } catch(e) {console.log('Could not save.');}
 
@@ -256,6 +255,8 @@ $(document).ready(function() {
       pos = $(this).prop('selectionStart');
       $(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
       $(this).selectRange(pos + 1, pos+1);
+    } else if (e.keyCode == KEYCODE_BACKSPACE) {
+      playSound('backspace'); 
     }
   });
 
@@ -273,12 +274,10 @@ $(document).ready(function() {
       // Note: do NOT try to access value here - leads to extra lines being inserted
       updateBox(value.substring(endLine+1,pos), $(this), pos, value);
       return false; // prevent the button click from happening
-      } else if (e.keyCode != KEYCODE_BACKSPACE) {
-        playSound('key');
       } else {
-        playSound('backspace');
-      }
-  });
+        playSound('key');
+      } 
+    });
 
   // Markdown preview
   $(document).on("keydown", function(e) {
@@ -330,6 +329,7 @@ $(document).ready(function() {
       closeAll();
     } else {
       $('a.active').removeClass('active');
+      $('a.active').blur();
       $('#' + e.currentTarget.id).addClass('active');
       $('#' + ngw.openScreen).fadeOut();
       $('#' + ngw.screen).fadeIn();
@@ -359,8 +359,10 @@ $(document).ready(function() {
 
   var tutorial = '###NoteGenie 101\nThe first note-taking app that writes descriptions of unfamiliar terms for you. To use NoteGenie, take notes like you normally would, but when you want to look up an unfamiliar term, type it in a new line and then press SHIFT + ENTER. Like this,\n\nDiscrete Mathematics\n> Discrete mathematics is the study of mathematical structures that are fundamentally discrete rather than continuous. In contrast to real numbers that have the property of varying \"smoothly\", the objects studied in discrete mathematics \u2013 such as integers, graphs, and statements in logic \u2013 do not vary smoothly in this way, but have distinct, separated values. Discrete mathematics therefore excludes topics in \"continuous mathematics\" such as calculus and analysis. \n\n####Formatting\n- To take bulleted notes, put a dash before each line.\n\t- You can indent bullets.\n- To create a heading, put hash symbols at the beginning of a line. \n\t- 1 hash = biggest heading. 6 hashes = smallest heading.\n- To bold, surround text in **two** asterisks. \n- To italicize, surround text in *one* asterisk.\n---\n1. To create numbered bullets, type in a number and a period before each line.\n2. To insert links, use this format: [NoteGenie](http://notegenie.io)\n3. To insert images, use this format: ![Flight](http://notegenie.io/images/flight-cover.jpg)\n\nWhen you\'re done press **CTRL + M** to see a formatted version of your notes with links and images& and press **CTRL + M** to go back into editing mode.\n\n####Saving Notes\n1. Login\n2. Type in a name in the navbar file name field\n3. Press \"Save\"\n\n####Loading Notes\n1. Press \"Files\"\n2. Click the file you want to open\n\t- Note: NoteGenie only accesses files under Apps/NoteGenie/ in your Dropbox storage.\n\nThat\'s all. Try it out today!';
   $('#tutorial').on('click', function(){
+    ngw.setupAlert(function(){ngw.clearTextarea();autoType(tutorial, $('#input'));}, 'Run Tutorial', null, 'Are you sure you want to run the tutorial without saving your current notes first?');
     clearInterval(ngw.interval);
-    autoType(tutorial, $('#input'));
+    $('[id="alertBox"]').fadeIn();
+
   });
 
     if(localStorage.getItem('firstTime') != 'false') {
@@ -378,9 +380,11 @@ function footerTriggerInit(){
       $('.progress.progress-striped.active').css('top','40px');
   },
     out: function(){
-      footer.css('top', '-40px');
-      $('.nav-collapse').collapse('hide');
-      $('.progress.progress-striped.active').css('top','0px');
+      if (!ngw.isFooterScreenOn) {
+        footer.css('top', '-40px');
+        $('.nav-collapse').collapse('hide');
+        $('.progress.progress-striped.active').css('top','0px');
+      }
     },
     timeout: 1000
   });
