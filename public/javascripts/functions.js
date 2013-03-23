@@ -479,35 +479,66 @@ function changeFontSize(e) {
 function autoType(text, input) {
   var textArray = text.split("");
   var rand = 50;
+  var toggledelay = 500;
+  var toggletrack = 0;
 
   function frameLooper(textArray) {
+console.log("welcome");
     if(textArray.length > 0) {
       if (textArray[0] == '\n')
         playSound('enter');
-      else //if (textArray[0] == ' ')
+      else if (textArray[0] == ' ')
         playSound('key');
       $('#input').val($('#input').val() + textArray.shift()); 
-      rand = Math.random() * 200;
       // Handle description pasting
       if (textArray[0] === '>')
         while (textArray[0] != '\n')
           $('#input').val($('#input').val() + textArray.shift()); 
-      // Handle toggle in and out of preview mode
-      if (textArray[0] === '&') {
-        clearInterval(ngw.interval);
-        togglePreviewMode();
-        ngw.interval = setTimeout(function(){togglePreviewMode();}, 3000);
-        textArray.shift();
-        ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
+      if (textArray[0] === '&') // Handle toggle in and out of preview mode
+      {
+	togprev = function () {
+
+	  var preview = $('#preview');
+	  if(!ngw.isPreviewOn) {
+	    var tokens = marked.lexer($('#input').val());
+	    preview.html(marked.parser(tokens));
+	    preview.css("opacity", 1);
+	    preview.css("visibility", "visible");
+	    $('body, html').css("background","white");
+	    $('#markdownMode').addClass('active');
+	    ngw.isPreviewOn = true;
+	    $('#input').blur();
+	    clearInterval(ngw.interval);
+            ngw.interval = setInterval(togprev, 3000);
+	  }
+	  else {
+	    preview.css("opacity", 0);
+	    preview.css("visibility", "hidden");
+	    $('body, html').css("background", "");
+	    $('#markdownMode').removeClass('active');
+
+	    ngw.isPreviewOn = false;
+	    $('#input').focus();
+	clearInterval(ngw.interval);
+           textArray.shift();
+         ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
+	  }
+	 }
+	clearInterval(ngw.interval);
+        ngw.interval = setInterval(togprev, rand);
+	
       }
-  } else {
+    } else {
       clearInterval(ngw.interval);
-      togglePreviewMode();
+       togglePreviewMode();
     }
   }
-
+  
   input.val('');
-  ngw.interval = setInterval(function(){frameLooper(textArray); }, rand);
+
+  ngw.interval = setInterval(function(){
+    frameLooper(textArray); 
+  }, rand);
 }
 
 var keyNum = 0;
