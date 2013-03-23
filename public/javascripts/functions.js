@@ -261,7 +261,7 @@ $(document).ready(function() {
 
   // Core keypress parser
   $('#input').on("keypress", function(e) {
-    if (e.keyCode == KEYCODE_ENTER) {
+    if (e.keyCode == KEYCODE_ENTER && e.shiftKey) {
       playSound('enter');
       var value = $(this).val();
       pos = $(this).prop('selectionStart'); //Cursor position
