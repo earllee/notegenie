@@ -75,7 +75,7 @@ $(document).ready(function() {
     if(localStorage.getItem('firstTime') === 'false')
       setInterval(function() {
         localStorage.setItem('text', $('#input').val());
-console.log('saved');
+//console.log('saved');
       }, 2000);
   } catch(e) {console.log('Could not save.');}
 
@@ -318,7 +318,9 @@ console.log('saved');
   // Footer Screen Mode
   $("[id$='Screen']").fadeOut();
   $('.footerScreenTrigger').on('click', function(e){
-    ngw.screen = e.target.dataset.target; // Screen to be opened
+
+    ngw.screen = e.target.getAttribute('data-target'); // Screen to be opened
+
     if (!ngw.isFooterScreenOn) {
       $('#' + e.currentTarget.id).addClass('active');
       ngw.isFooterScreenOn = true;
