@@ -15,7 +15,29 @@ $(document).ready(function() {
     openScreen : 'none'
   }); 
 
+
+
   var input = $('#input');
+
+
+  if (navigator.appName == "Microsoft Internet Explorer")
+  {
+
+    input.mousemove( function(e) {
+      var footer = $('#footer');
+      if (e.pageY < 40) 
+      {
+        footer.css('top','0px');
+        $('.progress.progress-striped.active').css('top','40px');
+      }
+      else
+      {
+        footer.css('top', '-40px');
+        $('.nav-collapse').collapse('hide');
+        $('.progress.progress-striped.active').css('top','0px');
+      }
+    });
+ }
 
   ngw.key = [document.getElementById('key1'),
               document.getElementById('key2'),
@@ -262,7 +284,7 @@ $(document).ready(function() {
 
   // Core keypress parser
   $('#input').on("keypress", function(e) {
-    if (e.keyCode == KEYCODE_ENTER) {
+    if (e.keyCode == KEYCODE_ENTER && e.shiftKey) {
       playSound('enter');
       var value = $(this).val();
       pos = $(this).prop('selectionStart'); //Cursor position
