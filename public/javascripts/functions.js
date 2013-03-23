@@ -290,8 +290,6 @@ $(document).ready(function() {
   });
 
   $('#markdownMode').on('click', function(e){
-    if ($('#input').val() === '')
-    $('#input').val('####NoteGenie 101\n---\n \nNoteGenie is a better way to write. It\'s a notepad powered by the infinite knowledge of databases. You type in a term you don\'t know in it\'s own line, press enter, and NoteGenie will paste a description of the term right below the term.\n \n- NoteGenie also supports Markdown, which allows you to format text using symbols.\n- For example, the \"NoteGenie 101\" up top becomes a header because it has hash symbols at the beginning. You can give it 1-6 hash symbols depending on how big you want the header. More hashes means **smaller** header.\n- Did I mention that two asterisks surrounding text makes that text **bold**?\n- Also, one asterisk surrounding text makes it *italicized*.\n- A single dash at the start of a line indicates a list item.\n* So does an asterisk.\n\nYou can even do quotes like this:\n\n> Just put a greater than sign in front of text,\n> and you get a quoted message!\n\nAnd numbered lists like this:\n\n1. One caveat: You must put an empty line between lists, quotes, and headers. \n2. Otherwise, everything gets smashed together.\n3. See for yourself.\n \nYou can also write [links](http://notegenie.io). And insert images:\n\n![Flight](images/flight.jpg) \n \n##### Syntax highlighting\n \nYou can also write code!\n \nHTML:\n \n\t<h1>HTML code</h1>\n\t<p class=\"some\">This is an example</p>\n \nPython:\n \n\tdef func():\n\tfor i in [1, 2, 3]:\n\tprint \"%s\" % i');
     togglePreviewMode();
     e.preventDefault();
   });
@@ -461,7 +459,6 @@ function autoType(text, input) {
   var i = 0;
 
   function frameLooper(textArray) {
-console.log("welcome");
     if(textArray.length > 0) {
       if (textArray[0] == '\n')
         playSound('enter');
