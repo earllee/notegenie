@@ -43,10 +43,12 @@ block content
             form.navbar-form
               input#fileName(type='text', placeholder='File Name')
           li.dropdown
-            a.dropdown-toggle(href='#', data-toggle='dropdown')
-              | Fonts
+            a#settingsTrigger(data-toggle="none", href='#')
+              | Settings
               b.caret
-            ul.dropdown-menu
+            ul#settings.dropdown-menu
+              li.nohover
+                button#soundToggle.btn.down(type="button") Sounds On
               li.nohover
                 form.navbar-form
                   input#font-size(type='number', value='16', min='5')

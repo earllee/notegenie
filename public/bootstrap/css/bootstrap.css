@@ -8826,7 +8826,7 @@ a.badge:focus {
   }
 }
 
-@media (max-width: 867px) {
+@media (max-width: 908px) {
   body {
     padding-top: 0;
   }
@@ -8978,7 +8978,7 @@ a.badge:focus {
   }
 }
 
-@media (min-width: 868px) {
+@media (min-width: 909px) {
   .nav-collapse.collapse {
     height: auto !important;
     overflow: visible !important;
@@ -9178,6 +9178,25 @@ body #footer {
   margin-left: 7px;
 }
 
+#footer #soundToggle {
+  width: 87%;
+}
+
+#footer #soundToggle.down {
+  background: #999999;
+}
+
+#footer .dropdown-menu {
+  margin-top: -1px;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+
+#footer #settings {
+  margin-right: -2px;
+}
+
 #footer #font-size {
   width: 91%;
 }
@@ -9200,6 +9219,10 @@ body #footer {
 
 #footer .nav .popover .arrow:after {
   border-top-color: black;
+}
+
+#footer .nav .nohover {
+  text-align: center;
 }
 
 #footer .nav .nohover:hover {

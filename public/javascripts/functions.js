@@ -12,32 +12,11 @@ $(document).ready(function() {
     isFooterScreenOn : false,
     isPreviewOn : false,
     screen : 'none',
-    openScreen : 'none'
+    openScreen : 'none',
+    isSoundOn : true
   }); 
 
-
-
   var input = $('#input');
-
-
-  if (navigator.appName == "Microsoft Internet Explorer")
-  {
-
-    input.mousemove( function(e) {
-      var footer = $('#footer');
-      if (e.pageY < 40) 
-      {
-        footer.css('top','0px');
-        $('.progress.progress-striped.active').css('top','40px');
-      }
-      else
-      {
-        footer.css('top', '-40px');
-        $('.nav-collapse').collapse('hide');
-        $('.progress.progress-striped.active').css('top','0px');
-      }
-    });
- }
 
   ngw.key = [document.getElementById('key1'),
               document.getElementById('key2'),
@@ -53,6 +32,21 @@ $(document).ready(function() {
               document.getElementById('enter4'),
               document.getElementById('enter5')];
 
+  // IE configuration
+  if (navigator.appName == "Microsoft Internet Explorer") {
+    input.mousemove( function(e) {
+      var footer = $('#footer');
+      if (e.pageY < 40) {
+        footer.css('top','0px');
+        $('.progress.progress-striped.active').css('top','40px');
+      } else {
+        footer.css('top', '-40px');
+        $('.nav-collapse').collapse('hide');
+        $('.progress.progress-striped.active').css('top','0px');
+      }
+    });
+  }
+
   // Set firstTime to false on first keypress
   if (!localStorage.getItem('firstTime'))
     $('#input').one('change', function() {
@@ -61,8 +55,9 @@ $(document).ready(function() {
       $('.nav-collapse').collapse('hide');
     });
 
-  // Footer
+  // Init Functions
   footerTriggerInit();
+  settingsTriggerInit();
 
   // Retrieve and set previous font family and size
   if (localStorage.getItem('font') || localStorage.getItem('fontSize')) {
@@ -165,7 +160,8 @@ $(document).ready(function() {
               hideParsingBar('error');
             else {
               hideParsingBar('success');
-              playSound('enter');
+              if (ngw.isSoundOn)
+                playSound('enter');
             }
             } catch (err) {
               var actval = String(box.val());
@@ -272,12 +268,13 @@ $(document).ready(function() {
   $('#input').on("keydown", function(e) {
     if (e.keyCode == KEYCODE_TAB) {
       e.preventDefault();
-      playSound('key');
+      if (ngw.isSoundOn)
+        playSound('key');
       var value = $(this).val();
       pos = $(this).prop('selectionStart');
       $(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
       $(this).selectRange(pos + 1, pos+1);
-    } else if (e.keyCode == KEYCODE_BACKSPACE) {
+    } else if (e.keyCode == KEYCODE_BACKSPACE && ngw.isSoundOn) {
       playSound('backspace'); 
     }
   });
@@ -285,6 +282,7 @@ $(document).ready(function() {
   // Core keypress parser
   $('#input').on("keypress", function(e) {
     if (e.keyCode == KEYCODE_ENTER && e.shiftKey) {
+      if (ngw.isSoundOn)
       playSound('enter');
       var value = $(this).val();
       pos = $(this).prop('selectionStart'); //Cursor position
@@ -296,9 +294,10 @@ $(document).ready(function() {
       // Note: do NOT try to access value here - leads to extra lines being inserted
       updateBox(value.substring(endLine+1,pos), $(this), pos, value);
       return false; // prevent the button click from happening
-      } else {
+      } else if (e.keyCode == KEYCODE_ENTER && ngw.isSoundOn){
+        playSound('enter');
+      } else if (ngw.isSoundOn)
         playSound('key');
-      } 
     });
 
   // Markdown preview
@@ -313,6 +312,19 @@ $(document).ready(function() {
   $('#markdownMode').on('click', function(e){
     togglePreviewMode();
     e.preventDefault();
+  });
+
+  // Toggle Sounds
+  $('#soundToggle').click(function(){
+    if ($(this).hasClass('down')) {
+      $(this).removeClass('down');
+      $(this).html('Sounds Off');
+      ngw.isSoundOn = false;
+    } else {
+      $(this).addClass('down');
+      $(this).html('Sounds On');
+      ngw.isSoundOn = true;
+    }
   });
 
   // Change fonts
@@ -381,8 +393,12 @@ $(document).ready(function() {
 
   var tutorial = '###NoteGenie 101\nThe first note-taking app that writes descriptions of unfamiliar terms for you. To use NoteGenie, take notes like you normally would, but when you want to look up an unfamiliar term, type it in a new line and then press SHIFT + ENTER. Like this,\n\nDiscrete Mathematics\n> Discrete mathematics is the study of mathematical structures that are fundamentally discrete rather than continuous. In contrast to real numbers that have the property of varying \"smoothly\", the objects studied in discrete mathematics \u2013 such as integers, graphs, and statements in logic \u2013 do not vary smoothly in this way, but have distinct, separated values. Discrete mathematics therefore excludes topics in \"continuous mathematics\" such as calculus and analysis. \n\n####Formatting\n- To take bulleted notes, put a dash before each line.\n\t- You can indent bullets.\n- To create a heading, put hash symbols at the beginning of a line. \n\t- 1 hash = biggest heading. 6 hashes = smallest heading.\n- To bold, surround text in **two** asterisks. \n- To italicize, surround text in *one* asterisk.\n---\n1. To create numbered bullets, type in a number and a period before each line.\n2. To insert links, use this format: [NoteGenie](http://notegenie.io)\n3. To insert images, use this format: ![Flight](http://notegenie.io/images/flight-cover.jpg)\n\nWhen you\'re done press **CTRL + M** to see a formatted version of your notes with links and images& and press **CTRL + M** to go back into editing mode.\n\n####Saving Notes\n1. Login\n2. Type in a name in the navbar file name field\n3. Press \"Save\"\n\n####Loading Notes\n1. Press \"Files\"\n2. Click the file you want to open\n\t- Note: NoteGenie only accesses files under Apps/NoteGenie/ in your Dropbox storage.\n\nThat\'s all. Try it out today!';
   $('#tutorial').on('click', function(){
-    ngw.setupAlert(function(){ngw.clearTextarea();autoType(tutorial, $('#input'));}, 'Run Tutorial', null, 'Are you sure you want to run the tutorial without saving your current notes first?');
-    clearInterval(ngw.interval);
+  ngw.setupAlert(function(){
+    ngw.clearTextarea(null, null, function(){
+      autoType(tutorial, $('#input'));
+    });
+  }, 'Run Tutorial', null, 'Are you sure you want to run the tutorial without saving your current notes first?');
+  clearInterval(ngw.interval);
     $('[id="alertBox"]').fadeIn();
 
   });
@@ -406,7 +422,21 @@ function footerTriggerInit(){
         footer.css('top', '-40px');
         $('.nav-collapse').collapse('hide');
         $('.progress.progress-striped.active').css('top','0px');
+        $('.dropdown').removeClass('open');
       }
+    },
+    timeout: 1000
+  });
+}
+
+function settingsTriggerInit(){
+  var settings = $('#settings');
+  $('#settingsTrigger').hoverIntent({
+    over: function(){
+      settings.dropdown();
+  },
+    out: function(){
+      settings.dropdown();
     },
     timeout: 1000
   });
@@ -486,9 +516,9 @@ function autoType(text, input) {
 
   function frameLooper(textArray) {
     if(textArray.length > 0) {
-      if (textArray[0] == '\n')
+      if (textArray[0] == '\n' && ngw.isSoundOn)
         playSound('enter');
-      else //if (i % 3 === 0)// textArray[0] != ' ')
+      else if (ngw.isSoundOn)//if (i % 3 === 0)// textArray[0] != ' ')
         playSound('key');
       $('#input').val($('#input').val() + textArray.shift()); 
       // Handle description pasting

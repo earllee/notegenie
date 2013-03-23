@@ -5,7 +5,8 @@ $(document).ready(function() {
     isFooterScreenOn : false, //footerScreenModeOn
     isPreviewOn : false,  //isPreviewActive
     screen : 'none',
-    openScreen : 'none'
+    openScreen : 'none',
+    isSoundOn : true
   }); 
 
     ngw.dblclick = false;
@@ -330,10 +331,11 @@ function setupAlert(action, actionName, fileName, content) {
       if (ngw.currentFile.length === 0) {
         checkExists(ngw.path, "New Note.txt", function(path, name) {
           $('#fileName').val(path + name);
-          saveFile(null, null, action(fileName));
+          console.log(path+name);
+          saveFile(null, null, function(){action(fileName);});
         });
       } else {
-        saveFile(null, null, action(fileName));
+        saveFile(null, null, function(){action(fileName);});
       }
       $('[id="alertBox"]').fadeOut();
     });

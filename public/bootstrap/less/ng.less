@@ -161,6 +161,21 @@ html, body {
   #save {
     margin-left: 7px;
   }
+  
+  #soundToggle {
+    width: 87%;
+    &.down {
+      background: @grayLight;
+    }
+  }
+
+  .dropdown-menu {
+    margin-top: -1px;
+    .border-radius(0);
+  }
+  #settings {
+    margin-right: -2px;
+  }
 
 	#font-size {
 		width: 91%;
@@ -182,6 +197,7 @@ html, body {
 			}
 		}
     .nohover {
+      text-align: center;
       &:hover {background: none;}
     }
 		&>li {
