@@ -45,6 +45,7 @@ $(document).ready(function() {
       login();
     } else {
       client.signOut(function(){
+        clearTextarea();
         $('#login').html('Login');
         $('#save').attr('disabled', 'true');
       });
@@ -90,6 +91,7 @@ $(document).ready(function() {
   $('#files').on('click', function(e) {
     if (client.isAuthenticated()) {
       loadDir(ngw.path);
+      $('#fileScreenToolbar').html('<h5><a id="newFile" href="#" class="btn">Create New Note</a><a id="newFolder" href="#" class="btn">Create New Folder</a></h5>');
     } else {
       $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
     }
@@ -101,12 +103,9 @@ $(document).ready(function() {
 
     client.readdir(path, {httpCache : true}, 
       function(err, dir, stat, dirstat) {
-          console.log(dirstat);
-          console.log(dir);
         if (err) {
           return showError(err);
         }
-        console.log(path);
         if (path.length > 0) {
           var pathArray = path.split('/');
           var link = '';
@@ -117,7 +116,6 @@ $(document).ready(function() {
           }
           $('#path').html(expandedPath);
           $('#path > a').on('click', function(e) {
-            console.log(e);
             loadDir(e.target.dataset.target);
           });
         } else {
@@ -140,7 +138,6 @@ $(document).ready(function() {
     $('.file').on('click', function(e) {
       setTimeout(function(){
         if (!ngw.dblclick) {
-          console.log(e);
           var fileName = e.target.innerText;
           e.preventDefault();
           if ($('#input').val()) {
@@ -195,7 +192,6 @@ $(document).ready(function() {
       }
   }
   function rename(path, fileName, newFileName, callback) {
-    console.log('Moving: ' + path + fileName +'\nto: ' + path + newFileName);
     client.move(path + fileName, path + newFileName, function(err, stat){
       if (err)
         showError(err);
@@ -215,9 +211,12 @@ $(document).ready(function() {
       }
     });
   }
+  
 
   // Creates New Notepad
-  function clearTextarea(path, fileName, callback) {  //fileName is not used. Just for convention.
+  // Do NOT pass params besides callback function.
+  // @param path, fileName exist for consistency
+  function clearTextarea(path, fileName, callback) { 
     fileName = fileName || '';
     $('#fileName').val(fileName);
     $('#input').val('');
@@ -230,7 +229,6 @@ $(document).ready(function() {
   function createNewFolder(path, name) {
     path = path || '';
     name = name || 'New Folder';
-    console.log('making folder: ' + path);
     
     checkExists(path, name, function(path, name) {
       client.mkdir(path + name, function(err, stat) {
@@ -253,6 +251,7 @@ $(document).ready(function() {
         $('#fileName').attr('disabled', 'true');
         $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
         localStorage.setItem('currentFile', currentFile);
+        closeAll();
       });
   }
 
@@ -267,6 +266,8 @@ $(document).ready(function() {
     ngw.currentFile = ngw.currentFile.replace(/^\s+/,"");
     ngw.currentFile = ngw.currentFile.replace(/\s+$/,"");
 
+    if (ngw.currentFile.length === 0)
+   ; 
     if (ngw.currentFile.length - 4 != ngw.currentFile.indexOf('.txt'))  // Ensure txt file
       ngw.currentFile += '.txt';
       client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
@@ -282,6 +283,33 @@ $(document).ready(function() {
   }
   ngw.saveFile = saveFile;
 
+// Sets Up Alert
+// If first three vars are null, just show cloes button.
+function setupAlert(action, actionName, fileName, content) {
+  $('#alertContent').html(content);
+  if (action !== null) {
+    $('#saveAction, #action').css('visibility', 'visible');
+    $('#saveAction').html('Save &amp; ' + actionName).off('click').on('click', function(e) {
+      if (fileName.length === 0 || fileName === '') {
+        checkExists(ngw.path, "New Note.txt", function(path, name) {
+          $('fileName').val(path + name);
+          saveFile(null, null, action(fileName));
+        });
+      } else {
+      }
+      $('[id="alertBox"]').fadeOut();
+    });
+    $('#action').html(actionName).off('click').on('click', function(e) {
+      action(fileName);
+      $('[id="alertBox"]').fadeOut();
+    });
+  } else {
+    $('#saveAction, #action').css('visibility', 'hidden');
+  }
+  $('#closeAlert').off('click').on('click', function(e){
+    $('[id="alertBox"]').fadeOut();
+  });
+}
   // !!!Callback on this authenticate doesn't work for some reason. Find out why.
   function login(callback) {
     client.authenticate({interactive: true}, function(error, client) {
@@ -296,3 +324,4 @@ $(document).ready(function() {
   }
 
 });
+

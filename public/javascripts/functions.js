@@ -442,29 +442,6 @@ function togglePreviewMode() {
   }
 }
 
-// Sets Up Alert
-// If first three vars are null, just show cloes button.
-function setupAlert(action, actionName, fileName, content) {
-  $('#alertContent').html(content);
-  if (action !== null) {
-    $('#saveAction, #action').css('visibility', 'visible');
-    $('#saveAction').html('Save &amp; ' + actionName).on('click', function(e) {
-      ngw.saveFile(); 
-      action(fileName);
-      $('[id="alertBox"]').fadeOut();
-    });
-    $('#action').html(actionName).on('click', function(e) {
-      action(fileName);
-      $('[id="alertBox"]').fadeOut();
-    });
-  } else {
-    $('#saveAction, #action').css('visibility', 'hidden');
-  }
-  $('#closeAlert').on('click', function(e){
-    $('[id="alertBox"]').fadeOut();
-  });
-}
-
 // Changes font size
 function changeFontSize(e) {
   var newSize = $('#font-size').val();
@@ -479,15 +456,15 @@ function changeFontSize(e) {
 function autoType(text, input) {
   var textArray = text.split("");
   var rand = 50;
+  var i = 0;
 
   function frameLooper(textArray) {
     if(textArray.length > 0) {
       if (textArray[0] == '\n')
         playSound('enter');
-      else //if (textArray[0] == ' ')
+      else //if (i % 3 === 0)// textArray[0] != ' ')
         playSound('key');
       $('#input').val($('#input').val() + textArray.shift()); 
-      rand = Math.random() * 200;
       // Handle description pasting
       if (textArray[0] === '>')
         while (textArray[0] != '\n')
@@ -498,6 +475,10 @@ function autoType(text, input) {
         togglePreviewMode();
         ngw.interval = setTimeout(function(){togglePreviewMode();}, 3000);
         textArray.shift();
+        ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
+      } else if (i % 20 === 0) {
+        rand = Math.random() * 120;
+        clearInterval(ngw.interval);
         ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
       }
   } else {
