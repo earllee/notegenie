@@ -13,7 +13,7 @@ $(document).ready(function() {
     isPreviewOn : false,
     screen : 'none',
     openScreen : 'none',
-    isSoundOn : true
+    isSoundOn : localStorage.getItem('isSoundOn') == 'false' ? false : true
   }); 
 
   var input = $('#input');
@@ -72,6 +72,10 @@ $(document).ready(function() {
     }
     changeFontSize();
   }
+
+  // Set Sound Toggle
+  if (!ngw.isSoundOn)
+    $('#soundToggle').removeClass('down').html('Sound Off');
 
   // Retrieve and set saved text
   if (Modernizr.localstorage && localStorage.getItem('text')) {
@@ -325,6 +329,7 @@ $(document).ready(function() {
       $(this).html('Sounds On');
       ngw.isSoundOn = true;
     }
+    localStorage.setItem('isSoundOn', ngw.isSoundOn);
   });
 
   // Change fonts
