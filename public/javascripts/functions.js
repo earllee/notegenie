@@ -140,7 +140,6 @@ $(document).ready(function() {
       }
       else if (data.AbstractSource === "The Free Dictionary" && text.indexOf("\u00b7") > -1)
       {
-  console.log(text.substring(text.lastIndexOf("\u00b7")));
            temptext = text.substring(text.lastIndexOf("\u00b7"));
            text = temptext.substring(temptext.indexOf(" ") + 1);
       }
@@ -159,7 +158,6 @@ $(document).ready(function() {
             var offsetSelect = actval.length - curval.length;
             var selectpos = pos + text.length + 5 + offsetSelect;
             $(box).selectRange(selectpos, selectpos); 
-            console.log(text);
             if (text === '')
               hideParsingBar('error');
             else {
@@ -249,7 +247,6 @@ $(document).ready(function() {
           var offsetSelect = actval.length - curval.length;
           var selectpos = pos + text.length + 5 + offsetSelect;
           $(box).selectRange(selectpos, selectpos); 
-          console.log(text);
           if (text === '')
             hideParsingBar('error');
           else
@@ -502,22 +499,8 @@ function togglePreviewMode() {
     var texttouse = $('#input').val();
 
     // add extra line to any line that's not a list.
-    var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
+    var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[\-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
     texttouse = texttouse.replace(notlist, "$5\n");
-  
-    // add extra line at end of a list
-/*    var ulist = /(([ \t]*[-+\*][ ][^\n]*($|\n))+)/g
-    texttouse = texttouse.replace(ulist, "$1\n");
-    var ordlist = /(([ \t]*[0-9]+[.][ ][^\n]*($|\n))+)/g
-    texttouse = texttouse.replace(ordlist, "$1\n");
-
-    //special cases of two lists following each other
-    var ulist_ord = /(([ \t]*[-+\*][ ][^\n]*\n)+\n)([ ]*[0-9]+[.][ ][^\n]*($|\n))/g
-    texttouse = texttouse.replace(ulist_ord, "$1\n$3");
-    var ord_ulist = /(([ \t]*[0-9]+[.][ ][^\n]*\n)+\n)([ ]*[-+\*][ ][^\n]*($|\n))/g
-    texttouse = texttouse.replace(ord_ulist, "$1\n$3");
-*/
-    console.log(texttouse);
 
     var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
