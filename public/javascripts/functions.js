@@ -504,11 +504,16 @@ function togglePreviewMode() {
   if(!ngw.isPreviewOn) {
 
     var texttouse = $('#input').val();
+
+    // add extra line to any line that's not a list.
+    var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[-][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
+    texttouse = texttouse.replace(notlist, "\n$5\n");
   
+    // add extra line at end of a list
     var ulist = /(([ \t]*[-][ ][^\n]*($|\n))+)/g
-    texttouse = texttouse.replace(ulist, "$1\n"); // add extra \n after unordered list
+    texttouse = texttouse.replace(ulist, "$1\n");
     var ordlist = /(([ \t]*[0-9]+[.][ ][^\n]*($|\n))+)/g
-    texttouse = texttouse.replace(ordlist, "$1\n"); // add extra \n after ordered list
+    texttouse = texttouse.replace(ordlist, "$1\n");
 
     //special cases of two lists following each other
     var ulist_ord = /(([ \t]*[-][ ][^\n]*\n)+\n)([ \t]*[0-9]+[.][ ][^\n]*($|\n))/g
@@ -516,12 +521,7 @@ function togglePreviewMode() {
     var ord_ulist = /(([ \t]*[0-9]+[.][ ][^\n]*\n)+\n)([ ]*[-][ ][^\n]*($|\n))/g
     texttouse = texttouse.replace(ord_ulist, "$1\n$3");
 
-    // add exta \n after bold or italics lines that are not in a list.
-    var re_bolditalics = /(^(([0-9]+[.] )|([-] )))(\*[^*]+\*[^\n]*\n)/ig
-    texttouse = texttouse.replace(re_bolditalics, "$1\n");
-
-
-    console.log(texttouse);
+    //console.log(texttouse);
 
     var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
