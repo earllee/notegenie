@@ -32,9 +32,9 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
   app.use("/images", express.static(__dirname + '/images'));
+  app.use(app.router);
 });
 
 
@@ -55,13 +55,8 @@ app.post('/', function(req, res){
   res.end();
 });
 
-app.get('/show', function(req, res){
-  User.find(function(err, users) {
-    if (err)
-      console.log(err);
-    console.log(users);
-  });
-  res.end();
+app.get('*', function(req, res){
+  res.redirect('/');
 });
 
 http.createServer(app).listen(app.get('port'), function(){
