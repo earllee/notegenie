@@ -502,7 +502,16 @@ function hideParsingBar(type) {
 function togglePreviewMode() {
   var preview = $('#preview');
   if(!ngw.isPreviewOn) {
-    var tokens = marked.lexer($('#input').val());
+
+    var texttouse = $('#input').val();
+    var re = /(\*[^*]+\*[^\n]*\n)/ig
+
+    texttouse = texttouse.replace(re, "$1\n");
+//          var citations = /(\[([^\]]+)\])/ig; //Finds bracketed citations
+  //        text = text.replace(citations, "");
+
+console.log(texttouse);
+    var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
     preview.css("opacity", 1);
     preview.css("visibility", "visible");
