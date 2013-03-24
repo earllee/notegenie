@@ -278,6 +278,8 @@ $(document).ready(function() {
       pos = $(this).prop('selectionStart');
       $(this).val(value.substring(0, pos) + "\t" + value.substring(pos));
       $(this).selectRange(pos + 1, pos+1);
+    } else if (e.keyCode == KEYCODE_S && e.ctrlKey) {
+      e.preventDefault();
     } else if (e.keyCode == KEYCODE_BACKSPACE && ngw.isSoundOn) {
       playSound('backspace'); 
     }
@@ -300,9 +302,16 @@ $(document).ready(function() {
       return false; // prevent the button click from happening
       } else if (e.keyCode == KEYCODE_ENTER && ngw.isSoundOn){
         playSound('enter');
+      } else if (e.keyCode == KEYCODE_S && e.ctrlKey){
+          try {
+             if(localStorage.getItem('firstTime') === 'false')
+               localStorage.setItem('text', $('#input').val());
+          } catch(e) {console.log('Could not save.');}
+         return false;
       } else if (ngw.isSoundOn)
         playSound('key');
     });
+
 
   // Markdown preview
   $(document).on("keydown", function(e) {
@@ -493,7 +502,16 @@ function hideParsingBar(type) {
 function togglePreviewMode() {
   var preview = $('#preview');
   if(!ngw.isPreviewOn) {
-    var tokens = marked.lexer($('#input').val());
+
+    var texttouse = $('#input').val();
+    var re = /(\*[^*]+\*[^\n]*\n)/ig
+
+    texttouse = texttouse.replace(re, "$1\n");
+//          var citations = /(\[([^\]]+)\])/ig; //Finds bracketed citations
+  //        text = text.replace(citations, "");
+
+console.log(texttouse);
+    var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
     preview.css("opacity", 1);
     preview.css("visibility", "visible");
