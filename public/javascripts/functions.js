@@ -517,11 +517,11 @@ function togglePreviewMode() {
     texttouse = texttouse.replace(ord_ulist, "$1\n$3");
 
     // add exta \n after bold or italics lines that are not in a list.
-    var re_bolditalics = /^(([0-9]+\. )|([-] ))(\*[^*]+\*[^\n]*\n)/ig
-    texttouse = texttouse.replace(re_bolditalics, "$3\n");
+    var re_bolditalics = /(^(([0-9]+[.] )|([-] )))(\*[^*]+\*[^\n]*\n)/ig
+    texttouse = texttouse.replace(re_bolditalics, "$1\n");
 
 
-    //console.log(texttouse);
+    console.log(texttouse);
 
     var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
