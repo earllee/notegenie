@@ -502,22 +502,22 @@ function togglePreviewMode() {
     var texttouse = $('#input').val();
 
     // add extra line to any line that's not a list.
-    var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[-][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
-    texttouse = texttouse.replace(notlist, "\n$5\n");
+    var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
+    texttouse = texttouse.replace(notlist, "$5\n");
   
     // add extra line at end of a list
-    var ulist = /(([ \t]*[-][ ][^\n]*($|\n))+)/g
+/*    var ulist = /(([ \t]*[-+\*][ ][^\n]*($|\n))+)/g
     texttouse = texttouse.replace(ulist, "$1\n");
     var ordlist = /(([ \t]*[0-9]+[.][ ][^\n]*($|\n))+)/g
     texttouse = texttouse.replace(ordlist, "$1\n");
 
     //special cases of two lists following each other
-    var ulist_ord = /(([ \t]*[-][ ][^\n]*\n)+\n)([ \t]*[0-9]+[.][ ][^\n]*($|\n))/g
+    var ulist_ord = /(([ \t]*[-+\*][ ][^\n]*\n)+\n)([ ]*[0-9]+[.][ ][^\n]*($|\n))/g
     texttouse = texttouse.replace(ulist_ord, "$1\n$3");
-    var ord_ulist = /(([ \t]*[0-9]+[.][ ][^\n]*\n)+\n)([ ]*[-][ ][^\n]*($|\n))/g
+    var ord_ulist = /(([ \t]*[0-9]+[.][ ][^\n]*\n)+\n)([ ]*[-+\*][ ][^\n]*($|\n))/g
     texttouse = texttouse.replace(ord_ulist, "$1\n$3");
-
-    //console.log(texttouse);
+*/
+    console.log(texttouse);
 
     var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
