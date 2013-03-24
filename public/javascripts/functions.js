@@ -559,7 +559,7 @@ function autoType(text, input) {
         }, 3000);
         textArray.shift();
       } else if (i % 20 === 0) {
-        rand = Math.random() * 120;
+        rand = Math.random() * 80;
         clearInterval(ngw.interval);
         ngw.interval = setInterval(function() {frameLooper(textArray);}, rand);
       }
