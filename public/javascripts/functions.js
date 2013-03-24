@@ -303,11 +303,7 @@ $(document).ready(function() {
       } else if (e.keyCode == KEYCODE_ENTER && ngw.isSoundOn){
         playSound('enter');
       } else if (e.keyCode == KEYCODE_S && e.ctrlKey){
-          try {
-             if(localStorage.getItem('firstTime') === 'false')
-               localStorage.setItem('text', $('#input').val());
-          } catch(e) {console.log('Could not save.');}
-         return false;
+        localStorage.setItem('text', $('#input').val());
       } else if (ngw.isSoundOn)
         playSound('key');
     });
