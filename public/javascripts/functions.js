@@ -500,7 +500,7 @@ function togglePreviewMode() {
 
     // add extra line to any line that's not a list.
     var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[\-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
-    texttouse = texttouse.replace(notlist, "$5\n");
+    texttouse = texttouse.replace(notlist, "\n$5\n");
 
     var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
