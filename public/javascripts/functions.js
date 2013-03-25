@@ -1,3 +1,4 @@
+// Key Codes
 var KEYCODE_ESC = 27;
 var KEYCODE_ENTER = 13;
 var KEYCODE_TAB = 9;
