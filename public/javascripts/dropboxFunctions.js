@@ -115,7 +115,7 @@ $(document).ready(function() {
   });
 
   // Create New Note
-  $('#newFile').on('click', function(){
+  $('#newFile').on('click', function(e){
     checkExists(ngw.path, 'New Note.txt', function(path, newFileName){
       clearTextarea(null, ngw.path + newFileName, function(){
         saveFile(null, null, function(){loadDir(ngw.path);});
