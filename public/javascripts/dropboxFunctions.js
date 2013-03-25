@@ -109,25 +109,28 @@ $(document).ready(function() {
       }
   });
 
-  // Create New Folder
-  $('#newFolder').on('click', function(){
-    createNewFolder(ngw.path);
-  });
+  function setupNewBtns(){
+    // Create New Folder
+    $('#newFolder').on('click', function(){
+      createNewFolder(ngw.path);
+    });
 
-  // Create New Note
-  $('#newFile').on('click', function(e){
-    checkExists(ngw.path, 'New Note.txt', function(path, newFileName){
-      clearTextarea(null, ngw.path + newFileName, function(){
-        saveFile(null, null, function(){loadDir(ngw.path);});
+    // Create New Note
+    $('#newFile').on('click', function(e){
+      checkExists(ngw.path, 'New Note.txt', function(path, newFileName){
+        clearTextarea(null, ngw.path + newFileName, function(){
+          saveFile(null, null, function(){loadDir(ngw.path);});
+        });
       });
     });
-  });
+  }
 
   // Read Directory
   $('#files').on('click', function(e) {
     if (client.isAuthenticated()) {
       loadDir(ngw.path);
       $('#fileScreenToolbar').html('<h5><a id="newFile" href="#" class="btn">Create New Note</a><a id="newFolder" href="#" class="btn">Create New Folder</a></h5>');
+      setupNewBtns();
     } else {
       $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
     }
