@@ -217,7 +217,7 @@ $(document).ready(function() {
             rename(ngw.path, name, $(this).val(), function(newFileName){
               $('#renameBox').replaceWith('<a class="' + type + '" href="#">' + newFileName +'</a>');
               ngw.dblclick = false;
-              openFile();
+              openFile(); // Reinitialize file link handlers
             });
           }
         });

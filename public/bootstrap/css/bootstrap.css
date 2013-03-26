@@ -9089,6 +9089,10 @@ body #footer {
   line-height: 120%;
 }
 
+#preview blockquote p {
+  font-size: 16px;
+}
+
 .alert {
   position: absolute;
   top: 50px;
