@@ -512,6 +512,7 @@ function togglePreviewMode() {
     ngw.isPreviewOn = true;
     $('#input').blur();
     $('#preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("font-size", '+=' + ($('#font-size').val() - 16).toString());
+    $('#input, #preview, .text').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("line-height", '1.15em');
   }
   else {
     preview.css("opacity", 0);
@@ -529,6 +530,7 @@ function changeFontSize(e) {
   var newSize = $('#font-size').val();
   var sizeChange = newSize - ngw.fontSize;
   $('#input, #preview, .text').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("font-size", '+=' + sizeChange.toString());
+  $('#input, #preview, .text').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("line-height", '1.15em');
   ngw.fontSize = newSize;
   localStorage.setItem('fontSize', newSize);
 }
