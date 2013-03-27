@@ -65,7 +65,7 @@ $(document).ready(function() {
     $('.text').css("font-family", localStorage.getItem('font'));
     if (localStorage.getItem('fontSize')) {
       $('#font-size').val(localStorage.getItem('fontSize'));
-      ngw.fontSize = 16;  // Temporary set this var to 16 so initial changeFontSize call works.
+      ngw.fontSize = 16;  // Temporarily set this var to 16 so initial changeFontSize call works.
     }
     else {
       ngw.fontSize = 16;
@@ -511,6 +511,7 @@ function togglePreviewMode() {
     $('#markdownMode').addClass('active');
     ngw.isPreviewOn = true;
     $('#input').blur();
+    $('#preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("font-size", '+=' + ($('#font-size').val() - 16).toString());
   }
   else {
     preview.css("opacity", 0);
@@ -527,8 +528,7 @@ function togglePreviewMode() {
 function changeFontSize(e) {
   var newSize = $('#font-size').val();
   var sizeChange = newSize - ngw.fontSize;
-  $('.text').css("font-size", '+=' + sizeChange);
-  $('#input, #preview, .text').find('body, h6, h5, h4, h3, h2, h1, blockquote').css("font-size", '+=' + sizeChange);
+  $('#input, #preview, .text').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("font-size", '+=' + sizeChange.toString());
   ngw.fontSize = newSize;
   localStorage.setItem('fontSize', newSize);
 }
