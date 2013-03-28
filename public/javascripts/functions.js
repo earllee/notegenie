@@ -505,19 +505,20 @@ function togglePreviewMode() {
 
     var tokens = marked.lexer(texttouse);
     preview.html(marked.parser(tokens));
-    preview.css("opacity", 1);
-    preview.css("visibility", "visible");
-    $('body, html').css("background","white");
+    preview.css('opacity', 1);
+    preview.css('visibility', 'visible');
+    $('body, html').css('background','white');
     $('#markdownMode').addClass('active');
     ngw.isPreviewOn = true;
     $('#input').blur();
-    $('#preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("font-size", '+=' + ($('#font-size').val() - 16).toString());
-    $('#input, #preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("line-height", '1.15em');
+    $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + ($('#font-size').val() - 16).toString());
+    $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
+    $('#input, #preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css('line-height', '1.5em');
   }
   else {
-    preview.css("opacity", 0);
-    preview.css("visibility", "hidden");
-    $('body, html').css("background", "");
+    preview.css('opacity', 0);
+    preview.css('visibility', 'hidden');
+    $('body, html').css('background', '');
     $('#markdownMode').removeClass('active');
 
     ngw.isPreviewOn = false;
@@ -529,9 +530,10 @@ function togglePreviewMode() {
 function changeFontSize(e) {
   var newSize = $('#font-size').val();
   var sizeChange = newSize - ngw.fontSize;
-  $('#input').css("font-size", '+=' + sizeChange.toString());
-  $('#preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("font-size", '+=' + sizeChange.toString());
-  $('#input, #preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("line-height", '1.15em');
+  $('#input').css('font-size', '+=' + sizeChange.toString());
+  $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + sizeChange.toString());
+  $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
+  $('#input, #preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("line-height", '1.5em');
   ngw.fontSize = newSize;
   localStorage.setItem('fontSize', newSize);
 }
