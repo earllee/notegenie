@@ -513,7 +513,6 @@ function togglePreviewMode() {
     $('#input').blur();
     $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + ($('#font-size').val() - 16).toString());
     $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
-    $('#input, #preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css('line-height', '1.5em');
   }
   else {
     preview.css('opacity', 0);
@@ -533,7 +532,6 @@ function changeFontSize(e) {
   $('#input').css('font-size', '+=' + sizeChange.toString());
   $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + sizeChange.toString());
   $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
-  $('#input, #preview').find('li, h6, h5, h4, h3, h2, h1, blockquote p, p').css("line-height", '1.5em');
   ngw.fontSize = newSize;
   localStorage.setItem('fontSize', newSize);
 }

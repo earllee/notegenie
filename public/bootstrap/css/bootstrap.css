@@ -9087,11 +9087,16 @@ body #footer {
 }
 
 #preview li {
-  line-height: 120%;
+  line-height: 1.15em;
+}
+
+#preview p {
+  line-height: 1.15em;
 }
 
 #preview blockquote p {
   font-size: 16px;
+  line-height: 1.15em;
 }
 
 .alert {
