@@ -8999,6 +8999,11 @@ body #footer {
   font-color: #555555;
 }
 
+.logo {
+  font-family: 'Open sans', Arial, sans-serif;
+  font-weight: 100;
+}
+
 #alertBox {
   display: none;
   -webkit-transition: none;

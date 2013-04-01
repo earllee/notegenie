@@ -5,7 +5,7 @@
     "notegenie.io",
     "www.notegenie.io"
   ],
-  "version": "0.1.0-13",
+  "version": "0.1.0-14",
   "private": true,
   "scripts": {
     "start": "node app.js"
