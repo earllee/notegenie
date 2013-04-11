@@ -9092,11 +9092,15 @@ body #footer {
 }
 
 #preview li {
-  line-height: 1.15em;
+  line-height: 1.5em;
 }
 
 #preview p {
   line-height: 1.15em;
+}
+
+#preview blockquote {
+  margin: 0 0 10px;
 }
 
 #preview blockquote p {

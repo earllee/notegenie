@@ -121,10 +121,12 @@ $(document).ready(function() {
   }
 
   function updateBox(wikipediaPage, box, pos, curval) {
-    if (wikipediaPage === "" || !(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))) || 
+    if (wikipediaPage === "" ||   
     wikipediaPage === "?" || wikipediaPage === "!") {
       return false;
     }
+    if(!(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))))
+      wikipediaPage = wikipediaPage.substring(1); 
 
     // Duckduckgo dictionary definition look up
     if (wikipediaPage.charAt(0) == '?' && wikipediaPage !== '?') {
