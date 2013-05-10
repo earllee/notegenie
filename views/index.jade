@@ -6,9 +6,9 @@ block content
     p File successfully saved!
   div#alertBox.alert.alert-block.fade.in.hide
     p#alertContent Hey! You already have a file open. Make sure to save before opening this new one, or else you'll lose all your changes!
-    a#saveAction.btn.btn-success Save &amp; Action
-    a#action.btn.btn-warning Action
-    a#closeAlert.btn() Close
+    //a#saveAction.btn.btn-success Save &amp; Action
+    //a#action.btn.btn-warning Action
+    //a#closeAlert.btn() Close
   textarea#input.text(form="save", name="body", placeholder="The first note-taking app that writes descriptions of terms for you. Take notes like you normally would. If there is something you need to look up, press enter, type in a term, then press SHIFT + ENTER. Need help? Click 'Tutorial' above.")
   div#footer-trigger
     div#footer.navbar
@@ -36,7 +36,7 @@ block content
           li
             a#clear(href='#') Clear
           li
-            a#markdownMode(href='#') Prettify
+            a#markdownMode(href='#') Markdown
           li
             a#files.footerScreenTrigger(href='#', data-target='filesScreen') Files
           li.nohover

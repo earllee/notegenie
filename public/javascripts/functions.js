@@ -66,8 +66,7 @@ $(document).ready(function() {
     if (localStorage.getItem('fontSize')) {
       $('#font-size').val(localStorage.getItem('fontSize'));
       ngw.fontSize = 16;  // Temporarily set this var to 16 so initial changeFontSize call works.
-    }
-    else {
+    } else {
       ngw.fontSize = 16;
       localStorage.setItem('fontSize', '16');
     }
@@ -85,10 +84,14 @@ $(document).ready(function() {
       savedText = localStorage.getItem('text');
     } catch(e) {}
     if (savedText) {
-      $('#input').val(savedText);
-      savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
-      savedText = savedText.replace(/[ ]{2,}/gi," ");
-      savedText = savedText.replace(/\n /,"\n");
+      var currentFile = '';
+      if ((currentFile = localStorage.getItem('currentFile'))) {
+        setupModal([function() {$('#fileName').val(currentFile); $('#input').val(savedText);}, function() {}], ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on ' + currentFile + ' last you used NoteGenie. Re-open the file?');
+        savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
+        savedText = savedText.replace(/[ ]{2,}/gi," ");
+        savedText = savedText.replace(/\n /,"\n");
+      }
+      //$('#input').val(savedText);
     }
   } 
 
@@ -121,121 +124,28 @@ $(document).ready(function() {
   }
 
   function updateBox(wikipediaPage, box, pos, curval) {
-    if (wikipediaPage === "" ||   
-    wikipediaPage === "?" || wikipediaPage === "!") {
-      return false;
-    }
+    if (wikipediaPage === "" || wikipediaPage === "?" || wikipediaPage === "!")
+    return false;
+
     if(!(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))))
-      wikipediaPage = wikipediaPage.substring(1); 
+    wikipediaPage = wikipediaPage.substring(1); 
 
     // Duckduckgo dictionary definition look up
     if (wikipediaPage.charAt(0) == '?' && wikipediaPage !== '?') {
       showParsingBar();
       var jqxhr = $.getJSON("http://api.duckduckgo.com/?q=define+" + wikipediaPage.substring(1) + "&format=json&pretty=1&callback=?&", function() {}).done(function(data) {
-          text = data.Abstract;
+        text = data.Abstract;
 
-          try {
-      // process/cleanup the definition
-
-      if (data.AbstractSource === "Merriam-Webster" && text.indexOf("definition:") > -1)
-      {
-           text = text.substring(text.indexOf("definition:") + 12);
-      }
-      else if (data.AbstractSource === "The Free Dictionary" && text.indexOf("\u00b7") > -1)
-      {
-           temptext = text.substring(text.lastIndexOf("\u00b7"));
-           text = temptext.substring(temptext.indexOf(" ") + 1);
-      }
-                  if (text === "")
-      throw "blank page";
-
-
-            var actval = String(box.val());
-            var extratextlen = actval.indexOf("\n", pos) - pos;
-            var newval = actval.substring(pos, extratextlen);
-
-            box.val(curval.substring(0, pos) + "\n\n> " + text + "\n\n" + actval.substring(pos + 1));
-            //box.scrollTop(9999).focus();
-
-            //box.focus();
-            var offsetSelect = actval.length - curval.length;
-            var selectpos = pos + text.length + 5 + offsetSelect;
-            $(box).selectRange(selectpos, selectpos); 
-            if (text === '')
-              hideParsingBar('error');
-            else {
-              hideParsingBar('success');
-              if (ngw.isSoundOn)
-                playSound('enter');
-            }
-            } catch (err) {
-              var actval = String(box.val());
-              box.val(curval.substring(0,pos) + actval.substring(pos));
-              var offset = actval.length - curval.length;
-              $(box).selectRange(pos +offset,pos+offset);
-              hideParsingBar('error');
-            }
-
-            }).error(function() {
-              hideParsingBar("error");
-            });
-            return;
-          }
-
-    // Wikipedia look up
-    showParsingBar();
-    var req1 = $.ajax({ 
-      type: 'GET', 
-      dataType: "json", 
-      url: '//en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', 
-      data: {page:wikipediaPage, uselang:'en'}, 
-      async: false, 
-      error: function(){hideParsingBar('error');},
-      success: function(json,wikipediaPage) {
         try {
-          var text = json.parse.text["*"];
-          var n = text.indexOf("/table>");
-          while (n != -1) { //Gets rid of pre-content tables  
-            if (n > -1) {
-              text = text.substring(n+8);
-            }
-            n = text.indexOf("/table>");
+          // process/cleanup the definition
+
+          if (data.AbstractSource === "Merriam-Webster" && text.indexOf("definition:") > -1)
+          text = text.substring(text.indexOf("definition:") + 12);
+          else if (data.AbstractSource === "The Free Dictionary" && text.indexOf("\u00b7") > -1) {
+            temptext = text.substring(text.lastIndexOf("\u00b7"));
+            text = temptext.substring(temptext.indexOf(" ") + 1);
           }
 
-          text = text.substring(text.indexOf("<p>")+3);
-          text = text.substring(0, text.indexOf("</p>"));
-
-          var tags = /(<([^>]+)>)/ig; //Finds all tags
-          text = text.replace(tags, "");
-
-          if (text.length > 3 && (text.substring(text.length-3) == "to:")) {
-            throw "disambiguation";
-          }
-
-          var citations = /(\[([^\]]+)\])/ig; //Finds bracketed citations
-          text = text.replace(citations, "");
-
-          text = text.replace(/&#160;/g, ""); //Remove symbol
-
-          if (text.indexOf("Cite error:") > -1)
-          text = text.substring(0, text.indexOf("Cite error:"));
-
-          var firstParen = text.substring(0,15).indexOf("(");
-
-          if (firstParen > -1) {
-            var parenCount = 1;
-            var curPos = firstParen + 1;
-            while (parenCount > 0 && curPos < text.length) {
-              if (text.charAt(curPos) == ')')
-              parenCount -= 1;
-              if (text.charAt(curPos) == '(')
-              parenCount += 1;
-              curPos += 1;
-            }
-            text = text.substring(0, firstParen) + text.substring(curPos+1);
-          }
-
-          text = text.replace(/^\s+|\s+$/g,''); //trim
           if (text === "")
           throw "blank page";
 
@@ -244,28 +154,113 @@ $(document).ready(function() {
           var newval = actval.substring(pos, extratextlen);
 
           box.val(curval.substring(0, pos) + "\n\n> " + text + "\n\n" + actval.substring(pos + 1));
-          //box.scrollTop(9999).focus();
 
-         // box.focus();
           var offsetSelect = actval.length - curval.length;
           var selectpos = pos + text.length + 5 + offsetSelect;
           $(box).selectRange(selectpos, selectpos); 
           if (text === '')
-            hideParsingBar('error');
-          else
+          hideParsingBar('error');
+          else {
             hideParsingBar('success');
-        }
-        catch (err) {
+            if (ngw.isSoundOn)
+            playSound('enter');
+          }
+        } catch (err) {
           var actval = String(box.val());
           box.val(curval.substring(0,pos) + actval.substring(pos));
           var offset = actval.length - curval.length;
           $(box).selectRange(pos +offset,pos+offset);
           hideParsingBar('error');
-        } // End try catch
+        }
+
+        }).error(function() {
+          hideParsingBar("error");
+        });
+        return;
+      }
+
+      // Wikipedia look up
+      showParsingBar();
+      var req1 = $.ajax({ 
+        type: 'GET', 
+        dataType: "json", 
+        url: '//en.wikipedia.org/w/api.php?action=parse&format=json&section=0&prop=text&callback=?&redirects=', 
+        data: {page:wikipediaPage, uselang:'en'}, 
+        async: false, 
+        error: function(){hideParsingBar('error');},
+        success: function(json,wikipediaPage) {
+          try {
+            var text = json.parse.text["*"];
+            var n = text.indexOf("/table>");
+            while (n != -1) { //Gets rid of pre-content tables  
+              if (n > -1)
+                text = text.substring(n+8);
+              n = text.indexOf("/table>");
+            }
+
+            text = text.substring(text.indexOf("<p>")+3);
+            text = text.substring(0, text.indexOf("</p>"));
+
+            var tags = /(<([^>]+)>)/ig; //Finds all tags
+            text = text.replace(tags, "");
+
+            if (text.length > 3 && (text.substring(text.length-3) == "to:"))
+            throw "disambiguation";
+
+            var citations = /(\[([^\]]+)\])/ig; //Finds bracketed citations
+            text = text.replace(citations, "");
+
+            text = text.replace(/&#160;/g, ""); //Remove symbol
+
+            if (text.indexOf("Cite error:") > -1)
+            text = text.substring(0, text.indexOf("Cite error:"));
+
+            var firstParen = text.substring(0,15).indexOf("(");
+
+            if (firstParen > -1) {
+              var parenCount = 1;
+              var curPos = firstParen + 1;
+              while (parenCount > 0 && curPos < text.length) {
+                if (text.charAt(curPos) == ')')
+                parenCount -= 1;
+                if (text.charAt(curPos) == '(')
+                parenCount += 1;
+                curPos += 1;
+              }
+              text = text.substring(0, firstParen) + text.substring(curPos+1);
+            }
+
+            text = text.replace(/^\s+|\s+$/g,''); //trim
+            if (text === "")
+            throw "blank page";
+
+            var actval = String(box.val());
+            var extratextlen = actval.indexOf("\n", pos) - pos;
+            var newval = actval.substring(pos, extratextlen);
+
+            box.val(curval.substring(0, pos) + "\n\n> " + text + "\n\n" + actval.substring(pos + 1));
+            //box.scrollTop(9999).focus();
+
+            // box.focus();
+            var offsetSelect = actval.length - curval.length;
+            var selectpos = pos + text.length + 5 + offsetSelect;
+            $(box).selectRange(selectpos, selectpos); 
+            if (text === '')
+            hideParsingBar('error');
+            else
+            hideParsingBar('success');
+          }
+          catch (err) {
+            var actval = String(box.val());
+            box.val(curval.substring(0,pos) + actval.substring(pos));
+            var offset = actval.length - curval.length;
+            $(box).selectRange(pos +offset,pos+offset);
+            hideParsingBar('error');
+          } // End try catch
         } // End success function
 
-        }); // End AJAX
-      } // End updateBox
+      }); // End AJAX
+    } // End updateBox
 
 
   // Catch tabs
@@ -403,14 +398,11 @@ $(document).ready(function() {
 
   var tutorial = '(Refresh to skip tutorial)\n\n###NoteGenie 101\nThe first note-taking app that writes descriptions of unfamiliar terms for you. To use NoteGenie, take notes like you normally would, but when you want to look up an unfamiliar term, type it in a new line and then press SHIFT + ENTER. Like this,\n\nDiscrete Mathematics\n\n> Discrete mathematics is the study of mathematical structures that are fundamentally discrete rather than continuous. In contrast to real numbers that have the property of varying \"smoothly\", the objects studied in discrete mathematics \u2013 such as integers, graphs, and statements in logic \u2013 do not vary smoothly in this way, but have distinct, separated values. Discrete mathematics therefore excludes topics in \"continuous mathematics\" such as calculus and analysis. Discrete objects can often be enumerated by integers. \n\n####Formatting\n- To take bulleted notes, put a dash before each line.\n\t- You can indent bullets.\n- To create a heading, put hash symbols at the beginning of a line. \n\t- 1 hash = biggest heading. 6 hashes = smallest heading.\n- To bold, surround text in **two** asterisks. \n- To italicize, surround text in *one* asterisk.\n---\n1. To create numbered bullets, type in a number and a period before each line.\n2. To insert links, use this format: [NoteGenie](http://notegenie.io)\n3. To insert images, use this format: \n\n![Flight](http://notegenie.io/images/flight-cover.jpg)\n\nWhen you\'re done press **CTRL + M** to see a formatted version of your notes with links and images& and press **CTRL + M** to go back into editing mode.\n\n####Saving Notes\n1. Login\n2. Type in a name in the navbar file name field\n3. Press \"Save\"\n\n####Loading Notes\n1. Press \"Files\"\n2. Click the file you want to open\n\t- Note: NoteGenie only accesses files under Apps/NoteGenie/ in your Dropbox storage.\n\nThat\'s all. Try it out today!';
   $('.tutorial').on('click', function(){
-  ngw.setupAlert(function(){
-    ngw.clearTextarea(null, null, function(){
-      autoType(tutorial, $('#input'));
-    });
-  }, 'Run Tutorial', null, 'Are you sure you want to run the tutorial without saving your current notes first?');
+    setupModal([function(){ngw.saveFile(null, null, autoType(tutorial, $('#input')));}, function(){autoType(tutorial, $('#input'));}, function(){}],
+    ['Save & Run Tutorial', 'Run Tutorial', 'Close'], 
+    ['primary', 'warning'], 
+    null, 'Are you sure you want to run the tutorial without saving your current notes first?');
   clearInterval(ngw.interval);
-    $('[id="alertBox"]').fadeIn();
-
   });
 
     if(localStorage.getItem('firstTime') != 'false') {
@@ -582,10 +574,10 @@ function autoType(text, input) {
   }, rand);
 }
 
+// Sounds
 var keyNum = 0;
 var backspaceNum = 0;
 var enterNum = 0;
-// Sounds
 function playSound(type) {
   if (type === 'key') {
     if (keyNum > 3)
@@ -606,4 +598,28 @@ function playSound(type) {
     ngw.backspace[backspaceNum].play();
     backspaceNum++;
   }
+}
+
+function setupModal(actions, actionNames, colors, params, content) {
+  function makeAction(action) {
+    return function() {
+      action(); 
+      $('[id="alertBox"]').fadeOut();
+    };
+  }
+
+  if (params === null) {
+    params = new Array(actions.length);
+  }
+
+  $('[id^=alertBoxAction]').remove();
+  $('#alertContent').html(content);
+  for (var i = 0; i < actions.length; i++) {
+    $('#alertBox').append('<a id="alertBoxAction' + i + '" class="btn">' + actionNames[i] + '</a>'); 
+    $('#alertBoxAction' + i + '').off('click').on('click', makeAction(actions[i])); // Initiate button triggers
+    if (colors[i]) {  // Give button color
+      $('#alertBoxAction' + i + '').addClass('btn-' + colors[i] + '');
+    }
+  }
+  $('[id="alertBox"]').fadeIn();
 }

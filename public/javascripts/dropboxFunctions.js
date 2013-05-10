@@ -58,8 +58,8 @@ $(document).ready(function() {
   // Clear Textarea
   $('#clear').on('click', function() {
     if (client.isAuthenticated()) {
-      setupAlert(function(){clearTextarea(); ngw.path = '';}, 'Clear', '', 'Are you sure you want to clear the note pad without saving?');
-      $('[id="alertBox"]').fadeIn();
+      setupModal([function(){saveFile(null, null, function(){clearTextarea(); ngw.path = '';}); clearTextarea(); ngw.path = '';}, function(){clearTextarea(); ngw.path = '';}, function(){}],
+      ['Save & Clear', 'Clear', 'Close'], ['success', 'danger'], null, 'Are you sure you want to clear the note pad without saving?');
     } else {
       clearTextarea();
       ngw.path = '';
@@ -180,8 +180,7 @@ $(document).ready(function() {
           var fileName = e.target.text;
           e.preventDefault();
           if ($('#input').val()) {
-            setupAlert(loadFile, 'Open', fileName, 'Are you sure you want to open a different file without saving the current one first?');
-            $('[id="alertBox"]').fadeIn();
+            setupModal([function(){saveFile(null, null, loadFile(fileName));}, function(){loadFile(fileName);}, function(){}], ['Save & Open', 'Open', 'Close'], ['success', 'warning'], null, 'Are you sure you want to open a different file without saving the current one first?');
           } else {
             loadFile(fileName);
             closeAll(); 
@@ -290,7 +289,7 @@ $(document).ready(function() {
         $('#fileName').val(ngw.currentFile);
         $('#fileName').attr('disabled', 'true');
         $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
-        localStorage.setItem('currentFile', currentFile);
+        localStorage.setItem('currentFile', ngw.currentFile);
         closeAll();
       });
   }
@@ -300,14 +299,13 @@ $(document).ready(function() {
   // @param path must end in /
   function saveFile(path, fileName, callback) {
     var content = $('#input').val();
-    //path = path || ngw.filePath;
     ngw.currentFile = $('#fileName').val();
 
     ngw.currentFile = ngw.currentFile.replace(/^\s+/,"");
     ngw.currentFile = ngw.currentFile.replace(/\s+$/,"");
 
     if (ngw.currentFile.length === 0)
-   ; 
+    ; 
     if (ngw.currentFile.length - 4 != ngw.currentFile.indexOf('.txt'))  // Ensure txt file
       ngw.currentFile += '.txt';
       client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
@@ -316,6 +314,7 @@ $(document).ready(function() {
       else {
         $('#fileName').attr('disabled', 'true');
         $('#fileName').val(ngw.currentFile);
+        localStorage.setItem('currentFile', ngw.currentFile);
         if (callback)
           callback();
       }
@@ -323,37 +322,6 @@ $(document).ready(function() {
   }
   ngw.saveFile = saveFile;
 
-// Sets Up Alert
-// If first three vars are null, just show cloes button.
-function setupAlert(action, actionName, fileName, content) {
-  $('#alertContent').html(content);
-  if (action !== null) {
-    $('#saveAction, #action').css('visibility', 'visible');
-    $('#saveAction').html('Save &amp; ' + actionName).off('click').on('click', function(e) {
-      ngw.currentFile = $('#fileName').val();
-      if (ngw.currentFile.length === 0) {
-        checkExists(ngw.path, "New Note.txt", function(path, name) {
-          $('#fileName').val(path + name);
-          console.log(path+name);
-          saveFile(null, null, function(){action(fileName);});
-        });
-      } else {
-        saveFile(null, null, function(){action(fileName);});
-      }
-      $('[id="alertBox"]').fadeOut();
-    });
-    $('#action').html(actionName).off('click').on('click', function(e) {
-      action(fileName);
-      $('[id="alertBox"]').fadeOut();
-    });
-  } else {
-    $('#saveAction, #action').css('visibility', 'hidden');
-  }
-  $('#closeAlert').off('click').on('click', function(e){
-    $('[id="alertBox"]').fadeOut();
-  });
-}
-ngw.setupAlert = setupAlert;
   // !!!Callback on this authenticate doesn't work for some reason. Find out why.
   function login(callback) {
     client.authenticate({interactive: true}, function(error, client) {
@@ -368,4 +336,3 @@ ngw.setupAlert = setupAlert;
   }
 
 });
-
