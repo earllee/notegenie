@@ -260,6 +260,8 @@ $(document).ready(function() {
     $('#input').val('');
     $('#save').removeAttr('disabled');
     $('#fileName').removeAttr('disabled');
+    localStorage.setItem('currentFile', '');
+    ngw.currentFile = '';
     if (callback)
       callback();
   }
