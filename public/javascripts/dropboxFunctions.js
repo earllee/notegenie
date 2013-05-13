@@ -205,9 +205,11 @@ $(document).ready(function() {
       setupRename(this, 'folder');
     });
     $('.delete').on('click', function(e){
-      console.log(e); 
-      client.remove(path + e.target.dataset.file, function(){loadDir(path);});
-      $(e.target.parentNode).remove();
+      function deleteFile (path, e) {
+        client.remove(path + e.target.dataset.file, function(){loadDir(path);});
+        $(e.target.parentNode).remove();
+      }
+      setupModal([function(){deleteFile(path, e);}, function(){}], ['Delete', 'Close'], ['danger'], null, 'Are you sure you want to delete <strong>' + e.target.dataset.file + '</strong>?');
     });
   }
 
