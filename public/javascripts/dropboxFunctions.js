@@ -163,7 +163,7 @@ $(document).ready(function() {
         $('#fileList').html('');
         $.each(dir, function(index, value) {
           var type = dirstat[index].isFolder ? 'folder' : 'file';
-          $('#fileList').append('<li class="' + type + '"><a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="floatR">(Delete)</a></li>');
+          $('#fileList').append('<li class="' + type + '"><a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="delete floatR" data-file="' + dir[index] + '">(Delete)</a></li>');
         });
         ngw.dblclick = false;
         ngw.path = path;
@@ -171,10 +171,10 @@ $(document).ready(function() {
       });
     }
 
-  // Open File Setup
+  // Sets up click handlers for opening files
   function openFile(path){
     path = path || ngw.path;
-    $('.file').on('click', function(e) {
+    $('a.file').on('click', function(e) {
       console.log(e);
       setTimeout(function(){
         if (!ngw.dblclick) {
@@ -189,10 +189,10 @@ $(document).ready(function() {
         }
       }, 300);
     });
-    $('.file').on('dblclick', function(){
+    $('a.file').on('dblclick', function(){
       setupRename(this, 'file');
     });
-    $('.folder').on('click', function(e) {
+    $('a.folder').on('click', function(e) {
       setTimeout(function(){
         if (!ngw.dblclick) {
           var folderName = e.target.text || e.target.children[0].text;
@@ -201,8 +201,13 @@ $(document).ready(function() {
         } 
       }, 300);
     });
-    $('.folder').on('dblclick', function(){
+    $('a.folder').on('dblclick', function(){
       setupRename(this, 'folder');
+    });
+    $('.delete').on('click', function(e){
+      console.log(e); 
+      client.remove(path + e.target.dataset.file, function(){loadDir(path);});
+      $(e.target.parentNode).remove();
     });
   }
 

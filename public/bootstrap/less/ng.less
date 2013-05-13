@@ -170,7 +170,7 @@ html, body {
 	position: fixed;
   top: 0px;
 	background: black;
-	.opacity(85);
+	.opacity(91);
   .transition(all .5s ease); 
 
 	#info {
@@ -248,22 +248,21 @@ html, body {
       margin: 0;
       ul {
         .transition(all 0.5s ease);
-        list-style-image: none;
       }
         .transition(all 0.5s ease);
       li {
-        a {.transition(all 0.5s ease);}
+        a { .transition(all 0.5s ease); }
+        .delete { color: @red; }
         .transition(all 0.5s ease);
         &.folder {
           list-style-type: none;
           background: url('../../images/folder.png') no-repeat left;
           background-size: 12px;
           padding-left: 20px;
-          &:hover{
-          color: black;
-          background-size: 12px;
-          a {color: black;}
-            background: url('../../images/folder.png') @blue no-repeat left;}
+          &:hover {
+            color: black;
+            background-size: 12px;
+            background: url('../../images/folder.png') @grayDarker no-repeat left;}
         }
         &.file {
           list-style-type: none;
@@ -271,10 +270,9 @@ html, body {
           background-size: 12px;
           padding-left: 20px;
           &:hover {
-          color: black;
-          background-size: 12px;
-          a {color: black;}
-            background: url('../../images/doc.png') @blue no-repeat left;}
+            color: black;
+            background-size: 12px;
+            background: url('../../images/doc.png') @grayDarker no-repeat left;}
         }
       }
     }
@@ -284,14 +282,14 @@ html, body {
 
       a {
         color: black;
-        &:hover{color: white; text-shadow: none;} 
+        &:hover {text-shadow: none;} 
       }
       .btn {
         .transition(all 0.5s ease);
         margin-right: 10px;
 
         &:hover {
-          background: @blue;
+          background: @grayLight;
         }
       }
     }
@@ -314,7 +312,7 @@ html, body {
 		background-repeat: no-repeat;
 		filter: none;
 
-		&>li{
+		&>li {
 			a {
 				color: @grayLighter;	
 				text-shadow: none;

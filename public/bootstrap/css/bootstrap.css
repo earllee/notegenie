@@ -9181,8 +9181,8 @@ body #footer {
   height: 40px;
   color: #eeeeee;
   background: black;
-  opacity: 0.85;
-  filter: alpha(opacity=85);
+  opacity: 0.91;
+  filter: alpha(opacity=91);
   -webkit-transition: all 0.5s ease;
      -moz-transition: all 0.5s ease;
        -o-transition: all 0.5s ease;
@@ -9286,7 +9286,6 @@ body #footer {
 }
 
 #footer .footer-screen #fileList ul {
-  list-style-image: none;
   -webkit-transition: all 0.5s ease;
      -moz-transition: all 0.5s ease;
        -o-transition: all 0.5s ease;
@@ -9307,6 +9306,10 @@ body #footer {
           transition: all 0.5s ease;
 }
 
+#footer .footer-screen #fileList li .delete {
+  color: #9d261d;
+}
+
 #footer .footer-screen #fileList li.folder {
   padding-left: 20px;
   list-style-type: none;
@@ -9316,12 +9319,8 @@ body #footer {
 
 #footer .footer-screen #fileList li.folder:hover {
   color: black;
-  background: url('../../images/folder.png') #049cdb no-repeat left;
+  background: url('../../images/folder.png') #222222 no-repeat left;
   background-size: 12px;
-}
-
-#footer .footer-screen #fileList li.folder:hover a {
-  color: black;
 }
 
 #footer .footer-screen #fileList li.file {
@@ -9333,12 +9332,8 @@ body #footer {
 
 #footer .footer-screen #fileList li.file:hover {
   color: black;
-  background: url('../../images/doc.png') #049cdb no-repeat left;
+  background: url('../../images/doc.png') #222222 no-repeat left;
   background-size: 12px;
-}
-
-#footer .footer-screen #fileList li.file:hover a {
-  color: black;
 }
 
 #footer .footer-screen #fileScreenToolbar {
@@ -9350,7 +9345,6 @@ body #footer {
 }
 
 #footer .footer-screen #fileScreenToolbar a:hover {
-  color: white;
   text-shadow: none;
 }
 
@@ -9363,7 +9357,7 @@ body #footer {
 }
 
 #footer .footer-screen #fileScreenToolbar .btn:hover {
-  background: #049cdb;
+  background: #999999;
 }
 
 #footer .footer-screen .screenImage {
