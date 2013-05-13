@@ -297,6 +297,29 @@ $(document).ready(function() {
 
   // Core keypress parser
   $('#input').on("keypress", function(e) {
+
+    if (e.keyCode == KEYCODE_ENTER && !e.shiftKey && !e.ctrlKey)
+    {
+      var value = $(this).val();
+      pos = $(this).prop('selectionStart'); //Cursor position
+      var endLine = value.substring(0, pos).lastIndexOf("\n");
+      if (endLine == -1)
+      endLine = value.lastIndexOf("\n");
+      theline = value.substring(endLine+1, pos)
+
+      var tab_regex = /(^[\t]+)/
+      var matchtabs = tab_regex.exec(theline)
+
+      if (matchtabs)
+      {
+         var ntabs = matchtabs[0].length;
+         theline = value.substring(0, pos) + "\n" + matchtabs[0] + value.substring(pos)
+         $(this).val(theline);
+         $(this).selectRange(pos+1+ntabs, pos+1+ntabs)
+         return false;
+      }
+    }
+
     if (e.keyCode == KEYCODE_ENTER && e.shiftKey) {
       if (ngw.isSoundOn)
       playSound('enter');
