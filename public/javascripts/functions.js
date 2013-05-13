@@ -132,9 +132,19 @@ $(document).ready(function() {
     if (wikipediaPage === "" || wikipediaPage === "?" || wikipediaPage === "!")
     return false;
 
-    if(!(!/[0-9\*\#\-]/i.test(wikipediaPage.charAt(0))))
-    wikipediaPage = wikipediaPage.substring(1); 
+    var numlist_regex = /(^[0-9]+[\.]\ )/
+    var amatch_numlist = numlist_regex.exec(wikipediaPage)
 
+    var hash_regex = /(^[\#]+)/
+    var amatch_hash = hash_regex.exec(wikipediaPage)
+
+    if (amatch_numlist)
+	wikipediaPage = wikipediaPage.substring(amatch_numlist[0].length);
+    else if (amatch_hash)
+        wikipediaPage = wikipediaPage.substring(amatch_hash[0].length);
+    else if (/[\*\-\+]/i.test(wikipediaPage.charAt(0)))
+        wikipediaPage = wikipediaPage.substring(1); 
+ 
     // Duckduckgo dictionary definition look up
     if (wikipediaPage.charAt(0) == '?' && wikipediaPage !== '?') {
       showParsingBar();
@@ -501,6 +511,11 @@ function togglePreviewMode() {
   if(!ngw.isPreviewOn) {
 
     var texttouse = $('#input').val();
+
+    // some simple substitutions
+    texttouse = texttouse.replace("<=", "&le;")
+    texttouse = texttouse.replace(">=", "&ge;")
+    texttouse = texttouse.replace("!=", "&ne;")
 
     // add extra line to any line that's not a list.
     var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[\-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
