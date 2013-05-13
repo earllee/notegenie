@@ -512,6 +512,11 @@ function togglePreviewMode() {
 
     var texttouse = $('#input').val();
 
+    // some simple substitutions
+    texttouse = texttouse.replace("<=", "&le;")
+    texttouse = texttouse.replace(">=", "&ge;")
+    texttouse = texttouse.replace("!=", "&ne;")
+
     // add extra line to any line that's not a list.
     var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[\-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
     texttouse = texttouse.replace(notlist, "\n$5\n");
