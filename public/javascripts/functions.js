@@ -91,7 +91,7 @@ $(document).ready(function() {
       setupModal([
       function() {$('#fileName').val(currentFile); $('#input').val(savedText);}, 
       function() {localStorage.setItem('currentFile', '');}], 
-      ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on ' + currentFile + ' last you used NoteGenie. Re-open the file?');
+      ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on <strong>' + currentFile + '<strong> last you used NoteGenie. Re-open the file?');
         savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
         savedText = savedText.replace(/[ ]{2,}/gi," ");
         savedText = savedText.replace(/\n /,"\n");

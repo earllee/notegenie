@@ -206,8 +206,12 @@ $(document).ready(function() {
     });
     $('.delete').on('click', function(e){
       function deleteFile (path, e) {
-        client.remove(path + e.target.dataset.file, function(){loadDir(path);});
-        $(e.target.parentNode).remove();
+        client.remove(path + e.target.dataset.file, function(){
+          $(e.target.parentNode).css('height', 0).css('margin-left', 9999);
+          setTimeout(function() {
+            $(e.target.parentNode).remove();
+          }, 300);
+        });
       }
       setupModal([function(){deleteFile(path, e);}, function(){}], ['Delete', 'Close'], ['danger'], null, 'Are you sure you want to delete <strong>' + e.target.dataset.file + '</strong>?');
     });
@@ -283,7 +287,14 @@ $(document).ready(function() {
       client.mkdir(path + name, function(err, stat) {
         if (err)
           showError(err);
-        loadDir(path);    
+          $('#fileList').append('<li class="folder" style="margin-left: -9999px"><a class="folder" href="#">' + name + '</a><a href="#" style="color: black;" class="floatR delete" data-file="' + name + '">(Delete)</a></li>');
+          var newFolderLI = $('li.folder:last-child');
+          var newFolderA = $('a.delete:last-child');
+          setTimeout(function() {
+            newFolderLI.css('margin-left', 0);
+            newFolderA.css('color', '#9d261d');
+          }, 100);
+          openFile(path);
       });
     });
   }
