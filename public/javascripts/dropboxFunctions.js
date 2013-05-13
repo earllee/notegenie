@@ -145,6 +145,7 @@ $(document).ready(function() {
         if (err) {
           return showError(err);
         }
+        $('#fileList').html('');
         if (path.length > 0) {
           var pathArray = path.split('/');
           var link = '';
@@ -160,7 +161,7 @@ $(document).ready(function() {
         } else {
           $('#path').html('');
         }
-        $('#fileList').html('');
+        $('#fileList').css('margin-left', 9999);
         $.each(dir, function(index, value) {
           var type = dirstat[index].isFolder ? 'folder' : 'file';
           $('#fileList').append('<li class="' + type + '"><a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="delete floatR" data-file="' + dir[index] + '">(Delete)</a></li>');
@@ -168,6 +169,9 @@ $(document).ready(function() {
         ngw.dblclick = false;
         ngw.path = path;
         openFile(path);
+        setTimeout(function(){
+          $('#fileList').removeAttr('style');//css('margin-left', 0);
+        }, 200);
       });
     }
 

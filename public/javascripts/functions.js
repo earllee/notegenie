@@ -477,6 +477,7 @@ function closeAll(){
   $("[id$='Screen']").fadeOut();
   $('.nav-collapse').collapse('hide');
   $('[id="alertBox"]').fadeOut();
+  $('#fileList').html('');
   $('#footer').removeAttr('style');
   $('#preview').css("opacity", 0);
   $('#preview').css("visibility", "hidden");
