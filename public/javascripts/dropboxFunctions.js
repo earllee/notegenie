@@ -163,7 +163,7 @@ $(document).ready(function() {
         $('#fileList').html('');
         $.each(dir, function(index, value) {
           var type = dirstat[index].isFolder ? 'folder' : 'file';
-          $('#fileList').append('<li><a class="' + type + '" href="#">' + dir[index] + '</a></li>');
+          $('#fileList').append('<li class="' + type + '"><a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="floatR">(Delete)</a></li>');
         });
         ngw.dblclick = false;
         ngw.path = path;
@@ -175,9 +175,10 @@ $(document).ready(function() {
   function openFile(path){
     path = path || ngw.path;
     $('.file').on('click', function(e) {
+      console.log(e);
       setTimeout(function(){
         if (!ngw.dblclick) {
-          var fileName = e.target.text;
+          var fileName = e.target.text || e.target.children[0].text;
           e.preventDefault();
           if ($('#input').val()) {
             setupModal([function(){saveFile(null, null, loadFile(fileName));}, function(){loadFile(fileName);}, function(){}], ['Save & Open', 'Open', 'Close'], ['success', 'warning'], null, 'Are you sure you want to open a different file without saving the current one first?');
@@ -194,7 +195,7 @@ $(document).ready(function() {
     $('.folder').on('click', function(e) {
       setTimeout(function(){
         if (!ngw.dblclick) {
-          var folderName = e.target.text;
+          var folderName = e.target.text || e.target.children[0].text;
           e.preventDefault();
           loadDir(path + folderName + '/');
         } 

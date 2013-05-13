@@ -48,6 +48,8 @@ $(document).ready(function() {
     });
   }
 
+  $('#rnput').wysiwyg();
+
   // Set firstTime to false on first keypress
   if (!localStorage.getItem('firstTime'))
     $('#input').one('change', function() {

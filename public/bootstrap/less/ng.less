@@ -245,12 +245,37 @@ html, body {
     box-sizing: border-box;
 
     #fileList {
-      ul{
+      margin: 0;
+      ul {
         .transition(all 0.5s ease);
-}
+        list-style-image: none;
+      }
         .transition(all 0.5s ease);
       li {
+        a {.transition(all 0.5s ease);}
         .transition(all 0.5s ease);
+        &.folder {
+          list-style-type: none;
+          background: url('../../images/folder.png') no-repeat left;
+          background-size: 12px;
+          padding-left: 20px;
+          &:hover{
+          color: black;
+          background-size: 12px;
+          a {color: black;}
+            background: url('../../images/folder.png') @blue no-repeat left;}
+        }
+        &.file {
+          list-style-type: none;
+          background: url('../../images/doc.png') no-repeat left;
+          background-size: 12px;
+          padding-left: 20px;
+          &:hover {
+          color: black;
+          background-size: 12px;
+          a {color: black;}
+            background: url('../../images/doc.png') @blue no-repeat left;}
+        }
       }
     }
 
@@ -313,3 +338,6 @@ html, body {
 	}
 }
 
+.floatR {
+  float: right;
+}

@@ -17,6 +17,7 @@ build:
 		${JAVASCRIPTS}/jquery.hoverIntent.js\
 		${JAVASCRIPTS}/modernizr.js\
 		${JAVASCRIPTS}/marked.js\
+		${JAVASCRIPTS}/bootstrap-wysiwyg.js\
 		${JAVASCRIPTS}/functions.js\
 		${JAVASCRIPTS}/dropbox.js\
 		${JAVASCRIPTS}/dropboxFunctions.js\

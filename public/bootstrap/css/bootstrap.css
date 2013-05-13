@@ -9278,6 +9278,7 @@ body #footer {
 }
 
 #footer .footer-screen #fileList {
+  margin: 0;
   -webkit-transition: all 0.5s ease;
      -moz-transition: all 0.5s ease;
        -o-transition: all 0.5s ease;
@@ -9285,6 +9286,7 @@ body #footer {
 }
 
 #footer .footer-screen #fileList ul {
+  list-style-image: none;
   -webkit-transition: all 0.5s ease;
      -moz-transition: all 0.5s ease;
        -o-transition: all 0.5s ease;
@@ -9296,6 +9298,47 @@ body #footer {
      -moz-transition: all 0.5s ease;
        -o-transition: all 0.5s ease;
           transition: all 0.5s ease;
+}
+
+#footer .footer-screen #fileList li a {
+  -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+
+#footer .footer-screen #fileList li.folder {
+  padding-left: 20px;
+  list-style-type: none;
+  background: url('../../images/folder.png') no-repeat left;
+  background-size: 12px;
+}
+
+#footer .footer-screen #fileList li.folder:hover {
+  color: black;
+  background: url('../../images/folder.png') #049cdb no-repeat left;
+  background-size: 12px;
+}
+
+#footer .footer-screen #fileList li.folder:hover a {
+  color: black;
+}
+
+#footer .footer-screen #fileList li.file {
+  padding-left: 20px;
+  list-style-type: none;
+  background: url('../../images/doc.png') no-repeat left;
+  background-size: 12px;
+}
+
+#footer .footer-screen #fileList li.file:hover {
+  color: black;
+  background: url('../../images/doc.png') #049cdb no-repeat left;
+  background-size: 12px;
+}
+
+#footer .footer-screen #fileList li.file:hover a {
+  color: black;
 }
 
 #footer .footer-screen #fileScreenToolbar {
@@ -9364,4 +9407,8 @@ body #footer {
 #footer .dropdown-menu:before {
   border-right: 0;
   border-bottom: 0;
+}
+
+.floatR {
+  float: right;
 }
