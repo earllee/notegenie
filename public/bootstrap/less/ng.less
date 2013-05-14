@@ -83,6 +83,22 @@ html, body {
 
 }
 
+#print {
+  .opacity(50);
+  background: url("../../images/printer.png") no-repeat;
+  background-size: 20px;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  bottom: 1em;
+  right: -999em;
+  z-index: 10000;
+  .transition(all 0.5s ease);
+  &:hover {
+    .opacity(100);
+  }
+}
+
 #preview {
 	background-color: white;
 	visibility: hidden;

@@ -79,6 +79,9 @@ $(document).ready(function() {
   if (!ngw.isSoundOn)
     $('#soundToggle').removeClass('down').html('Sound Off');
 
+  // Print hook
+  $('#print').on('click', function(){ printDiv('preview');});
+
   // Retrieve and set saved text
   if (Modernizr.localstorage && localStorage.getItem('text')) {
     var savedText = "";
@@ -548,9 +551,9 @@ function togglePreviewMode() {
     var texttouse = $('#input').val();
 
     // some simple substitutions
-    texttouse = texttouse.replace("<=", "&le;")
-    texttouse = texttouse.replace(">=", "&ge;")
-    texttouse = texttouse.replace("!=", "&ne;")
+    texttouse = texttouse.replace("<=", "&le;");
+    texttouse = texttouse.replace(">=", "&ge;");
+    texttouse = texttouse.replace("!=", "&ne;");
 
     // add extra line to any line that's not a list.
     var notlist = /^(?!(([\t ]*[0-9]+\. [^\n]*[\n]))|(([\t ]*[\-+\*][ ][^\n]*[\n])))([^\n]*?(\n))/gm;
@@ -566,16 +569,13 @@ function togglePreviewMode() {
     $('#input').blur();
     $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + ($('#font-size').val() - 16).toString());
     $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
-
-//printing code
-  printDiv('preview');
-
-  }
-  else {
+    $('#print').css('right', '1em');
+  } else {
     preview.css('opacity', 0);
     preview.css('visibility', 'hidden');
     $('body, html').css('background', '');
     $('#markdownMode').removeClass('active');
+    $('#print').css('right', '-999em');
 
     ngw.isPreviewOn = false;
     $('#input').focus();
@@ -587,9 +587,9 @@ function printDiv(divName) {
      var printContents = document.getElementById(divName).innerHTML;
      var originalContents = document.body.innerHTML;
 
-     w = window.open()
-     w.document.write(printContents)
-     w.print()
+     w = window.open();
+     w.document.write(printContents);
+     w.print();
      w.close();
 }
 
