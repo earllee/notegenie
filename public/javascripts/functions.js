@@ -566,6 +566,10 @@ function togglePreviewMode() {
     $('#input').blur();
     $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + ($('#font-size').val() - 16).toString());
     $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
+
+//printing code
+  printDiv('preview');
+
   }
   else {
     preview.css('opacity', 0);
@@ -576,6 +580,17 @@ function togglePreviewMode() {
     ngw.isPreviewOn = false;
     $('#input').focus();
   }
+}
+
+// adapted from http://stackoverflow.com/questions/468881/print-div-id-printarea-div-only
+function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     w = window.open()
+     w.document.write(printContents)
+     w.print()
+     w.close();
 }
 
 // Changes font size
