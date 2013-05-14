@@ -9080,6 +9080,28 @@ body #footer {
   height: 20px;
 }
 
+#print {
+  position: absolute;
+  right: -999em;
+  bottom: 1em;
+  z-index: 10000;
+  width: 20px;
+  height: 20px;
+  background: url("../../images/printer.png") no-repeat;
+  background-size: 20px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+
+#print:hover {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
 #preview {
   position: absolute;
   width: 100%;
