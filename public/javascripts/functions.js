@@ -135,15 +135,26 @@ $(document).ready(function() {
     var numlist_regex = /(^[0-9]+[\.]\ )/
     var amatch_numlist = numlist_regex.exec(wikipediaPage)
 
-    var hash_regex = /(^[\#]+)/
+    var hash_regex = /((^[\#]+)|(^[\*]+)|(^[\_]+))/
     var amatch_hash = hash_regex.exec(wikipediaPage)
+
+    var asterisk_regex = /^[\*]+([^\*]+)[\*]+/
+    var amatch_asterisk = asterisk_regex.exec(wikipediaPage)
+
+    var underscore_regex = /^[\_]+([^\_]+)[\_]+/
+    var amatch_underscore = underscore_regex.exec(wikipediaPage)
 
     if (amatch_numlist)
 	wikipediaPage = wikipediaPage.substring(amatch_numlist[0].length);
+    else if (amatch_asterisk)
+        wikipediaPage = amatch_asterisk[1];
+    else if (amatch_underscore)
+        wikipediaPage = amatch_underscore[1];
+    else if (/^[\*\-\+]\ /i.test(wikipediaPage))	// handles bullets
+        wikipediaPage = wikipediaPage.substring(2); 
     else if (amatch_hash)
         wikipediaPage = wikipediaPage.substring(amatch_hash[0].length);
-    else if (/[\*\-\+]/i.test(wikipediaPage.charAt(0)))
-        wikipediaPage = wikipediaPage.substring(1); 
+
  
     // Duckduckgo dictionary definition look up
     if (wikipediaPage.charAt(0) == '?' && wikipediaPage !== '?') {
