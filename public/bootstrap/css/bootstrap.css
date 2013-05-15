@@ -9082,7 +9082,7 @@ body #footer {
 
 #print {
   position: absolute;
-  right: -999em;
+  right: 999em;
   bottom: 1em;
   z-index: 10000;
   width: 20px;

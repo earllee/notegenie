@@ -569,13 +569,17 @@ function togglePreviewMode() {
     $('#input').blur();
     $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + ($('#font-size').val() - 16).toString());
     $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
+    //$('#print').fadeIn();
     $('#print').css('right', '1em');
+    $('#print').css('display', 'inherit');
   } else {
     preview.css('opacity', 0);
     preview.css('visibility', 'hidden');
     $('body, html').css('background', '');
     $('#markdownMode').removeClass('active');
-    $('#print').css('right', '-999em');
+    //$('#print').fadeOut();
+    $('#print').css('right', '999em');
+    //$('#print').css('display', 'inherit');
 
     ngw.isPreviewOn = false;
     $('#input').focus();
