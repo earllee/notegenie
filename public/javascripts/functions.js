@@ -11,6 +11,7 @@ $(document).ready(function() {
   // ngw is an object that stores variables to the browser window. Used to communicate some variables with functionsDropbox.js.
   var ngw = window.ngw || (window.ngw = {
     isFooterScreenOn : false,
+    isFilesScreenOn :true,
     isPreviewOn : false,
     screen : 'none',
     openScreen : 'none',
@@ -47,8 +48,6 @@ $(document).ready(function() {
       }
     });
   }
-
-  $('#rnput').wysiwyg();
 
   // Set firstTime to false on first keypress
   if (!localStorage.getItem('firstTime'))
@@ -92,9 +91,14 @@ $(document).ready(function() {
       var currentFile = '';
       if ((currentFile = localStorage.getItem('currentFile'))) {
       setupModal([
-      function() {$('#fileName').val(currentFile); $('#input').val(savedText);}, 
+      function() {
+        var temp = currentFile.split('/');
+        for (var i = 0; i < temp.length - 1; i++) // Tease out directory path
+          ngw.path += temp[i] + '/';
+        ngw.loadFile(temp[temp.length - 1]);
+        }, 
       function() {localStorage.setItem('currentFile', '');}], 
-      ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on <strong>' + currentFile + '<strong> last you used NoteGenie. Re-open the file?');
+      ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on <strong>' + currentFile + '</strong> last you used NoteGenie. Re-open the file?');
         savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
         savedText = savedText.replace(/[ ]{2,}/gi," ");
         savedText = savedText.replace(/\n /,"\n");
@@ -522,6 +526,7 @@ function closeAll(){
   $('a.active').removeClass('active');
   ngw.screen = ngw.openScreen = 'none';
   ngw.isFooterScreenOn = false;
+  ngw.isFilesScreenOn = false;
   ngw.isPreviewOn = false;
   footerTriggerInit();
 }
@@ -569,7 +574,6 @@ function togglePreviewMode() {
     $('#input').blur();
     $('#preview').find('h6, h5, h4, h3, h2, h1').css('font-size', '+=' + ($('#font-size').val() - 16).toString());
     $('#preview').find('li, blockquote p, p').css('font-size', $('#font-size').val().toString() + 'px');
-    //$('#print').fadeIn();
     $('#print').css('right', '1em');
     $('#print').css('display', 'inherit');
   } else {
@@ -577,9 +581,7 @@ function togglePreviewMode() {
     preview.css('visibility', 'hidden');
     $('body, html').css('background', '');
     $('#markdownMode').removeClass('active');
-    //$('#print').fadeOut();
     $('#print').css('right', '999em');
-    //$('#print').css('display', 'inherit');
 
     ngw.isPreviewOn = false;
     $('#input').focus();

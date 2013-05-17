@@ -3,6 +3,7 @@ var KEYCODE_S = 83;
 $(document).ready(function() {
   var ngw = window.ngw || (window.ngw = {
     isFooterScreenOn : false, //footerScreenModeOn
+    isFilesScreenOn : true,
     isPreviewOn : false,  //isPreviewActive
     screen : 'none',
     openScreen : 'none',
@@ -127,14 +128,16 @@ $(document).ready(function() {
 
   // Read Directory
   $('#files').on('click', function(e) {
-    if (client.isAuthenticated()) {
-      loadDir(ngw.path);
-      $('#fileScreenToolbar').html('<h5><a id="newFile" href="#" class="btn">Create New Note</a><a id="newFolder" href="#" class="btn">Create New Folder</a></h5>');
-      setupNewBtns();
-    } else {
-      $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
-    }
+    //if (!ngw.isFilesScreenOn) {
+      if (client.isAuthenticated()) {
+        loadDir(ngw.path);
+        $('#fileScreenToolbar').html('<h5><a id="newFile" href="#" class="btn">Create New Note</a><a id="newFolder" href="#" class="btn">Create New Folder</a></h5>');
+        setupNewBtns();
+      } else {
+        $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
+      }
   });
+  loadDir(ngw.path);
 
   // Load Directory
   function loadDir(path) {
@@ -146,6 +149,7 @@ $(document).ready(function() {
           return showError(err);
         }
         $('#fileList').html('');
+        $('#fileList').css('margin-left', 9999);
         if (path.length > 0) {
           var pathArray = path.split('/');
           var link = '';
@@ -161,7 +165,6 @@ $(document).ready(function() {
         } else {
           $('#path').html('');
         }
-        $('#fileList').css('margin-left', 9999);
         $.each(dir, function(index, value) {
           var type = dirstat[index].isFolder ? 'folder' : 'file';
           $('#fileList').append('<li class="' + type + '"><a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="delete floatR" data-file="' + dir[index] + '">(Delete)</a></li>');
@@ -170,7 +173,7 @@ $(document).ready(function() {
         ngw.path = path;
         openFile(path);
         setTimeout(function(){
-          $('#fileList').removeAttr('style');//css('margin-left', 0);
+          $('#fileList').removeAttr('style');
         }, 200);
       });
     }
@@ -318,6 +321,7 @@ $(document).ready(function() {
         closeAll();
       });
   }
+  ngw.loadFile = loadFile;
 
   
   // Saves File
