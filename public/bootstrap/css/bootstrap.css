@@ -9085,10 +9085,9 @@ body #footer {
   right: 999em;
   bottom: 1em;
   z-index: 10000;
-  width: 20px;
-  height: 20px;
-  background: url("../../images/printer.png") no-repeat;
-  background-size: 20px;
+  font-size: 25px;
+  color: black;
+  text-decoration: none;
   opacity: 0.5;
   filter: alpha(opacity=50);
   -webkit-transition: all 0.5s ease;
@@ -9098,6 +9097,7 @@ body #footer {
 }
 
 #print:hover {
+  text-decoration: none;
   opacity: 1;
   filter: alpha(opacity=100);
 }
@@ -9325,6 +9325,10 @@ body #footer {
           transition: all 0.5s ease;
 }
 
+#footer .footer-screen #fileList li i {
+  color: white;
+}
+
 #footer .footer-screen #fileList li a {
   -webkit-transition: all 0.5s ease;
      -moz-transition: all 0.5s ease;
@@ -9337,29 +9341,21 @@ body #footer {
 }
 
 #footer .footer-screen #fileList li.folder {
-  padding-left: 20px;
   list-style-type: none;
-  background: url('../../images/folder.png') no-repeat left;
-  background-size: 12px;
 }
 
 #footer .footer-screen #fileList li.folder:hover {
   color: black;
-  background: url('../../images/folder.png') #222222 no-repeat left;
-  background-size: 12px;
+  background: #222222;
 }
 
 #footer .footer-screen #fileList li.file {
-  padding-left: 20px;
   list-style-type: none;
-  background: url('../../images/doc.png') no-repeat left;
-  background-size: 12px;
 }
 
 #footer .footer-screen #fileList li.file:hover {
   color: black;
-  background: url('../../images/doc.png') #222222 no-repeat left;
-  background-size: 12px;
+  background: #222222;
 }
 
 #footer .footer-screen #fileScreenToolbar {

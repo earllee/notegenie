@@ -167,7 +167,8 @@ $(document).ready(function() {
         }
         $.each(dir, function(index, value) {
           var type = dirstat[index].isFolder ? 'folder' : 'file';
-          $('#fileList').append('<li class="' + type + '"><a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="delete floatR" data-file="' + dir[index] + '">(Delete)</a></li>');
+          var icon = dirstat[index].isFolder ? 'folder-close' : 'file';
+          $('#fileList').append('<li class="' + type + '"><i class="icon-' + icon + '"></i> <a class="' + type + '" href="#">' + dir[index] + '</a><a href="#" class="delete floatR" data-file="' + dir[index] + '">(Delete)</a></li>');
         });
         ngw.dblclick = false;
         ngw.path = path;

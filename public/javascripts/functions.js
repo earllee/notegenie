@@ -103,7 +103,6 @@ $(document).ready(function() {
         savedText = savedText.replace(/[ ]{2,}/gi," ");
         savedText = savedText.replace(/\n /,"\n");
       }
-      //$('#input').val(savedText);
     }
   } 
 

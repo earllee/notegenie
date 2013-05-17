@@ -85,16 +85,16 @@ html, body {
 
 #print {
   .opacity(50);
-  background: url("../../images/printer.png") no-repeat;
-  background-size: 20px;
-  height: 20px;
-  width: 20px;
+  color: black;
+  font-size: 25px;
   position: absolute;
   bottom: 1em;
   right: 999em;
   z-index: 10000;
+  text-decoration: none;
   .transition(all 0.5s ease);
   &:hover {
+    text-decoration: none;
     .opacity(100);
   }
 }
@@ -271,28 +271,25 @@ html, body {
       }
         .transition(all 0.5s ease);
       li {
+        i {
+          color: white;
+        }
         a { .transition(all 0.5s ease); }
         .delete { color: @red; }
         .transition(all 0.5s ease);
         &.folder {
           list-style-type: none;
-          background: url('../../images/folder.png') no-repeat left;
-          background-size: 12px;
-          padding-left: 20px;
           &:hover {
             color: black;
-            background-size: 12px;
-            background: url('../../images/folder.png') @grayDarker no-repeat left;}
+            background: @grayDarker;
+          }
         }
         &.file {
           list-style-type: none;
-          background: url('../../images/doc.png') no-repeat left;
-          background-size: 12px;
-          padding-left: 20px;
           &:hover {
             color: black;
-            background-size: 12px;
-            background: url('../../images/doc.png') @grayDarker no-repeat left;}
+            background: @grayDarker;
+          }
         }
       }
     }
