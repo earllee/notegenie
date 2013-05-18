@@ -1,5 +1,3 @@
-var KEYCODE_S = 83;
-
 $(document).ready(function() {
   var ngw = window.ngw || (window.ngw = {
     isFooterScreenOn : false, //footerScreenModeOn
@@ -49,7 +47,7 @@ $(document).ready(function() {
       login();
     } else {
       client.signOut(function(){
-        clearTextarea();
+        reset();
         $('#login').html('Login');
         $('#save').attr('disabled', 'true');
       });
@@ -59,10 +57,10 @@ $(document).ready(function() {
   // Clear Textarea
   $('#clear').on('click', function() {
     if (client.isAuthenticated()) {
-      setupModal([function(){saveFile(null, null, function(){clearTextarea(); ngw.path = '';}); clearTextarea(); ngw.path = '';}, function(){clearTextarea(); ngw.path = '';}, function(){}],
+      setupModal([function(){saveFile(null, null, function(){reset(); ngw.path = '';}); reset(); ngw.path = '';}, function(){reset(); ngw.path = '';}, function(){}],
       ['Save & Clear', 'Clear', 'Close'], ['success', 'danger'], null, 'Are you sure you want to clear the note pad without saving?');
     } else {
-      clearTextarea();
+      reset();
       ngw.path = '';
     }
   });
@@ -119,7 +117,7 @@ $(document).ready(function() {
     // Create New Note
     $('#newFile').on('click', function(e){
       checkExists(ngw.path, 'New Note.txt', function(path, newFileName){
-        clearTextarea(null, ngw.path + newFileName, function(){
+        reset(null, ngw.path + newFileName, function(){
           saveFile(null, null, function(){loadDir(ngw.path);});
         });
       });
@@ -128,16 +126,14 @@ $(document).ready(function() {
 
   // Read Directory
   $('#files').on('click', function(e) {
-    //if (!ngw.isFilesScreenOn) {
-      if (client.isAuthenticated()) {
-        loadDir(ngw.path);
-        $('#fileScreenToolbar').html('<h5><a id="newFile" href="#" class="btn">Create New Note</a><a id="newFolder" href="#" class="btn">Create New Folder</a></h5>');
-        setupNewBtns();
-      } else {
-        $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
-      }
+    if (client.isAuthenticated()) {
+      loadDir(ngw.path);
+      $('#fileScreenToolbar').html('<h5><a id="newFile" href="#" class="btn">Create New Note</a><a id="newFolder" href="#" class="btn">Create New Folder</a></h5>');
+      setupNewBtns();
+    } else {
+      $('#currentFile').html('<h3>Before saving and loading files, you need to log in with a Dropbox account first.</br></br>Files will be saved to "Dropbox/App/NoteGenie/".</h3>');
+    }
   });
-  loadDir(ngw.path);
 
   // Load Directory
   function loadDir(path) {
@@ -149,7 +145,6 @@ $(document).ready(function() {
           return showError(err);
         }
         $('#fileList').html('');
-        $('#fileList').css('margin-left', 9999);
         if (path.length > 0) {
           var pathArray = path.split('/');
           var link = '';
@@ -172,7 +167,7 @@ $(document).ready(function() {
         });
         ngw.dblclick = false;
         ngw.path = path;
-        openFile(path);
+        setupFileList(path);
         setTimeout(function(){
           $('#fileList').removeAttr('style');
         }, 200);
@@ -180,11 +175,11 @@ $(document).ready(function() {
     }
 
   // Sets up click handlers for opening files
-  function openFile(path){
+  function setupFileList(path) {
     path = path || ngw.path;
     $('a.file').on('click', function(e) {
       console.log(e);
-      setTimeout(function(){
+      setTimeout(function() {
         if (!ngw.dblclick) {
           var fileName = e.target.text || e.target.children[0].text;
           e.preventDefault();
@@ -197,7 +192,7 @@ $(document).ready(function() {
         }
       }, 300);
     });
-    $('a.file').on('dblclick', function(){
+    $('a.file').on('dblclick', function() {
       setupRename(this, 'file');
     });
     $('a.folder').on('click', function(e) {
@@ -209,12 +204,12 @@ $(document).ready(function() {
         } 
       }, 300);
     });
-    $('a.folder').on('dblclick', function(){
+    $('a.folder').on('dblclick', function() {
       setupRename(this, 'folder');
     });
-    $('.delete').on('click', function(e){
+    $('.delete').on('click', function(e) {
       function deleteFile (path, e) {
-        client.remove(path + e.target.dataset.file, function(){
+        client.remove(path + e.target.dataset.file, function() {
           $(e.target.parentNode).css('height', 0).css('margin-left', 9999);
           setTimeout(function() {
             $(e.target.parentNode).remove();
@@ -236,7 +231,7 @@ $(document).ready(function() {
             rename(ngw.path, name, $(this).val(), function(newFileName){
               $('#renameBox').replaceWith('<a class="' + type + '" href="#">' + newFileName +'</a>');
               ngw.dblclick = false;
-              openFile(); // Reinitialize file link handlers
+              setupFileList(); // Reinitialize file link handlers
             });
           }
         });
@@ -244,11 +239,12 @@ $(document).ready(function() {
           rename(ngw.path, name, $(this).val(), function(newFileName){
             $('#renameBox').replaceWith('<a class="' + type + ' href="#">' + newFileName +'</a>');
             ngw.dblclick = false;
-            openFile();
+            setupFileList();
           });
         });
       }
   }
+
   function rename(path, fileName, newFileName, callback) {
     client.move(path + fileName, path + newFileName, function(err, stat){
       if (err)
@@ -274,7 +270,7 @@ $(document).ready(function() {
   // Creates New Notepad
   // Do NOT pass params besides callback function.
   // @param path, fileName exist for consistency
-  function clearTextarea(path, fileName, callback) { 
+  function reset(path, fileName, callback) { 
     fileName = fileName || '';
     $('#fileName').val(fileName);
     $('#input').val('');
@@ -285,7 +281,7 @@ $(document).ready(function() {
     if (callback)
       callback();
   }
-  ngw.clearTextarea = clearTextarea;
+  ngw.reset = reset;
 
   function createNewFolder(path, name) {
     path = path || '';
@@ -302,7 +298,7 @@ $(document).ready(function() {
             newFolderLI.css('margin-left', 0);
             newFolderA.css('color', '#9d261d');
           }, 100);
-          openFile(path);
+          setupFileList(path);
       });
     });
   }
