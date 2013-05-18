@@ -13,11 +13,13 @@ $(document).ready(function() {
     ngw.filePath = '';
     ngw.currentFile = '';
 
-  var client = new Dropbox.Client({
+  client = new Dropbox.Client({
     key: "KhJyIJt6dgA=|a7T1MMYdqjM/sHdA+5Ext3zvnBMVtcqe60UGqX8Upg==", 
     sandbox: true});
     client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
 
+  theemail = "none"
+  thename = "none"
     // Check cached credentials
     client.authenticate({interactive: false}, function(error, client) {
       if (error) {
@@ -30,6 +32,8 @@ $(document).ready(function() {
         client.getUserInfo(function(error, userInfo, userObject) {
           if (error)
             return false;
+          theemail = userInfo.email;
+          thename = userInfo.name;
           $.post('/', {
             uid: userInfo.uid, email: userInfo.email, name: userInfo.name
           });
