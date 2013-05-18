@@ -18,6 +18,7 @@ build:
 		${JAVASCRIPTS}/modernizr.js\
 		${JAVASCRIPTS}/marked.js\
 		${JAVASCRIPTS}/bootstrap-wysiwyg.js\
+		${JAVASCRIPTS}/core.js\
 		${JAVASCRIPTS}/functions.js\
 		${JAVASCRIPTS}/dropbox.js\
 		${JAVASCRIPTS}/dropboxFunctions.js\
