@@ -12,6 +12,7 @@ try {
 } catch(err){}
 
 var MONGO_PASS = process.env.MONGO_PASS || keys.MONGO_PASS;
+var GMAIL_PASS = process.env.GMAIL_PASS || keys.GMAIL_PASS;
 
 mongoose.connect('mongodb://nodejitsu_earllee:' + MONGO_PASS + '@ds051977.mongolab.com:51977/nodejitsu_earllee_nodejitsudb9586039269');
 var db = mongoose.connection;
@@ -27,7 +28,7 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
     service: "Gmail",
     auth: {
         user: "notegenie.email@gmail.com",
-        pass: THEPASSWORD
+        pass: GMAIL_PASS
     }
 });
 
@@ -77,23 +78,24 @@ app.post('/email', function(req, res){
   var thename = unescape(req.body.name);
   var thefilename = unescape(req.body.filename);
 
-// setup e-mail data with unicode symbols
-var mailOptions = {
-    from: thename + " " + theemail, // sender address
-    to: theemail, // list of receivers
-    subject: "[NoteGenie] " + thefilename, // Subject line
-    text: thetext, // plaintext body
-    html: thehtml // html body
-}
-// send mail with defined transport object
-smtpTransport.sendMail(mailOptions, function(error, response){
-    if(error){
-        console.log(error);
-    }else{
-        console.log("Message sent: " + response.message);
-    }
-    //smtpTransport.close(); // shut down the connection pool, no more messages
-});
+  // setup e-mail data with unicode symbols
+  var mailOptions = {
+      from: thename + " " + theemail, // sender address
+      to: theemail, // list of receivers
+      subject: "[NoteGenie] " + thefilename, // Subject line
+      text: thetext, // plaintext body
+      html: thehtml // html body
+  };
+
+  // send mail with defined transport object
+  smtpTransport.sendMail(mailOptions, function(error, response){
+      if(error){
+          console.log(error);
+      } else {
+          console.log("Message sent: " + response.message);
+      }
+      //smtpTransport.close(); // shut down the connection pool, no more messages
+  });
   res.end();
 });
 
