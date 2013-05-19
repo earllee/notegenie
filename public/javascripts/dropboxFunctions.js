@@ -18,8 +18,9 @@ $(document).ready(function() {
     sandbox: true});
     client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
 
-  theemail = "none"
-  thename = "none"
+    theemail = "none";
+    thename = "none";
+
     // Check cached credentials
     client.authenticate({interactive: false}, function(error, client) {
       if (error) {

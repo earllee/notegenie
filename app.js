@@ -70,8 +70,6 @@ app.post('/', function(req, res){
 });
 
 app.post('/email', function(req, res){
-  console.log("email rec'd");
-  console.log(req.body);
   var theemail = unescape(req.body.email);
   var thetext = unescape(req.body.content);
   var thehtml = unescape(req.body.formatted);
@@ -92,7 +90,7 @@ app.post('/email', function(req, res){
       if(error){
           console.log(error);
       } else {
-          console.log("Message sent: " + response.message);
+          console.log('Message "' + thefilename + '" to ' + theemail);
       }
       //smtpTransport.close(); // shut down the connection pool, no more messages
   });

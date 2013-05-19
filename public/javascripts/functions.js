@@ -177,35 +177,29 @@ $(document).ready(function() {
       } else if (ngw.isSoundOn)
         playSound('key');
     });
-  // email functionality
-  $('#email').on('click', function(e) {
-     e.preventDefault();
 
-     if (!client.isAuthenticated() || theemail === "none" || thename === "none")
-     {
-         alert("you must log in with dropbox to email your notes");
-         return false;
-     }
+    // Email button 
+    $('#email').on('click', function(e) {
+      e.preventDefault();
 
-     if (!ngw.isPreviewOn)
-     {
-         alert("you must be in preview mode to email your notes");
-         return false;
-     }
+      if (!client.isAuthenticated() || theemail === "none" || thename === "none")
+      setupModal([function(){}], ['Close'], [], [], 'You must log in with Dropbox to email notes.');
 
-     thecontent = $('#input').val();
-     formattednotes = $('#preview').html();
-     thefilename = $('#fileName').val();
+      if (!ngw.isPreviewOn)
+      togglePreviewMode();
 
-     if (!thefilename || thefilename === "")
-          thefilename = "Notes from NoteGenie"
-     $.post('/email', {
-       email: theemail, name: thename, content:thecontent,
-          filename: thefilename, formatted: formattednotes
-     });
-     alert("Email sent");
-     return false;
-  });
+      thecontent = $('#input').val();
+      formattednotes = $('#preview').html();
+      thefilename = $('#fileName').val();
+
+      if (!thefilename || thefilename === '')
+      thefilename = 'Notes from NoteGenie';
+      $.post('/email', {
+        email: theemail, name: thename, content:thecontent,
+        filename: thefilename, formatted: formattednotes
+      });
+      setupModal([function(){togglePreviewMode();}, function(){}], ['Return to edit', 'Close'], ['success'], [], 'Email sent. Check the email you use to log into Dropbox.');
+    });
 
   // Markdown preview
   $(document).on("keydown", function(e) {
