@@ -421,7 +421,7 @@ function autoType(text, input) {
     if(textArray.length > 0) {
       if (textArray[0] == '\n' && ngw.isSoundOn)
         playSound('enter');
-      else if (ngw.isSoundOn)//if (i % 3 === 0)// textArray[0] != ' ')
+      else if (ngw.isSoundOn)
         playSound('key');
       $('#input').val($('#input').val() + textArray.shift()); 
       // Handle description pasting
@@ -489,18 +489,16 @@ function setupModal(actions, actionNames, colors, params, content) {
     };
   }
 
-  if (params === null) {
+  if (params === null)
     params = new Array(actions.length);
-  }
 
   $('[id^=alertBoxAction]').remove();
   $('#alertContent').html(content);
   for (var i = 0; i < actions.length; i++) {
     $('#alertBox').append('<a id="alertBoxAction' + i + '" class="btn">' + actionNames[i] + '</a>'); 
     $('#alertBoxAction' + i + '').off('click').on('click', makeAction(actions[i])); // Initiate button triggers
-    if (colors[i]) {  // Give button color
+    if (colors[i])  // Give button color
       $('#alertBoxAction' + i + '').addClass('btn-' + colors[i] + '');
-    }
   }
   $('[id="alertBox"]').fadeIn();
 }
