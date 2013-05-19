@@ -177,7 +177,35 @@ $(document).ready(function() {
       } else if (ngw.isSoundOn)
         playSound('key');
     });
+  // email functionality
+  $('#email').on('click', function(e) {
+     e.preventDefault();
 
+     if (!client.isAuthenticated() || theemail === "none" || thename === "none")
+     {
+         alert("you must log in with dropbox to email your notes");
+         return false;
+     }
+
+     if (!ngw.isPreviewOn)
+     {
+         alert("you must be in preview mode to email your notes");
+         return false;
+     }
+
+     thecontent = $('#input').val();
+     formattednotes = $('#preview').html();
+     thefilename = $('#fileName').val();
+
+     if (!thefilename || thefilename === "")
+          thefilename = "Notes from NoteGenie"
+     $.post('/email', {
+       email: theemail, name: thename, content:thecontent,
+          filename: thefilename, formatted: formattednotes
+     });
+     alert("Email sent");
+     return false;
+  });
 
   // Markdown preview
   $(document).on("keydown", function(e) {
