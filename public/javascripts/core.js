@@ -141,7 +141,11 @@ wikipediaPage = wikipediaPage.substring(amatch_numlist[0].length);
           text = text.replace(tags, "");
 
           if (text.length > 3 && (text.substring(text.length-3) == "to:"))
-          throw "disambiguation";
+             throw "disambiguation";
+	  if (text.indexOf(" may refer to ") > -1)
+          {
+             throw "disambiguation";
+          }
 
           var citations = /(\[([^\]]+)\])/ig; //Finds bracketed citations
           text = text.replace(citations, "");
