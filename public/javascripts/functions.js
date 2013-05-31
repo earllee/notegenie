@@ -182,8 +182,10 @@ $(document).ready(function() {
     $('#email').on('click', function(e) {
       e.preventDefault();
 
-      if (!client.isAuthenticated() || theemail === "none" || thename === "none")
-      setupModal([function(){}], ['Close'], [], [], 'You must log in with Dropbox to email notes.');
+      if (!client.isAuthenticated() || theemail === "none" || thename === "none") {
+        setupModal([function(){}], ['Close'], [], [], 'You must log in with Dropbox to email notes.');
+        return;
+      }
 
       if (!ngw.isPreviewOn)
       togglePreviewMode();
