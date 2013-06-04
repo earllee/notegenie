@@ -390,7 +390,9 @@ function togglePreviewMode() {
     texttouse = texttouse.replace(notlist, "\n$5\n");
 
     var tokens = marked.lexer(texttouse);
-    preview.html(marked.parser(tokens));
+    var html = marked.parser(tokens);
+    html = html_sanitize(html);
+    preview.html(html);
     preview.css('opacity', 1);
     preview.css('visibility', 'visible');
     $('body, html').css('background','white');

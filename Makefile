@@ -15,6 +15,7 @@ build:
 	@echo "Compiling LESS with Recess...               ${CHECK} Done"
 	@uglifyjs ${BOOTSTRAP}/js/bootstrap.js\
 		${JAVASCRIPTS}/jquery.hoverIntent.js\
+		${JAVASCRIPTS}/html-sanitizer-minified.js\
 		${JAVASCRIPTS}/modernizr.js\
 		${JAVASCRIPTS}/marked.js\
 		${JAVASCRIPTS}/bootstrap-wysiwyg.js\
