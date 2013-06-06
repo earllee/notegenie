@@ -187,20 +187,23 @@ $(document).ready(function() {
         return;
       }
 
+      var temp = ngw.isPreviewOn; // Save status of editor
       if (!ngw.isPreviewOn)
-      togglePreviewMode();
+        togglePreviewMode();
 
       thecontent = $('#input').val();
       formattednotes = $('#preview').html();
       thefilename = $('#fileName').val();
 
       if (!thefilename || thefilename === '')
-      thefilename = 'Notes from NoteGenie';
+        thefilename = 'Notes from NoteGenie';
       $.post('/email', {
         email: theemail, name: thename, content:thecontent,
         filename: thefilename, formatted: formattednotes
       });
       setupModal([function(){togglePreviewMode();}, function(){}], ['Return to edit', 'Close'], ['success'], [], 'Email sent. Check the email you use to log into Dropbox.');
+      if (temp !== ngw.isPreviewOn)
+        togglePreviewMode();
     });
 
   // Markdown preview
