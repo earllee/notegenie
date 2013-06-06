@@ -116,16 +116,12 @@ $(document).ready(function() {
   function setupNewBtns(){
     // Create New Folder
     $('#newFolder').on('click', function(){
-      createNewFolder(ngw.path);
+      createNew(ngw.path, null, 'folder');
     });
 
     // Create New Note
     $('#newFile').on('click', function(e){
-      checkExists(ngw.path, 'New Note.txt', function(path, newFileName){
-        reset(null, ngw.path + newFileName, function(){
-          saveFile(null, null, function(){loadDir(ngw.path);});
-        });
-      });
+      createNew(ngw.path, null, 'file');
     });
   }
 
@@ -288,24 +284,39 @@ $(document).ready(function() {
   }
   ngw.reset = reset;
 
-  function createNewFolder(path, name) {
+  function createNew(path, name, type) {
     path = path || '';
-    name = name || 'New Folder';
-    
+    name = name || '';
+    if (name === '')
+      name = (type === 'folder') ? 'New Folder' : 'New File';
+
     checkExists(path, name, function(path, name) {
-      client.mkdir(path + name, function(err, stat) {
-        if (err)
-          showError(err);
-          $('#fileList').append('<li class="folder" style="margin-left: -9999px"><a class="folder" href="#">' + name + '</a><a href="#" style="color: black;" class="floatR delete" data-file="' + name + '">(Delete)</a></li>');
-          var newFolderLI = $('li.folder:last-child');
-          var newFolderA = $('a.delete:last-child');
-          setTimeout(function() {
-            newFolderLI.css('margin-left', 0);
-            newFolderA.css('color', '#9d261d');
-          }, 100);
-          setupFileList(path);
-      });
+      if (type === 'folder')
+        client.mkdir(path + name, function(err, stat) {
+          if (err) 
+            showError(err);
+          setupNew(name, type);
+        });
+      else
+        client.writeFile(path + name, '', function(err, stat) {
+          if (err)
+            showError(err);
+          setupNew(name, type);
+        });
     });
+  }
+
+  function setupNew(name, type) {
+    var icon = (type === 'folder') ? 'folder-close' : 'file';
+    $('#fileList').append('<li class="' + type + '" style="margin-left: -9999px"><i class="icon-' + icon + '"></i> <a class="' + type + '" href="#">' + name + '</a><a href="#" style="color: black;" class="floatR delete" data-file="' + name + '">(Delete)</a></li>');
+    var newItemLI = $('li.' + type + ':last-child');
+    var newItemA = $('a.delete:last');
+    setTimeout(function() {
+      newItemLI.css('margin-left', 0);
+      newItemA.css('color', '#9d261d');
+    }, 100);
+    setupFileList(path);  // Can isolate to only setup clicks for this particular folder
+    setupRename(newItemLI.children('a:first'), type);
   }
 
   // Loads File
@@ -335,11 +346,7 @@ $(document).ready(function() {
     ngw.currentFile = ngw.currentFile.replace(/^\s+/,"");
     ngw.currentFile = ngw.currentFile.replace(/\s+$/,"");
 
-    if (ngw.currentFile.length === 0)
-    ; 
-    if (ngw.currentFile.length - 4 != ngw.currentFile.indexOf('.txt'))  // Ensure txt file
-      ngw.currentFile += '.txt';
-      client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
+    client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
       if (err)
         showError(err); 
       else {
@@ -347,7 +354,7 @@ $(document).ready(function() {
         $('#fileName').val(ngw.currentFile);
         localStorage.setItem('currentFile', ngw.currentFile);
         if (callback)
-          callback();
+        callback();
       }
     }); 
   }
