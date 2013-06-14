@@ -6,8 +6,8 @@ var KEYCODE_BACKSPACE = 8;
 var KEYCODE_M = 77;
 var KEYCODE_S = 83;
 
-$(document).ready(function() {
-
+//$(document).ready(function() {
+$(window).bind("load", function(){
   // ngw is an object that stores variables to the browser window. Used to communicate some variables with functionsDropbox.js.
   var ngw = window.ngw || (window.ngw = {
     isFooterScreenOn : false,
@@ -82,8 +82,16 @@ $(document).ready(function() {
   $('#print').on('click', function(){ printDiv('preview'); });
 
   // Retrieve and set saved text
-  if (Modernizr.localstorage && localStorage.getItem('text')) {
-    var savedText = "";
+  var urlDoc;
+  var savedText;
+  if ((urlDoc = $.getURLParam.doc)) { // If URL is for specific doc
+  console.log('This is urlDoc: ' + urlDoc);
+    ngw.path = urlDoc.substr(1, urlDoc.lastIndexOf('/'));
+    ngw.loadFile(urlDoc.substr(urlDoc.lastIndexOf('/') + 1), function(){
+      if ((savedText = localStorage.getItem(hash(urlDoc.substr(1)))))
+        $('#input').val(savedText);
+    });
+  } else if (Modernizr.localstorage && localStorage.getItem('text')) {
     try {
       savedText = localStorage.getItem('text');
     } catch(e) {}
@@ -110,7 +118,10 @@ $(document).ready(function() {
   try {
     if(localStorage.getItem('firstTime') === 'false')
       setInterval(function() {
-        localStorage.setItem('text', $('#input').val());
+        if (ngw.currentFile !== '')
+          localStorage.setItem(ngw.fileHash, $('#input').val());
+        else
+          localStorage.setItem('text', $('#input').val());
       }, 2000);
   } catch(e) {console.log('Could not save.');}
 

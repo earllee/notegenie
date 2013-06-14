@@ -10,8 +10,8 @@ $(document).ready(function() {
 
     ngw.dblclick = false;
     ngw.path = '';
-    ngw.filePath = '';
     ngw.currentFile = '';
+    ngw.fileHash = hash(ngw.currentFile);
 
   client = new Dropbox.Client({
     key: "KhJyIJt6dgA=|a7T1MMYdqjM/sHdA+5Ext3zvnBMVtcqe60UGqX8Upg==", 
@@ -53,6 +53,7 @@ $(document).ready(function() {
     } else {
       client.signOut(function(){
         reset();
+        localStorage.clear();
         $('#login').html('Login');
         $('#save').attr('disabled', 'true');
       });
@@ -179,7 +180,6 @@ $(document).ready(function() {
   function setupFileList(path) {
     path = path || ngw.path;
     $('a.file').on('click', function(e) {
-      console.log(e);
       setTimeout(function() {
         if (!ngw.dblclick) {
           var fileName = e.target.text || e.target.children[0].text;
@@ -320,17 +320,25 @@ $(document).ready(function() {
   }
 
   // Loads File
-  function loadFile(fileName) {
+  function loadFile(fileName, callback) {
     client.readFile(ngw.path + fileName, {httpCache: true}, 
-      function(err, file, stat, rangeInfo){
+      function(err, file, dbStat, rangeInfo){
+        client.stat(ngw.path + fileName, null, function(err, stat, arrStat) {
+          var URIComponent = encodeURIComponent(stat.path);
+          window.history.pushState({}, '', '?doc=' + URIComponent);
+          console.log('This is stat.path: ' + stat.path);
+        });
         if (err)
           return showError(err);
         ngw.currentFile = ngw.path + fileName;
+        ngw.fileHash = hash(ngw.currentFile);
         $('#input').val(file);
         $('#fileName').val(ngw.currentFile);
         $('#fileName').attr('disabled', 'true');
         $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
         localStorage.setItem('currentFile', ngw.currentFile);
+        console.log('This is ngw.currentFile ' + ngw.currentFile);
+        callback();
         closeAll();
       });
   }
@@ -346,6 +354,8 @@ $(document).ready(function() {
     ngw.currentFile = ngw.currentFile.replace(/^\s+/,"");
     ngw.currentFile = ngw.currentFile.replace(/\s+$/,"");
 
+    ngw.fileHash = hash(ngw.currentFile);
+
     client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
       if (err)
         showError(err); 
@@ -353,6 +363,7 @@ $(document).ready(function() {
         $('#fileName').attr('disabled', 'true');
         $('#fileName').val(ngw.currentFile);
         localStorage.setItem('currentFile', ngw.currentFile);
+        localStorage.setItem(ngw.fileHash, $('#input').val());
         if (callback)
         callback();
       }
