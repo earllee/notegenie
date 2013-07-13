@@ -1,4 +1,13 @@
+.container { padding-top: 2em; }
+.highlight { background-color: yellow }
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.navbar-fixed-top { position: fixed; }
+
 body {
+  padding-top: 2em;
 	color: #585858;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 100%;
@@ -28,7 +37,7 @@ body {
 	width: 222px;
 	float: left;
 }
-#content-col {
+.content-col {
 	margin: 0 0 0 30px;
 	width: 726px;
 	float: left;
@@ -40,7 +49,7 @@ body {
 }
 
 /*Conditional*/
-body.narrow #content-col {
+body.narrow .content-col {
 	padding: 0 14px 0 0;
 	width: 474px;
 	float: left;
@@ -83,30 +92,6 @@ body.yalecollege #header h1 {
 }
 
 /*Search*/
-#search {
-	margin: 5px 0;
-	padding: 1px;
-	width: 218px;
-	float: right;
-	border: 1px solid #85a6c9;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-}
-#search label {
-	display: none;
-}
-#search .searchbox {
-	padding: 0 0.1em;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 0.75em;
-	color: #85a6c9;
-	width: 185px;
-	height: 21px;
-	float: left;
-	background: 0;
-	border: 0;
-}
 .submit {
 	text-indent: -9999em;
 	border: 0;
@@ -365,147 +350,147 @@ body.yalecollege #header h1 {
 }
 
 /*Content*/
-#content a {
+.content a {
 	color: #4477aa;
 	text-decoration: none;
 }
 /*General Typography*/
-#content h1 {font-size: 2.25em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
-#content h2 {font-size: 1.875em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
-#content h3 {font-size: 1.5em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
-#content h4 {font-size: 1.225em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
-#content h5 {font-size: 0.9375em; margin: 0 0 .25em 0; font-weight: bold;}
-#content h6 {font-size: 0.8125em; margin: 0 0 .25em 0; font-weight: bold;}
-#content p, #content dl {font-size: 0.8125em; margin: 0 0 1em 0;}
-#content ul {font-size: 0.8125em; list-style: disc; margin: 0 0 .5em 25px;}
-#content ol {font-size: 0.8125em; list-style: decimal; margin: 0 0 .5em 25px;}
-#content ol li, #content ul li {margin: 0 0 .5em 0;}
-#content li br {margin: 0 0 .5em 0;}
-#content ul li ul, #content ol li ol {font-size: 1em;}
-#content ol li ul, #content ul li ol {font-size: 1em;}
-#content li p, #content ul table, #content ol table {font-size: 1em;}
-#content sup {font-size: .8em; vertical-align: super; line-height: 1;}
-#content hr {display: block; height: 1px; border: 0; border-top: 1px solid #ededed; margin: 1em 0; padding: 0;}
+.content h1 {font-size: 2.25em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
+.content h2 {font-size: 1.875em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
+.content h3 {font-size: 1.5em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
+.content h4 {font-size: 1.225em; margin: 0 0 .25em 0; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; line-height: 1.2;}
+.content h5 {font-size: 0.9375em; margin: 0 0 .25em 0; font-weight: bold;}
+.content h6 {font-size: 0.8125em; margin: 0 0 .25em 0; font-weight: bold;}
+.content p, .content dl {font-size: 0.8125em; margin: 0 0 1em 0;}
+.content ul {font-size: 0.8125em; list-style: disc; margin: 0 0 .5em 25px;}
+.content ol {font-size: 0.8125em; list-style: decimal; margin: 0 0 .5em 25px;}
+.content ol li, .content ul li {margin: 0 0 .5em 0;}
+.content li br {margin: 0 0 .5em 0;}
+.content ul li ul, .content ol li ol {font-size: 1em;}
+.content ol li ul, .content ul li ol {font-size: 1em;}
+.content li p, .content ul table, .content ol table {font-size: 1em;}
+.content sup {font-size: .8em; vertical-align: super; line-height: 1;}
+.content hr {display: block; height: 1px; border: 0; border-top: 1px solid #ededed; margin: 1em 0; padding: 0;}
 
 /*Nested Ordered Lists*/
-#content ol ol {list-style: lower-alpha;}
-#content ol ol ol {list-style: lower-roman;}
-#content ol ol li:first-child, #content ol ol ol li:first-child {margin-top: .5em;}
+.content ol ol {list-style: lower-alpha;}
+.content ol ol ol {list-style: lower-roman;}
+.content ol ol li:first-child, .content ol ol ol li:first-child {margin-top: .5em;}
 
 /*Nested Unordered Lists*/
-#content ul ul li:first-child, #content ul ul ul li:first-child {margin-top: .5em;}
+.content ul ul li:first-child, .content ul ul ul li:first-child {margin-top: .5em;}
 
 /*Blockquotes*/
-#content blockquote {margin: 0 0 .25em 0;  padding: 0;}
-#content blockquote p {line-height: 1.5;}
-#content blockquote cite {display: block; font-size: 0.8125em;}
-#content blockquote cite:before {content: "\2014 \0020";}
-#content blockquote cite a, blockquote cite a:visited, blockquote cite a:visited {color: #ededed;}
+.content blockquote {margin: 0 0 .25em 0;  padding: 0;}
+.content blockquote p {line-height: 1.5;}
+.content blockquote cite {display: block; font-size: 0.8125em;}
+.content blockquote cite:before {content: "\2014 \0020";}
+.content blockquote cite a, blockquote cite a:visited, blockquote cite a:visited {color: #ededed;}
 
 /*Tables*/
-#content table {font-size: 0.8125em; margin: 0 0 1em 0; border-collapse: collapse; border-spacing: 0; width: 100%;}
-#content th {padding: .3em; vertical-align: top; font-size: 1.5em; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; border-bottom: 1px solid #d2e7f5; text-align: left;}
-#content td {border-top: 1px solid #d2e7f5; padding: .3em; vertical-align: top;}
-#content td img {vertical-align: top;}
-#content td p {margin: 0; font-size: 1em;}
-#content td ul {font-size: 1em;}
+.content table {font-size: 0.8125em; margin: 0 0 1em 0; border-collapse: collapse; border-spacing: 0; width: 100%;}
+.content th {padding: .3em; vertical-align: top; font-size: 1.5em; font-family: 'YaleDesign', Georgia, "Times New Roman", Times, serif; color: #4477aa; border-bottom: 1px solid #d2e7f5; text-align: left;}
+.content td {border-top: 1px solid #d2e7f5; padding: .3em; vertical-align: top;}
+.content td img {vertical-align: top;}
+.content td p {margin: 0; font-size: 1em;}
+.content td ul {font-size: 1em;}
 
 /*Forms*/
-#content form {font-size: 0.8125em; margin: 0 0 1em 0;}
-#content form input, #content form select {font-size: 1em;}
+.content form {font-size: 0.8125em; margin: 0 0 1em 0;}
+.content form input, .content form select {font-size: 1em;}
 
 /*Two Columns*/
-#content .cola {
+.content .cola {
 	width: 358px;
 	float: left;
 }
-#content .colb {
+.content .colb {
 	width: 358px;
 	float: right;
 }
 
 /*Structured Content*/
-#content tr.areaheader td,
-#content td.areaheader,
-#content tr.listsum td,
-#content tr.plangridtotal td,
-#content tr.plangridsum td {
+.content tr.areaheader td,
+.content td.areaheader,
+.content tr.listsum td,
+.content tr.plangridtotal td,
+.content tr.plangridsum td {
 	font-weight: bold;
 }
-#content tr.odd {
+.content tr.odd {
 	background: #fffeee;
 }
-#content tr.orclass td {
+.content tr.orclass td {
 	padding-top: 0;
 	border-top: none;
 }
-#content tr.orclass td.codecol {
+.content tr.orclass td.codecol {
 	padding-left: 1em;
 }
-#content td.hourscol,
-#content th.hourscol {
+.content td.hourscol,
+.content th.hourscol {
 	text-align: right;
 }
 
 /*Footnotes*/
-#content .sc_footnotes {
+.content .sc_footnotes {
 	border: 0;
 }
-#content .sc_footnotes td {
+.content .sc_footnotes td {
 	padding: 0 0 .75em 0;
 	border: 0;
 }
-#content .sc_footnotes td.symcol {
+.content .sc_footnotes td.symcol {
 	width: 15px;
 	font-size: .8em;
 	vertical-align: super;
 }
 
 /*Plan Grid*/
-#content .sc_plangrid tr.plangridterm th {
+.content .sc_plangrid tr.plangridterm th {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 1em;
 	color: #585858;
 	font-weight: bold;
 }
-#content .sc_plangrid th.hourscol,
-#content .sc_plangrid td.hourscol {
+.content .sc_plangrid th.hourscol,
+.content .sc_plangrid td.hourscol {
 	padding-right: .75em;
 }
 
 /*Course Blocks*/
-#content p.courseblocktitle {
+.content p.courseblocktitle {
 	margin: 0;
 	font-weight: bold;
 }
-#content .instructor {
+.content .instructor {
 	font-weight: normal;
 	margin-left: 30px;
 }
 
 /*Calendar*/
-#content table.caltable td {
+.content table.caltable td {
 	min-width: 40px;
 }
-#content table.caltable th {
+.content table.caltable th {
 	font-size: 2em;
 }
 
 /*Key to Course Listings*/
-#content table.tbl_courselistings td.column0 {
+.content table.tbl_courselistings td.column0 {
 	width: 30%;
 }
 
 /*Tabs*/
-#content #tabs ul {
+.content #tabs ul {
 	margin: 0 0 1em 0;
 	list-style: none;
 }
-#content #tabs ul li {
+.content #tabs ul li {
 	font-size: 1em;
 	display: inline;
 }
-#content #tabs ul li a {
+.content #tabs ul li a {
 	margin: 0 5px 5px 0;
 	padding: .75em 1em;
 	font-weight: bold;
@@ -519,24 +504,24 @@ body.yalecollege #header h1 {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 }
-#content #tabs ul li a:hover,
-#content #tabs ul li.active a {
+.content #tabs ul li a:hover,
+.content #tabs ul li.active a {
 	background: #4477aa;
 }
 
 /*A-Z Index*/
-#content ul.letternav {
+.content ul.letternav {
 	margin: 0 0 1em 0;
 	list-style: none;
 }
-#content ul.letternav li {
+.content ul.letternav li {
 	text-transform: uppercase;
 	font-weight: bold;
 	float: left;
 	margin: 0 1px 1px 0;
 }
-#content ul.letternav li a,
-#content ul.letternav li.inactive {
+.content ul.letternav li a,
+.content ul.letternav li.inactive {
 	padding: .25em .6em;
 	color: #fff;
 	text-align: center;
@@ -547,43 +532,43 @@ body.yalecollege #header h1 {
 	border: none;
 	background: #095198;
 }
-#content ul.letternav li.inactive {
+.content ul.letternav li.inactive {
 	background: #999;
 }
-#content ul.letternav li a {
+.content ul.letternav li a {
 	color: white;
 	text-decoration: none;
 	border: none;
 }
-#content ul.letternav li a:hover,
-#content ul.letternav li a:active,
-#content ul.letternav li a:focus {
+.content ul.letternav li a:hover,
+.content ul.letternav li a:active,
+.content ul.letternav li a:focus {
 	background: #4477aa;
 }
 
 /*Image Floats*/
-#content img.imgleft {
+.content img.imgleft {
 	padding: 0 10px 10px 0;
 }
-#content img.imgright {
+.content img.imgright {
 	padding: 0 0 10px 10px;
 }
 
 /*Custom Lists*/
-#content ul.tightlist {list-style: none; margin: 0 0 .5em 0;}
-#content ul.tightlist ul {list-style: none; margin: 0 0 0 25px;}
-#content ul.tightlist li {margin: 0 0 0 0;}
-#content ul.tightlist ul li:first-child, #content ul.tightlist ul ul li:first-child {margin-top: 0;}
+.content ul.tightlist {list-style: none; margin: 0 0 .5em 0;}
+.content ul.tightlist ul {list-style: none; margin: 0 0 0 25px;}
+.content ul.tightlist li {margin: 0 0 0 0;}
+.content ul.tightlist ul li:first-child, .content ul.tightlist ul ul li:first-child {margin-top: 0;}
 
 /*Temporary Fixes*/
-#content p.facultyRankHead {
+.content p.facultyRankHead {
 	margin: 0;
 	font-weight: bold;
 }
-#content #coursestextcontainer h3 {
+.content #coursestextcontainer h3 {
 	margin: 1em 0 .5em 0;
 }
-#content #coursestextcontainer h4 {
+.content #coursestextcontainer h4 {
 	margin: 1em 0 .75em 0;
 }
 
