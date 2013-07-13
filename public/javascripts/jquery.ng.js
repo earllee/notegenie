@@ -17,5 +17,12 @@
 })(jQuery);
 
 function hash(s) {
-  return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a;},0);              
+  return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a;},0);
+}
+
+// Returns true or false depending on if the two input texts are the same
+// Note: get_bool is a new function added to the difflib js library.
+function diff(a, b) {
+  var sm = new difflib.SequenceMatcher(a, b);
+  return sm.get_bool();
 }

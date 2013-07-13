@@ -84,32 +84,33 @@ $(window).bind("load", function(){
   // Retrieve and set saved text
   var urlDoc;
   var savedText;
-  if ((urlDoc = $.getURLParam.doc)) { // If URL is for specific doc
-  console.log('This is urlDoc: ' + urlDoc);
+  if ((urlDoc = $.getURLParam.doc) & client.isAuthenticated()) { // If URL is for specific doc
     ngw.path = urlDoc.substr(1, urlDoc.lastIndexOf('/'));
     ngw.loadFile(urlDoc.substr(urlDoc.lastIndexOf('/') + 1), function(){
       if ((savedText = localStorage.getItem(hash(urlDoc.substr(1)))))
         $('#input').val(savedText);
     });
   } else if (Modernizr.localstorage && localStorage.getItem('text')) {
+    window.history.pushState({}, '', '/'); // Clears URL params in case logged off user attempts to access specific file
+    document.title = 'NoteGenie';
     try {
       savedText = localStorage.getItem('text');
     } catch(e) {}
     if (savedText) {
       var currentFile = '';
       if ((currentFile = localStorage.getItem('currentFile'))) {
-      setupModal([
-      function() {
-        var temp = currentFile.split('/');
-        for (var i = 0; i < temp.length - 1; i++) // Tease out directory path
-          ngw.path += temp[i] + '/';
-        ngw.loadFile(temp[temp.length - 1]);
-        }, 
-      function() {localStorage.setItem('currentFile', '');}], 
-      ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on <strong>' + currentFile + '</strong> last you used NoteGenie. Re-open the file?');
-        savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
-        savedText = savedText.replace(/[ ]{2,}/gi," ");
-        savedText = savedText.replace(/\n /,"\n");
+        setupModal([
+        function() {
+          var temp = currentFile.split('/');
+          for (var i = 0; i < temp.length - 1; i++) // Tease out directory path
+            ngw.path += temp[i] + '/';
+          ngw.loadFile(temp[temp.length - 1]);
+          }, 
+        function() {localStorage.setItem('currentFile', '');}], 
+        ['Re-open', 'Close'], ['success', 'warning'], [currentFile], 'You were working on <strong>' + currentFile + '</strong> last you used NoteGenie. Re-open the file?');
+          savedText = savedText.replace(/(^\s*)|(\s*$)/gi,"");
+          savedText = savedText.replace(/[ ]{2,}/gi," ");
+          savedText = savedText.replace(/\n /,"\n");
       }
     }
   } 
@@ -212,7 +213,7 @@ $(window).bind("load", function(){
         email: theemail, name: thename, content:thecontent,
         filename: thefilename, formatted: formattednotes
       });
-      setupModal([function(){togglePreviewMode();}, function(){}], ['Return to edit', 'Close'], ['success'], [], 'Email sent. Check the email you use to log into Dropbox.');
+      setupModal([function(){togglePreviewMode();}, function(){}], ['Return to edit', 'Close'], ['success'], [], 'Email sent. Check the email you use to opbox.');
       if (temp !== ngw.isPreviewOn)
         togglePreviewMode();
     });

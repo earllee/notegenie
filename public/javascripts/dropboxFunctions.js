@@ -57,6 +57,8 @@ $(document).ready(function() {
         $('#login').html('Login');
         $('#save').attr('disabled', 'true');
       });
+    window.history.pushState({}, '', '/');
+    document.title = 'NoteGenie';
     }
   });
 
@@ -326,7 +328,6 @@ $(document).ready(function() {
         client.stat(ngw.path + fileName, null, function(err, stat, arrStat) {
           var URIComponent = encodeURIComponent(stat.path);
           window.history.pushState({}, '', '?doc=' + URIComponent);
-          console.log('This is stat.path: ' + stat.path);
         });
         if (err)
           return showError(err);
@@ -337,9 +338,10 @@ $(document).ready(function() {
         $('#fileName').attr('disabled', 'true');
         $('#currentFile').html('<h3>You are working on: ' + fileName + '</h3>');
         localStorage.setItem('currentFile', ngw.currentFile);
-        console.log('This is ngw.currentFile ' + ngw.currentFile);
-        callback();
+        document.title = fileName + ' | NoteGenie';
         closeAll();
+        if (callback)
+          callback();
       });
   }
   ngw.loadFile = loadFile;
@@ -354,9 +356,11 @@ $(document).ready(function() {
     ngw.currentFile = ngw.currentFile.replace(/^\s+/,"");
     ngw.currentFile = ngw.currentFile.replace(/\s+$/,"");
 
+    ngw.path = ngw.currentFile.substr(0, ngw.currentFile.lastIndexOf('/'));
+    fileName = ngw.currentFile.substr(ngw.currentFile.lastIndexOf('/') + 1);
     ngw.fileHash = hash(ngw.currentFile);
 
-    client.writeFile(/*path +*/ ngw.currentFile, content, function(err, stat) {
+    client.writeFile(ngw.currentFile, content, function(err, stat) {
       if (err)
         showError(err); 
       else {
@@ -364,8 +368,9 @@ $(document).ready(function() {
         $('#fileName').val(ngw.currentFile);
         localStorage.setItem('currentFile', ngw.currentFile);
         localStorage.setItem(ngw.fileHash, $('#input').val());
+        document.title = fileName + ' | NoteGenie';
         if (callback)
-        callback();
+          callback();
       }
     }); 
   }

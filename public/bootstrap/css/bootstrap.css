@@ -8985,6 +8985,72 @@ a.badge:focus {
   }
 }
 
+table.diff {
+  white-space: pre-wrap;
+  border: 1px solid darkgray;
+  border-collapse: collapse;
+}
+
+table.diff .insert {
+  background-color: #9E9;
+}
+
+table.diff .empty {
+  background-color: #DDD;
+}
+
+table.diff thead {
+  font-family: Verdana;
+  background: #EFEFEF;
+  border-bottom: 1px solid #BBC;
+}
+
+table.diff thead th.texttitle {
+  text-align: left;
+}
+
+table.diff .skip {
+  background-color: #EFEFEF;
+  border: 1px solid #AAA;
+  border-right: 1px solid #BBC;
+}
+
+table.diff tbody {
+  font-family: Courier, monospace;
+}
+
+table.diff tbody td {
+  padding: 0 .4em;
+  padding-top: .4em;
+  vertical-align: top;
+}
+
+table.diff tbody th {
+  padding: .3em .5em .1em 2em;
+  font-family: verdana, arial, 'Bitstream Vera Sans', helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  color: #886;
+  text-align: right;
+  vertical-align: top;
+  background: #EED;
+  border: 1px solid #BBC;
+}
+
+table.diff th.author {
+  text-align: right;
+  background: #EFEFEF;
+  border-top: 1px solid #BBC;
+}
+
+table.diff .delete {
+  background-color: #E99;
+}
+
+table.diff .replace {
+  background-color: #FD8;
+}
+
 html,
 body {
   width: 100%;

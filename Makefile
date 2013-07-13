@@ -13,13 +13,16 @@ build:
 #	@echo "Running JSHint on javascript...             ${CHECK} Done"
 	@recess --compile ${NG_LESS} > ${BOOTSTRAP}/css/bootstrap.css
 	@echo "Compiling LESS with Recess...               ${CHECK} Done"
-	@uglifyjs ${BOOTSTRAP}/js/bootstrap.js\
+	@uglifyjs \
+		${BOOTSTRAP}/js/bootstrap.js\
 		${JAVASCRIPTS}/jquery.hoverIntent.js\
-		${JAVASCRIPTS}/jquery.ng.js\
+		${JAVASCRIPTS}/difflib.js\
+		${JAVASCRIPTS}/diffview.js\
 		${JAVASCRIPTS}/html-sanitizer-minified.js\
 		${JAVASCRIPTS}/modernizr.js\
 		${JAVASCRIPTS}/marked.js\
 		${JAVASCRIPTS}/bootstrap-wysiwyg.js\
+		${JAVASCRIPTS}/jquery.ng.js\
 		${JAVASCRIPTS}/core.js\
 		${JAVASCRIPTS}/functions.js\
 		${JAVASCRIPTS}/dropbox.js\
