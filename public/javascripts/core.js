@@ -39,7 +39,7 @@ function setCaretToPos (input, pos) {
 }
 
 function generalRequest(request, success_callback, box, curval, error_callback) {
-  request.error = function(){
+  request.error = function(em){
     hideParsingBar('error');
     if (typeof error_callback !== 'undefined')
       error_callback();
@@ -168,6 +168,25 @@ function ddgRequest(searchQuery, box, curval) {
   generalRequest(request, ddgSuccessCallback, box, curval, wikipedia_fallback);
 }
 
+function gettyImageSuccessCallback(data) {
+  if (data.total_hits < 1)
+    throw "no images";
+
+  var image_url = data.image_url;
+  return "![" + data.search_term + "](" + image_url + ")"
+}
+
+function imgRequest(searchQuery, box, curval) {
+  request = {
+    type: 'GET',
+    dataType: "json",
+    url: '/image_search?q=' + searchQuery,
+    async: true
+  }
+
+  generalRequest(request, gettyImageSuccessCallback, box, curval);
+}
+
 function updateBox(wikipediaPage, box, pos, curval) {
   if (wikipediaPage === "" || wikipediaPage === "?" || wikipediaPage === "!")
   return false;
@@ -199,6 +218,14 @@ function updateBox(wikipediaPage, box, pos, curval) {
   if (wikipediaPage.charAt(0) == '?' && wikipediaPage !== '?') {
     showParsingBar();
     ddgRequest(wikipediaPage.substring(1), box, curval)
+    return;
+  }
+
+  // gettyimage search for queries beginning with "/img "
+  if (wikipediaPage.match(/^\/img .+/) != null) {
+    showParsingBar();
+    searchTerm = wikipediaPage.match(/^\/img .+/)[0].substring(5);
+    imgRequest(searchTerm, box, curval);
     return;
   }
 

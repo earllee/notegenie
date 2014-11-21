@@ -6,6 +6,7 @@ var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
 var nodemailer = require("nodemailer");
+var connectsdk = require('connectsdk');
 
 try {
   var keys = require('./keys');
@@ -22,7 +23,6 @@ var userSchema = mongoose.Schema({ uid: String, email: String, name: String });
 var User = mongoose.model('User', userSchema);
 
 
-
 // create reusable transport method (opens pool of SMTP connections)
 var smtpTransport = nodemailer.createTransport("SMTP",{
     service: "Gmail",
@@ -35,6 +35,11 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
 // Create Express object
 
 var app = express();
+var connectSdk = new connectsdk (
+    process.env.ConnectSDK_ApiKey,
+    process.env.ConnectSDK_ApiSecret,
+    process.env.ConnectSDK_UserName,
+    process.env.ConnectSDK_UserPassword)
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -54,6 +59,36 @@ app.configure(function(){
 
 app.get('/', function(req, res){
   res.render('index');
+});
+
+// GET request to /images?q=search_term
+app.get('/image_search', function(req, res) {
+  searchTerm = req.query.q;
+
+  var search = connectSdk
+      .search()
+      .images()
+      .withPage(1)
+      .withPageSize(1)
+      .withPhrase(searchTerm)
+
+  // bug causes search to get executed multiple times
+  search_executed = false
+
+  search.execute(function(err, response) {
+      if (search_executed) {
+        return;
+      }
+      search_executed = true
+
+      if (err || response.images.length < 1 || response.images[0].display_sizes.length < 1) {
+        res.status(400).send('{"total_hits" : 0}')
+      } else {
+        result = '{"total_hits" : 1, "search_term" : "' + searchTerm + '", "image_url" : ' +
+            '"' + response.images[0].display_sizes[0].uri + '"}'
+        res.status(200).send(result)
+      }
+  })
 });
 
 app.post('/', function(req, res){
@@ -99,7 +134,7 @@ app.post('/email', function(req, res){
 
 
 app.get('*', function(req, res){
-  res.redirect('/');
+ res.redirect('/');
 });
 
 http.createServer(app).listen(app.get('port'), function(){
