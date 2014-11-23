@@ -406,7 +406,8 @@ function togglePreviewMode() {
 
     var tokens = marked.lexer(texttouse);
     var html = marked.parser(tokens);
-    html = html_sanitize(html);
+    // comment out for now because messing with img src tag
+    // html = html_sanitize(html);
     preview.html(html);
     preview.css('opacity', 1);
     preview.css('visibility', 'visible');
