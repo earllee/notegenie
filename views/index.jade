@@ -16,7 +16,7 @@ block content
           span.icon-bar
           span.icon-bar
         a.brand(href='#', data-content='Hi') NoteGenie
-        // Main Nav 
+        // Main Nav
         ul.nav.pull-left
           li
             a#about.footerScreenTrigger(href='#', data-target='aboutScreen') About
@@ -29,7 +29,7 @@ block content
                 a#help.footerScreenTrigger(href='#', data-toggle='dropdown', data-target='helpScreen') Guide
           li
             a#login(href='#') Login
-        // Tools 
+        // Tools
         ul.nav.pull-right.nav-collapse.collapse
           li
             a#clear(href='#') Clear
@@ -55,7 +55,7 @@ block content
               li
                 a.font-btn(data-font='Arial', href='#') Arial
               li
-                a.font-btn(data-font='Consolas', href='#') Consolas
+                a.font-btn(data-font='Ubuntu Mono', href='#') Ubuntu Mono
               li
                 a.font-btn(data-font='EB Garamond', href='#') EB Garamond
               li
@@ -67,7 +67,7 @@ block content
       a#closeScreen.close(href='#') &times;
       div#filesScreen.footer-screen
         div#currentFile
-          h3 No file currently open. You are working on the scratch notepad. 
+          h3 No file currently open. You are working on the scratch notepad.
         div
           h3#path
         div#fileScreenToolbar
@@ -75,7 +75,7 @@ block content
       div#aboutScreen.footer-screen
         h1.logo NoteGenie.io
         h3.logo A better way to take notes
-        p 
+        p
           | NoteGenie is the first note-taking app that writes descriptions of terms for you. It's a new way to take notes in situations where you're bombarded with new concepts, people, places, etc.
         h4 Features
         ul
@@ -92,20 +92,20 @@ block content
           li We do NOT have access to your Dropbox password.
           li We do NOT store your files.
           li Text currently in the notepad is saved in your browser's cache.
-        p by 
-          a(href='mailto:earl.lee@yale.edu') Earl 
-          | and 
+        p by
+          a(href='mailto:earl.lee@yale.edu') Earl
+          | and
           a(href='mailto:shenil.dodhia@yale.edu') Shenil
       div#helpScreen.footer-screen
         h5 How to Use NoteGenie
         p Take notes like you normally would. If there is something you need to look up, press enter, type in a term, then press SHIFT + ENTER. (If you want pure definitions, put a '?' before each term).
           | NoteGenie can handle a variety of terms from famous people's names to economics topics.
         h5 Working with Files
-        ul  
-          li To rename files: Double-click name in file browser. 
+        ul
+          li To rename files: Double-click name in file browser.
         h5 Formatting &amp; Markdown
-        p Need to bold, italicize, and more? Use the following syntax to indicate words in bold. Then, press <strong>CTRL + M</strong> to see the effects. For a more detailed guide, go 
-          a(href='http://softwaremaniacs.org/playground/showdown-highlight/') here 
+        p Need to bold, italicize, and more? Use the following syntax to indicate words in bold. Then, press <strong>CTRL + M</strong> to see the effects. For a more detailed guide, go
+          a(href='http://softwaremaniacs.org/playground/showdown-highlight/') here
           | or
           a(href='http://daringfireball.net/projects/markdown/')  here.
         table.table
@@ -138,16 +138,16 @@ block content
               td Use at beginning. Up to 6 levels. Higher levels give smaller headings.
               td
                 pre
-                  | ##Level 2 Heading                  
+                  | ##Level 2 Heading
             tr
               td Horizontal Rule
               td ---
               td Keep in it's own line.
               td
                 pre
-                  | #Heading                  
-                  | ---                  
-                  | Content goes here.                  
+                  | #Heading
+                  | ---
+                  | Content goes here.
             tr
               td Unordered Lists
               td *,+,-
@@ -155,12 +155,12 @@ block content
               td
                 pre.
                   | * List item 1
-                  | * List item 2                  
+                  | * List item 2
             tr
               td Images
               td ![Title](URL)
               td This will insert in-line images.
               td
                 pre.
-                  | ![NoteGenie Logo](www.notegenie.io/logo.gif)                  
+                  | ![NoteGenie Logo](www.notegenie.io/logo.gif)
   div#alertBox.modal-backdrop.fade.in
